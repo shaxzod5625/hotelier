@@ -65,18 +65,14 @@
       v-if="selected === 'Брони'"
       class="tab-conpage"
     >
-      <div class="guest-card">
-        <h2>hi</h2>
-      </div>
+      <Bookings/>
     </div>
 
     <div
       v-if="selected === 'Профили гостей'"
       class="tab-conpage"
     >
-      <div class="guest-card">
-        <h2>greetings</h2>
-      </div>
+      <Guestprofile/>
     </div>
   </div>
 </template>
@@ -87,6 +83,8 @@ import Tab from '@/components/Tab.vue'
 import Reside from '@/views/frontdesk/Reside.vue'
 import Checkingin from './frontdesk/Checkingin.vue'
 import Checkedout from './frontdesk/Checkedout.vue'
+import Bookings from './frontdesk/Bookings.vue'
+import Guestprofile from './frontdesk/Guestprofile.vue'
 
 
 
@@ -94,7 +92,7 @@ export default {
   name: 'Frontdesk',
   
   components: {
-    TabBar, Tab, Reside, Checkingin, Checkedout
+    TabBar, Tab, Reside, Checkingin, Checkedout, Bookings, Guestprofile
   },
 
   data() {

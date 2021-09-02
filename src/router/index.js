@@ -17,7 +17,7 @@ const routes = [
   {
     path: '/cashier',
     name: 'Cashier',
-    // component: () => import ('../views/Cashier.vue')
+    component: () => import ('../views/Cashier.vue')
   },
   {
     path: '/folio',

@@ -265,6 +265,7 @@
         }
         p {
           color: #323438;
+          letter-spacing: 1px;
         }
       }
     }
@@ -290,6 +291,7 @@
         font-family: Roboto;
         font-size: 14px;
         font-weight: 500;
+        letter-spacing: 1px;
       }
     }
 
@@ -377,6 +379,7 @@
       z-index: 2;
       text-decoration: none;
       cursor: pointer;
+      letter-spacing: 0.8px;
 
       &:hover {
         color: #6B96F3;
@@ -547,6 +550,12 @@ table {
       margin-right: 132px;
     }
 
+    .card-online {
+      width: 64px;
+      height: 24px;
+      align-self: center;
+    }
+
     .iconblc {
       display: flex;
       gap: 12px;
@@ -599,4 +608,31 @@ table {
   width: 6px;
   transition: transform .15s ease-in .05s;
   transform-origin: center;
+}
+
+
+
+
+::-webkit-scrollbar {
+  width: 10px;
+
+  :horizontal {
+    display: none;
+  }
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #0030AD; 
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #2161ED; 
 }
