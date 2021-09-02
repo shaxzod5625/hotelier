@@ -1,7 +1,7 @@
 <template>
   <div class="con-page" style="gap: 24px">
     <div class="guest-card"
-      v-for="item in reside"
+      v-for="item in checkingin"
       :key="item"
     >
       <div class="card-header">
@@ -48,7 +48,7 @@
 export default {
     name: 'Checkingin',
     data: () => ({
-      reside:
+      checkingin:
         [
           {nfl: 'ABDULLAYEV ABDULLA ABDULLAYEVICH',
           vip: true,
