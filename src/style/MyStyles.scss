@@ -427,7 +427,146 @@
 .tab-conpage {
   margin-top: 24px;
   display: flex;
+  flex-direction: column;
   width: 100%;
+
+  .filter-block {
+    display: flex;
+    justify-content: space-between;
+    padding: 24px 24px 16px 24px;
+    height: 88px;
+    width: auto;
+    background: #fff;
+    border-radius: 12px;
+    margin-bottom: 24px;
+
+    .search-bar {
+      display: flex;
+      flex-direction: column;
+      width: 50%;
+      height: 88px;
+
+      h3 {
+        margin-bottom: 0;
+        margin-top: 24px;
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+        color: #83858A;
+
+        span {
+          color: #323438;
+          margin-left: 8px;
+        }
+      }
+
+      img {
+        position: absolute;
+        margin-left: 604px;
+        margin-top: 12px;
+      }
+  
+      input {
+        background: #fff;
+        height: 48px;
+        width: 608px;
+        border-width: 1px;
+        border-style: solid;
+        border-color: #E0E1E2;
+        filter: drop-shadow(0px 4px 4px rgba(50, 52, 56, 0.16));
+        padding: 0 16px 0 16px;
+        border-radius: 8px;
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 16px;
+        color: #323438;
+  
+        &:hover {
+          border-color: #6B96F3;
+        }
+  
+        &:focus {
+          outline: none;
+          border: 2px solid #2161ED !important;
+          border-radius: 8px;
+          border-image: none;
+        }
+      }
+      input::placeholder {
+        font-family: Roboto;
+        font-weight: 200;
+        font-size: 14px;
+        line-height: 16px;
+        letter-spacing: 0.8px;
+        color: #83858A;
+      }
+    }
+    .button-bar {
+      display: flex;
+      flex-direction: column;
+      width: 50%;
+      height: 88px;
+
+      .btns {
+        display: flex;
+        justify-content: flex-end;
+        gap: 24px;
+
+        .sec-btn {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 12px;
+          width: 180px;
+          height: 48px;
+          background: transparent;
+          border-radius: 8px;
+          border: 1px solid #2161ED;
+          font-family: Roboto;
+          font-style: normal;
+          font-weight: 500;
+          font-size: 16px;
+          line-height: 16px;
+          color: #2161ED;
+          cursor: pointer;
+
+          &:hover {
+            border: 1px solid #6B96F3;
+            color: #6B96F3;
+          }
+
+          &:active {
+            color: #0030AD;
+            border: 1px solid#0030AD;
+          }
+        }
+      }
+
+      h3 {
+        display: flex;
+        justify-content: left;
+        align-items: center;
+        margin-bottom: 0;
+        margin-top: 24px;
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+        color: #83858A;
+        gap: 8px;
+
+        span {
+          color: #323438;
+          margin-left: 4px;
+        }
+      }
+    }
+  }
 }
 
 .guest-card {
@@ -635,4 +774,59 @@ table {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #2161ED; 
+}
+
+
+
+.divider {
+  background: #E0E1E2;
+  height: 1px;
+  width: 100%;
+  padding: 0;
+}
+
+
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  z-index: 10;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+
+  .modal-back {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    background: rgba(50, 52, 56, 0.48);
+  }
+}
+
+.form-filter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 398px;
+  height: 406px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px 0 40px 0;
+  z-index: 1000;
+  filter: drop-shadow(0px 6px 16px rgba(50, 52, 56, 0.36));
+
+  h3 {
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 16px;
+    color: #323438;
+    margin-top: 0;
+    margin-bottom: 16px;
+  }
 }
