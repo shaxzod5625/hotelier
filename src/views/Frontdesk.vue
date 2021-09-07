@@ -2,19 +2,21 @@
   <div class="con-page">
 
     <div class="modal"
-      v-if="modal === true"
+      v-if="modal"
     >
       <div class="form-filter">
         <h3>Фильтрация карточек</h3>
         <div class="divider"></div>
-        <el-select v-model="value" placeholder="Выберите категорию">
-          <el-option
-            v-for="item in filters"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
+        <label for="select">Категория номера</label>
+        <select name="select" id="">
+          <option value="qwert"
+            v-for="category in catoption"
+            :key="category"
+            tag="option"
+          >
+          <h3>{{category.cat}}</h3>
+          </option>
+        </select>
       </div>
       <div class="modal-back"
         @click="modal = false"
@@ -69,8 +71,6 @@
     <div class="filter-block">
       <div class="search-bar">
         <input placeholder="Введите имя гостя или номер брони" v-model="input">
-        <img src="@/assets/icons/Search.svg" alt="">
-
         <h3>Сортировка: <span>Все</span></h3>
       </div>
       <div class="button-bar">
@@ -108,7 +108,6 @@
       <div class="filter-block">
         <div class="search-bar">
           <input placeholder="Введите имя гостя или номер брони" v-model="input">
-          <img src="@/assets/icons/Search.svg" alt="">
 
           <h3>Сортировка: <span>Все</span></h3>
         </div>
@@ -140,7 +139,6 @@
       <div class="filter-block">
         <div class="search-bar">
           <input placeholder="Введите имя гостя или номер брони" v-model="input">
-          <img src="@/assets/icons/Search.svg" alt="">
 
           <h3>Сортировка: <span>Все</span></h3>
         </div>
@@ -172,7 +170,6 @@
       <div class="filter-block">
         <div class="search-bar">
           <input placeholder="Введите имя гостя или номер брони" v-model="input">
-          <img src="@/assets/icons/Search.svg" alt="">
 
           <h3>Сортировка: <span>Все</span></h3>
         </div>
@@ -207,8 +204,7 @@
     >
       <div class="filter-block">
         <div class="search-bar">
-          <input placeholder="Введите имя гостя или номер брони" v-model="input">
-          <img src="@/assets/icons/Search.svg" alt="">
+          <input placeholder="Введите имя гостя или серию и номер паспорта" v-model="input">
 
           <h3>Сортировка: <span>Все</span></h3>
         </div>
@@ -249,13 +245,20 @@ export default {
     TabBar, Tab, Reside, Checkingin, Checkedout, Bookings, Guestprofile
   },
 
-  data() {
-    return {
+  data: () => ({
       selected: 'Проживают',
       input: '',
       modal: false,
-    }
-  },
+
+    catoption: [
+      {cat: 'Lux'},
+      {cat: 'Standart'},
+      {cat: 'Family'},
+      {cat: 'Apartment'},
+      {cat: 'Presidential'},
+      {cat: 'Studio'},
+    ]
+  }),
 
   methods: {
     setSelected(tab) {
