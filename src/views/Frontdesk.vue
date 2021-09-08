@@ -5,18 +5,50 @@
       v-if="modal"
     >
       <div class="form-filter">
-        <h3>Фильтрация карточек</h3>
+        <h3>Фильтрация</h3>
         <div class="divider"></div>
         <label for="select">Категория номера</label>
-        <select name="select" id="">
-          <option value="qwert"
-            v-for="category in catoption"
-            :key="category"
-            tag="option"
+        <el-select v-model="Category" placeholder="Выберите категорию">
+          <el-option
+            v-for="item in filtercats"
+            :key="item.Category"
+            :label="item.Category"
+            :value="item.Category">
+          </el-option>
+        </el-select>
+
+        <label for="select">Гражданство гостя</label>
+        <el-select v-model="Citizenship" placeholder="Выберите гражданство">
+          <el-option
+            v-for="item in filtercitizenship"
+            :key="item.Citizenship"
+            :label="item.Citizenship"
+            :value="item.Citizenship">
+          </el-option>
+        </el-select>
+
+        <label for="select">Статус оплаты</label>
+        <el-select v-model="Paymentstatus" placeholder="Выберите статус оплаты">
+          <el-option
+            v-for="item in filterpaymenstatus"
+            :key="item.Paymentstatus"
+            :label="item.Paymentstatus"
+            :value="item.Paymentstatus">
+          </el-option>
+        </el-select>
+
+        <div class="modal-btns">
+          <button
+            class="sec-btn"
+            @click="modal = false"
           >
-          <h3>{{category.cat}}</h3>
-          </option>
-        </select>
+            <span>Отмена</span>
+          </button>
+
+          <button class="prim-btn">
+            <span>OK</span>
+          </button>
+        </div>
       </div>
       <div class="modal-back"
         @click="modal = false"
@@ -216,7 +248,7 @@
             </button>
           </div>
           <h3>
-            Вид: 
+            Вид:
             <span>Карточки</span>
             <img src="@/assets/icons/Arrow-dwn.svg" alt="">
           </h3>
@@ -250,14 +282,52 @@ export default {
       input: '',
       modal: false,
 
-    catoption: [
-      {cat: 'Lux'},
-      {cat: 'Standart'},
-      {cat: 'Family'},
-      {cat: 'Apartment'},
-      {cat: 'Presidential'},
-      {cat: 'Studio'},
-    ]
+      filtercats: [{
+        Category: 'Lux',
+        Citizenship: 'USA',
+        Paymentstatus: 'Оплачено'
+      }, {
+        Category: 'Standart',
+        Citizenship: 'Uzbekistan',
+        Paymentstatus: 'Не оплачено'
+      }, {
+        Category: 'Apartments',
+        Citizenship: 'Ukraine',
+        Paymentstatus: 'По договору'
+      }, {
+        Category: 'Family',
+        Citizenship: 'Kazakhstan',
+        Paymentstatus: 'Частично оплачено'
+      }, {
+        Category: 'Suite',
+        Citizenship: 'Japan',
+        Paymentstatus: 'Оплачено'
+      }],
+      Category: '',
+
+      filtercitizenship: [{
+        Citizenship: 'USA'
+      }, {
+        Citizenship: 'Uzbekistan'
+      }, {
+        Citizenship: 'Ukraine'
+      }, {
+        Citizenship: 'Kazakhstan'
+      }, {
+        Citizenship: 'Japan'
+      }],
+      Citizenship: '',
+
+      filterpaymenstatus: [{
+        Paymentstatus: 'Оплачено'
+      }, {
+        Paymentstatus: 'Не оплачено'
+      }, {
+        Paymentstatus: 'По договору'
+      }, {
+        Paymentstatus: 'Частично оплачено'
+      }],
+      Paymentstatus: ''
   }),
 
   methods: {
