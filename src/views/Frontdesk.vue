@@ -1,8 +1,10 @@
 <template>
   <div class="con-page">
 
+
+<!-- filtering modal -->
     <div class="modal"
-      v-if="modal"
+      v-if="filtering"
     >
       <div class="form-filter">
         <h3>Фильтрация</h3>
@@ -40,7 +42,7 @@
         <div class="modal-btns">
           <button
             class="sec-btn"
-            @click="modal = false"
+            @click="filtering = false"
           >
             <span>Отмена</span>
           </button>
@@ -51,7 +53,97 @@
         </div>
       </div>
       <div class="modal-back"
-        @click="modal = false"
+        @click="filtering = false"
+      >
+      </div>
+    </div>
+
+
+<!-- printout modal -->
+    <div class="modal"
+      v-if="printout"
+    >
+      <div class="form-filter">
+        <h3>Распечатать карточки</h3>
+        <div class="divider"></div>
+        <h3 class="cardsectitle">Количество выбранных гостей:</h3>
+        <h3 class="cardcount">12</h3>
+        <h3 class="cardquest">Распечатать регистрационные карточки?</h3>
+        <div class="modal-btns">
+          <button
+            class="sec-btn"
+            @click="printout = false"
+          >
+            <span>Отмена</span>
+          </button>
+
+          <button class="prim-btn">
+            <span>OK</span>
+          </button>
+        </div>
+      </div>
+      <div class="modal-back"
+        @click="printout = false"
+      >
+      </div>
+    </div>
+
+
+<!-- checkingout modal -->
+    <div class="modal"
+      v-if="checkingout"
+    >
+      <div class="form-filter">
+        <h3>Распечатать карточки</h3>
+        <div class="divider"></div>
+        <h3 class="cardsectitle">Количество выбранных гостей:</h3>
+        <h3 class="cardcount">12</h3>
+        <h3 class="cardquest">Распечатать регистрационные карточки?</h3>
+        <div class="modal-btns">
+          <button
+            class="sec-btn"
+            @click="checkingout = false"
+          >
+            <span>Отмена</span>
+          </button>
+
+          <button class="prim-btn">
+            <span>OK</span>
+          </button>
+        </div>
+      </div>
+      <div class="modal-back"
+        @click="checkingout = false"
+      >
+      </div>
+    </div>
+
+
+<!-- checkingout modal -->
+    <div class="modal"
+      v-if="residing"
+    >
+      <div class="form-filter">
+        <h3>Распечатать карточки</h3>
+        <div class="divider"></div>
+        <h3 class="cardsectitle">Количество выбранных гостей:</h3>
+        <h3 class="cardcount">12</h3>
+        <h3 class="cardquest">Распечатать регистрационные карточки?</h3>
+        <div class="modal-btns">
+          <button
+            class="sec-btn"
+            @click="residing = false"
+          >
+            <span>Отмена</span>
+          </button>
+
+          <button class="prim-btn">
+            <span>OK</span>
+          </button>
+        </div>
+      </div>
+      <div class="modal-back"
+        @click="residing = false"
       >
       </div>
     </div>
@@ -109,16 +201,22 @@
         <div class="btns">
           <button
             class="sec-btn"
-            @click="modal = true"
+            @click="filtering = true"
           >
             <img src="@/assets/icons/Filter-sm.svg" alt="">
             <span>Фильтр</span>
           </button>
-          <button class="sec-btn">
+          <button
+            class="sec-btn"
+            @click="printout = true"
+          >
             <img src="@/assets/icons/Print-sm.svg" alt="">
             <span>Распечатать</span>
           </button>
-          <button class="sec-btn">
+          <button
+            class="sec-btn"
+            @click="checkingout = true"
+          >
             <img src="@/assets/icons/Checkout-sm.svg" alt="">
             <span>Выселить</span>
           </button>
@@ -130,7 +228,7 @@
         </h3>
       </div>
     </div>
-      <Reside/>
+      <Reside @click="residing = true"/>
     </div>
 
     <div
@@ -280,7 +378,10 @@ export default {
   data: () => ({
       selected: 'Проживают',
       input: '',
-      modal: false,
+      filtering: false,
+      printout: false,
+      checkingout: false,
+      residing: false,
 
       filtercats: [{
         Category: 'Lux',

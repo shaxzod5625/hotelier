@@ -17,7 +17,10 @@
             >
           <div class="iconblc">
             <img src="@/assets/icons/Extend.svg" alt="">
-            <img src="@/assets/icons/Relocate.svg" alt="">
+            <img
+              src="@/assets/icons/Relocate.svg" alt=""
+              @click="residing = true"
+            >
             <el-checkbox v-model="checked"></el-checkbox>
           </div>
         </div>

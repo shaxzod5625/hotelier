@@ -853,6 +853,10 @@ table {
       padding-right: 24px;
       align-items: center;
       padding-top: 16px;
+
+      img {
+        cursor: pointer;
+      }
     }
   }
 }
@@ -982,6 +986,37 @@ table {
     font-size: 14px;
     line-height: 16px;
     color: #83858A;
+  }
+
+  .cardsectitle {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 16px;
+    color: #83858A;
+    margin: 12px 0 24px 0;
+    padding: 0;
+  }
+
+  .cardcount {
+    font-family: Roboto;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 16px;
+    margin: 0;
+    color: #323438;
+  }
+
+  .cardquest {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 16px;
+    color: #323438;
+    margin: 24px 0 0 0;
+    padding: 0;
   }
 
   h3 {
