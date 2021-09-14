@@ -35,7 +35,7 @@
     margin: 0 !important;
     padding: 0 !important;
     li {
-        height: 64px;
+        height: 48px;
         width: 100%;
         position: relative;
         transition: all 0.2s ease-out;
@@ -211,7 +211,7 @@
     margin: 0 !important;
     padding: 0 !important;
     li {
-        height: 64px;
+        height: 48px;
         width: 264px;
         transition: all 0.2s ease-out;
         display: flex;
@@ -392,7 +392,7 @@
     display: flex;
     margin-top: 24px;
     height: 84px;
-    min-width: 304px;
+    min-width: 180px;
     width: 25%;
     background: #fff;
     border-radius: 12px;
@@ -459,7 +459,7 @@
     height: 392px;
     border-radius: 12px;
     background: #fff;
-    min-width: 632px;
+    min-width: 432px;
     width: 50%;
     padding: 24px;
     
@@ -619,7 +619,8 @@
       input {
         background: #fff;
         height: 48px;
-        width: 608px;
+        min-width: 220px;
+        width: 80%;
         border-width: 1px;
         border-style: solid;
         border-color: #E0E1E2;
