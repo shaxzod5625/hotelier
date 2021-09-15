@@ -50,10 +50,20 @@ const routes = [
     // component: () => import ('../views/Channel-manager.vue')
   },
   {
-    path: '/settings',
+    path: '/settings/',
     name: 'Settings',
+    component: () => import ('../views/Settings.vue'),
+  },
+  {
+    path: '/settings/object-registration',
+    name: 'Object registration',
+    component: () => import ('../views/settings/ObjectReg.vue')
+  },
+  {
+    path: '/settings/requisites',
+    name: 'Requisites',
     // component: () => import ('../views/Settings.vue')
-  }
+  },
 ]
 
 const router = new VueRouter({
