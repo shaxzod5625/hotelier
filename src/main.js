@@ -1,4 +1,6 @@
 import Vue from 'vue'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
 import App from './App.vue'
 import './registerServiceWorker'
 import router from './router'
@@ -10,6 +12,7 @@ import VueApexCharts from 'vue-apexcharts'
 
 
 Vue.use(Vuelidate)
+Vue.use(VueAxios, axios)
 Vue.use(VueApexCharts)
 
 Vue.component('apexchart', VueApexCharts)

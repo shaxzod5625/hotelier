@@ -56,13 +56,13 @@ const routes = [
   },
   {
     path: '/settings/object-registration',
-    name: 'Object registration',
+    name: 'Registration',
     component: () => import ('../views/settings/ObjectReg.vue')
   },
   {
     path: '/settings/requisites',
     name: 'Requisites',
-    // component: () => import ('../views/Settings.vue')
+    component: () => import ('../views/settings/Requisites.vue')
   },
 ]
 
