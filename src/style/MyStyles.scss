@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap');
 
 // Sidebar
 
@@ -406,6 +407,7 @@
         height: 100px;
         align-items: center;
         width: auto;
+        user-select: none;
         
         h3 {
           font-family: Roboto;
@@ -423,6 +425,10 @@
         gap: 24px;
         margin: 0 24px;
       }
+
+      .modal-btns {
+        margin-top: 66px;
+      }
     }
   }
   
@@ -437,13 +443,6 @@
 }
 
 
-
-
-
-
-
-
-
 // dashboard
 
 .con-page {
@@ -451,7 +450,7 @@
 
   .el-breadcrumb {
   font-family: 'Roboto';
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 500;
   line-height: unset;
   color: #83858A;
@@ -765,6 +764,7 @@
           line-height: 16px;
           color: #2161ED;
           cursor: pointer;
+          user-select: none;
 
           &:hover {
             border: 1px solid #6B96F3;
@@ -888,7 +888,7 @@ table {
     h3 {
       font-family: Roboto;
       font-style: normal;
-      font-weight: normal;
+      font-weight: 500;
       font-size: 16px;
       line-height: 16px;
       padding-left: 24px;
@@ -903,7 +903,7 @@ table {
     .room-num {
       font-family: Roboto;
       font-style: normal;
-      font-weight: 600;
+      font-weight: 500;
       font-size: 16px;
       line-height: 16px;
     }
@@ -1109,6 +1109,11 @@ table {
     margin-bottom: 16px;
   }
 
+  .el-select {
+    width: 398px;
+    min-width: 180px;
+  }
+
   .el-select:hover .el-input__inner {
     border: 1px solid #6B96F3;
   }
@@ -1193,6 +1198,7 @@ table {
   line-height: 16px;
   color: #2161ED;
   cursor: pointer;
+  user-select: none;
 
   &:hover {
     border: 1px solid #6B96F3;
@@ -1222,6 +1228,7 @@ table {
   line-height: 16px;
   color: #2161ED;
   cursor: pointer;
+  user-select: none;
 
   &:hover {
     color: #6B96F3;
@@ -1249,6 +1256,7 @@ table {
   line-height: 16px;
   color: #fff;
   cursor: pointer;
+  user-select: none;
 
   &:hover {
     background: #6B96F3;
@@ -1275,7 +1283,7 @@ table {
 
   .el-breadcrumb {
     font-family: 'Roboto';
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 500;
     line-height: unset;
   }
@@ -1284,7 +1292,7 @@ table {
 .el-breadcrumb__inner.is-link {
   font-family: Roboto;
   font-weight: 500;
-  font-size: 17px;
+  font-size: 16px;
   line-height: 20px;
   color: #323438 !important;
 
@@ -1292,6 +1300,8 @@ table {
     color: #6B96F3 !important;
   }
 }
+
+// setting cards styles
 
 .set-card {
   display: flex;
@@ -1366,6 +1376,65 @@ table {
     grid-template-rows: auto;
   }
 }
+
+
+// Employee cards styles
+
+.employee-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 120px;
+  min-width: 200px;
+  width: 100%;
+  background: #fff;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 200ms;
+  user-select: none;
+  text-decoration-line: none;
+
+  h1 {
+    margin: 24px 0 14px 0;
+    font-family: Roboto;
+    font-weight: bold;
+    font-size: 36px;
+    line-height: 42px;
+    color: #323438;
+  }
+
+  h3 {
+    margin: 0;
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 16px;
+    color: #83858A;
+  }
+
+  .employee-card-titleblock {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+  }
+
+  &:hover {
+    background: #2161ED;
+    filter: drop-shadow(0px 8px 16px rgba(50, 52, 56, 0.56));
+    transition: 200ms;
+
+    h1 {
+      color: #fff;
+    }
+
+    h3 {
+      color: #fff;
+    }
+  }
+}
+
+
 
 
 
@@ -1554,4 +1623,69 @@ table {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: 0.7px;
+  user-select: none;
+}
+
+
+// Employees styles
+
+.search-bar-empl {
+  display: flex;
+  background: #fff;
+  border-radius: 12px;
+  height: 128px;
+  margin-top: 24px;
+  padding: 0 24px;
+
+  .search-div {
+    width: 50%;
+
+    .search-input {
+      margin-top: 24px;
+      background: #fff;
+      height: 48px;
+      min-width: 220px;
+      width: 80%;
+      border-width: 1px;
+      border-style: solid;
+      border-color: #E0E1E2;
+      filter: drop-shadow(0px 4px 4px rgba(50, 52, 56, 0.16));
+      padding: 0 16px 0 16px;
+      border-radius: 8px;
+      appearance: none;
+      background-image: url(../assets/icons/Search.svg);
+      background-repeat: no-repeat;
+      background-position-x: 98%;
+      background-position-y: 50%;
+      font-family: Roboto;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 16px;
+      color: #323438;
+  
+      &:hover {
+        border-color: #6B96F3;
+      }
+  
+      &:focus {
+        outline: none;
+        border: 1px solid #2161ED !important;
+        border-radius: 8px;
+      }
+    }
+
+    h4 {
+      font-family: Roboto;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 16px;
+      color: #83858A;
+
+      span {
+        color: #323438;
+        font-weight: 500;
+      }
+    }
+  } 
 }

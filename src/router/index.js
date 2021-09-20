@@ -64,6 +64,16 @@ const routes = [
     name: 'Requisites',
     component: () => import ('../views/settings/Requisites.vue')
   },
+  {
+    path: '/settings/employees',
+    name: 'Employees',
+    component: () => import ('../views/settings/Employees.vue')
+  },
+  {
+    path: '/settings/employees/receptionists',
+    name: 'Receptionists',
+    component: () => import ('../views/settings/employees/Receptionists.vue')
+  },
 ]
 
 const router = new VueRouter({

@@ -6,7 +6,7 @@
     <div class="modal"
       v-if="filtering"
     >
-      <div class="form-filter">
+      <form class="form-filter">
         <h3>Фильтрация</h3>
         <div class="divider"></div>
         <label for="select">Категория номера</label>
@@ -20,7 +20,7 @@
         </el-select>
 
         <label for="select">Гражданство гостя</label>
-        <el-select v-model="Citizenship" placeholder="Выберите гражданство">
+        <el-select v-model="Citizenship" filterable placeholder="Выберите гражданство">
           <el-option
             v-for="item in filtercitizenship"
             :key="item.Citizenship"
@@ -51,7 +51,7 @@
             <span>OK</span>
           </button>
         </div>
-      </div>
+      </form>
       <div class="modal-back"
         @click="filtering = false"
       >
