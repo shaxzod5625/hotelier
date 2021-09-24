@@ -28,7 +28,7 @@
             <span>Войти</span>
           </button>
 
-          <h3>{{user}}</h3>
+          <div v-for="message in messages" :key="message.id"><span>{{message}}</span></div>
 
         </div>
       </form>
@@ -38,23 +38,26 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
-
 
 export default {
   name: 'LoginPage',
-
+  
   data: () => ({
     login: '',
-    password: ''
+    password: '',
   }),
 
-  computed: {
-    ...mapState(['user'])
+  mounted() {
+    this.$store.dispatch('loadMessages')
   },
 
-  mounted() {
-    this.$store.dispatch("loadUsers")
-  }
+  computed: {
+    messages() {
+      return this.$store.state.messages
+    }
+  },
+
+  
+  
 }
 </script>

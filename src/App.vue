@@ -11,12 +11,13 @@ import LoginPage from './layouts/LoginPage.vue'
 
 export default {
   name: 'app',
+
   components: {
     MainLayout, LoginPage
   },
 
   data: () => ({
-    login: true
+    login: false
   })
 }
 </script>
