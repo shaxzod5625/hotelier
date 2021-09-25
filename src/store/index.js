@@ -6,7 +6,6 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    messages: [],
     reside: [
       {
         nfl: 'ABDULLAYEV ABDULLA ABDULLAYEVICH',
@@ -54,14 +53,17 @@ export default new Vuex.Store({
     ]
   },
   mutations: {
-    SET_MESSAGES(state, messages) {
-      state.messages = messages
-    }
   },
   actions: {
-    async loadMessages({commit}) {
-      let response = await Api().get('/user/login');
-      commit('SET_MESSAGES', response.data)
+    async loginUser({commit}, loginInfo) {
+      try {
+        let response = await Api().post('/user/login', loginInfo)
+        let user = response.data.attributes
+        commit('SET_CURRENT_USER', user)
+        return user
+      } catch {
+        return {error: "error appeared"}
+      }
     }
   },
   modules: {
