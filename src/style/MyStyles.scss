@@ -1319,6 +1319,97 @@ table {
   }
 }
 
+.con-page-grid5 {
+  margin-top: 24px;
+  width: 100%;
+  display: grid;
+  grid-column: 1 /span5;
+  column-gap: 24px;
+  row-gap: 24px;
+  grid-template-columns: calc(20% - 24px) calc(20% - 24px) calc(20% - 24px) calc(20% - 24px) 20%;
+  grid-template-rows: auto;
+
+  .img-cards {
+    position: relative;
+
+    .card-btns {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      align-items: center;
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      border-radius: 12px;
+      background: rgba(131, 133, 138, 0.64);
+      backdrop-filter: blur(8px);
+      opacity: 0;
+      transition: opacity 200ms;
+
+      .icn-btn-opcty {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 36px;
+        width: 36px;
+        border-radius: 8px;
+        border: none;
+        background: rgba(255, 255, 255, 0.36);
+        cursor: pointer;
+
+        img {
+          width: 24px;
+          height: 24px;
+        }
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.8);
+        }
+      }
+    }
+    
+    &:hover {
+      .card-btns {
+        opacity: 1;
+      }
+    }
+    
+    .empl-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      
+      span {
+        text-align: center;
+        font-family: Roboto;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 14px;
+        color: #83858A;
+        margin: 12px 0;
+      }
+
+      h3 {
+        text-align: center;
+        font-family: Roboto;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 16px;
+        color: #323438;
+        padding: 0 24px;
+        margin: 0;
+      }
+    }
+
+    img {
+      height: 234px;
+      width: 100%;
+      border-radius: 12px 12px 0 0;
+      object-fit: cover;
+    }
+  }
+}
+
 .el-breadcrumb__inner.is-link {
   font-family: Roboto;
   font-weight: 500;
@@ -1392,7 +1483,11 @@ table {
   }
 }
 
-
+.img-cards {
+  height: 320px;
+  background: #fff;
+  border-radius: 12px;
+}
 
 @media only screen and (max-width: 1520px) {
   .con-page-grid {
@@ -1717,7 +1812,15 @@ table {
         font-weight: 500;
       }
     }
-  } 
+  }
+
+  .btn-div {
+    display: flex;
+    width: 50%;
+    justify-content: flex-end;
+    padding-top: 24px;
+    gap: 24px;
+  }
 }
 
 
@@ -1737,5 +1840,5 @@ table {
 }
 
 .el-message .el-icon-error {
-    color: #fff;
-  }
+  color: #fff;
+}

@@ -56,6 +56,6 @@ export default {
       count: '6',
       path: './employees/cooks'},
       ]
-  })
+  }),
 }
 </script>
