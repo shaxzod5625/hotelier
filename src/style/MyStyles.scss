@@ -429,6 +429,24 @@
         flex-direction: column;
         gap: 24px;
         margin: 0 24px;
+
+        .login-input {
+          .el-input__inner {
+            background-image: url(../assets/icons/Login.svg);
+            background-repeat: no-repeat;
+            background-position-x: 97%;
+            background-position-y: 50%;
+          }
+        }
+
+        .password-input {
+          .el-input__inner {
+            background-image: url(../assets/icons/Password.svg);
+            background-repeat: no-repeat;
+            background-position-x: 97%;
+            background-position-y: 50%;
+          }
+        }
       }
 
       .modal-btns {
