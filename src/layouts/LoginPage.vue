@@ -14,10 +14,21 @@
               placeholder="Введите логин"
               v-model.trim="loginInfo.login"
               class="login-input"
-              :class="{invalid: ($v.loginInfo.login.$dirty && !$v.loginInfo.login.required)}"
+              :class="{invalid: ($v.loginInfo.login.$dirty && !$v.loginInfo.login.required) || ($v.loginInfo.login.$dirty && !$v.loginInfo.login.email)}"
             >
             </el-input>
-            <span class="validation-error">Пожалуйста, введите логин</span>
+            <span
+              class="validation-error"
+              v-if="$v.loginInfo.login.$dirty && !$v.loginInfo.login.required"
+            >
+              Пожалуйста, введите логин
+            </span>
+            <span
+              class="validation-error"
+              v-else-if="$v.loginInfo.login.$dirty && !$v.loginInfo.login.email"
+            >
+              Пожалуйста, введите корректный логин
+            </span>
           </div>
           
           <div
@@ -29,9 +40,22 @@
               placeholder="Введите пароль"
               v-model.trim="loginInfo.password"
               class="password-input"
+              :class="{invalid: ($v.loginInfo.password.$dirty && !$v.loginInfo.password.required) || ($v.loginInfo.password.$dirty && !$v.loginInfo.password.minLength)}"
             >
             </el-input>
-            <span class="validation-error">Пожалуйста, введите пароль</span>
+            <span
+              class="validation-error"
+              v-if="$v.loginInfo.password.$dirty && !$v.loginInfo.password.required"
+            >
+              Пожалуйста, введите пароль
+            </span>
+
+            <span
+              class="validation-error"
+              v-else-if="$v.loginInfo.password.$dirty && !$v.loginInfo.password.minLength"
+            >
+              Длина пароли должен быть {{$v.loginInfo.password.$params.minLength.min}} символов
+            </span>
           </div>
         </div>
 
@@ -56,15 +80,15 @@
 </template>
 
 <script>
-import {required} from 'vuelidate/lib/validators'
+import {email, required, minLength} from 'vuelidate/lib/validators'
 
 export default {
   name: 'LoginPage',
 
   validations: {
     loginInfo: {
-      login: {required},
-      password: {required}
+      login: {required, email},
+      password: {required, minLength: minLength(8)}
     }
   },
   
@@ -86,7 +110,7 @@ export default {
       let user = await this.$store.dispatch('loginUser', this.loginInfo)
     
       if(user.error) {
-        alert(user.error)
+        this.$message.error('Oops, this is a error message.');
       } else {
         alert("You're signed in!" + user.name)
       }
