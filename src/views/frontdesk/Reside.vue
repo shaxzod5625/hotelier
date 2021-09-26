@@ -192,51 +192,59 @@
       </div>
     </div>
 
-    <div class="guest-card"
-      v-for="id in filterReside"
-      :key="id"
-    >
-      <div class="card-header">
-        <div class="nfl">
-          <h3>{{id.nfl}}</h3>
-        </div>
-        <div class="r-n">
-          <h3 class="room-num">{{id.roomcat}} {{id.roomtype}} № {{id.roomnum}}</h3>
-        </div>
-        <div class="l-ic">
-            <img class="card-label" src="@/assets/icons/VIP.svg" alt=""
-              v-if="id.vip === true"
-            >
-          <div class="iconblc">
-            <img src="@/assets/icons/Extend.svg" alt="">
-            <img
-              src="@/assets/icons/Relocate.svg" alt=""
-              @click="residing = true"
-            >
-            <el-checkbox v-model="checked"></el-checkbox>
+    <div v-if="filterReside != ''">
+      <div class="guest-card"
+        v-for="(id, idx) in filterReside"
+        :key="idx"
+      >
+        <div class="card-header">
+          <div class="nfl">
+            <h3>{{id.nfl}}</h3>
+          </div>
+          <div class="r-n">
+            <h3 class="room-num">{{id.roomcat}} {{id.roomtype}} № {{id.roomnum}}</h3>
+          </div>
+          <div class="l-ic">
+              <img class="card-label" src="@/assets/icons/VIP.svg" alt=""
+                v-if="id.vip === true"
+              >
+            <div class="iconblc">
+              <img src="@/assets/icons/Extend.svg" alt="">
+              <img
+                src="@/assets/icons/Relocate.svg" alt=""
+                @click="residing = true"
+              >
+              <el-checkbox v-model="checked"></el-checkbox>
+            </div>
           </div>
         </div>
+        <table>
+          <tr>
+            <th class="pad-l-24">Регистрационный номер</th>
+            <th>Гражданство</th>
+            <th>Номер брони</th>
+            <th>Заезд</th>
+            <th>Выезд</th>
+            <th>Сумма к оплате</th>
+            <th class="pad-r-24">Статус оплаты</th>
+          </tr>
+          <tr>
+            <td class="pad-l-24">{{id.regnum}}</td>
+            <td>{{id.citizenship}}</td>
+            <td class="bookingnum">{{id.bookingnum}}</td>
+            <td>{{id.checkin}}</td>
+            <td>{{id.checkout}}</td>
+            <td>{{id.amounttopay}}</td>
+            <td class="pad-r-24">{{id.paymentstatus}}</td>
+          </tr>
+        </table>
       </div>
-      <table>
-        <tr>
-          <th class="pad-l-24">Регистрационный номер</th>
-          <th>Гражданство</th>
-          <th>Номер брони</th>
-          <th>Заезд</th>
-          <th>Выезд</th>
-          <th>Сумма к оплате</th>
-          <th class="pad-r-24">Статус оплаты</th>
-        </tr>
-        <tr>
-          <td class="pad-l-24">{{id.regnum}}</td>
-          <td>{{id.citizenship}}</td>
-          <td class="bookingnum">{{id.bookingnum}}</td>
-          <td>{{id.checkin}}</td>
-          <td>{{id.checkout}}</td>
-          <td>{{id.amounttopay}}</td>
-          <td class="pad-r-24">{{id.paymentstatus}}</td>
-        </tr>
-      </table>
+    </div>
+    <div
+      v-else
+      class="no-reults"
+    >
+      <h3>Результатов по поиску <span>"{{search}}"</span> среди гостей не найдено</h3>
     </div>
   </div>
 </template>
