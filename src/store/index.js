@@ -53,6 +53,9 @@ export default new Vuex.Store({
     ]
   },
   mutations: {
+    SET_CURRENT_USER(state, user) {
+      state.currentUser = user
+    }
   },
   actions: {
     async loginUser({commit}, loginInfo) {
