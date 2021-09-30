@@ -16,9 +16,10 @@
       <div class="btn-div">
         <button
           class="sec-btn"
+          @click="accesses = true"
         >
           <img src="@/assets/icons/Settings-sm.svg" alt="">
-          Добавить
+          Доступы
         </button>
         <button
           class="prim-btn"
@@ -29,6 +30,17 @@
       </div>
     </div>
 
+    <div
+      class="modal"
+      v-if="accesses"
+    >
+      <Accesses/>
+      <div class="modal-back"
+        @click="accesses = false"
+      >
+      </div>
+    </div>
+    
     <div class="con-page-grid5">
       <Employee-card
         v-for="(employee, idx) in searchEmployee" :key="idx"
@@ -44,16 +56,19 @@
 </template>
 
 <script>
+import Accesses from './Accesses.vue'
 import EmployeeCard from "./Employee-card.vue"
 
 export default {
   name: 'Receptionists',
 
   components: {
-    EmployeeCard
+    EmployeeCard,
+    Accesses
   },
   data: () => ({
     search: '',
+    accesses: false,
 
     clerks: [
       {
@@ -86,6 +101,14 @@ export default {
         position: 'Ночной',
         post: 'администратор',
         nfl: 'Arutunyan Alina Nikolayevna',
+        sex: 'female'
+      },
+      {
+        admin: '5',
+        imageUrl: '',
+        position: 'Ночной',
+        post: 'администратор',
+        nfl: 'Saveleva Yekaterina Pavlovna',
         sex: 'female'
       },
     ]

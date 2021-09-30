@@ -14,14 +14,14 @@
   width: 264px;
   height: 100%;
   background-color: #fff;
-  overflow-y: scroll;
+  overflow-y: hidden;
   overflow-x: hidden;
   transition: all 0.3s ease-out;
 
   .logo-box {
     display: flex;
     align-items: center;
-    height: 76px;
+    height: 68px;
 
     button {
     background: none;
@@ -192,14 +192,14 @@
   width: 68px;
   min-height: 100%;
   background-color: #fff;
-  overflow-y: scroll;
+  overflow-y: hidden;
   overflow-x: hidden;
   transition: all 0.3s ease-out;
 
   .logo-box {
     display: flex;
     align-items: center;
-    height: 76px;
+    height: 68px;
 
     button {
     background: none;
@@ -384,7 +384,10 @@
 .login-page {
   display: flex;
   padding: 0;
-  margin: 0;
+  margin-left: -288px;
+  margin-top: -24px;
+  margin-bottom: 0;
+  margin-right: 0;
 
   .blur-back {
     display: flex;
@@ -1321,16 +1324,18 @@ table {
 
 .con-page-grid5 {
   margin-top: 24px;
-  width: 100%;
+  width: auto;
   display: grid;
   grid-column: 1 /span5;
   column-gap: 24px;
   row-gap: 24px;
-  grid-template-columns: calc(20% - 24px) calc(20% - 24px) calc(20% - 24px) calc(20% - 24px) 20%;
+  grid-template-columns: calc((100% - 96px) / 5) calc((100% - 96px) / 5) calc((100% - 96px) / 5) calc((100% - 96px) / 5) calc((100% - 96px) / 5);
   grid-template-rows: auto;
 
   .img-cards {
     position: relative;
+    width: 100%;
+    min-width: 238px;
 
     .card-btns {
       display: flex;
@@ -1489,18 +1494,6 @@ table {
   border-radius: 12px;
 }
 
-@media only screen and (max-width: 1520px) {
-  .con-page-grid {
-    margin-top: 24px;
-    width: 100%;
-    display: grid;
-    grid-column: 1 /span3;
-    column-gap: 24px;
-    row-gap: 24px;
-    grid-template-columns: calc(33% - 24px) calc(33% - 24px) 34%;
-    grid-template-rows: auto;
-  }
-}
 
 
 // Employee cards styles
@@ -1690,6 +1683,10 @@ table {
   display: flex;
   flex-direction: column;
 
+  .el-select {
+    margin-left: 0 !important;
+  }
+
   label {
     font-family: Roboto;
     font-weight: 400;
@@ -1826,15 +1823,30 @@ table {
 
 // Custom element ui components
 
-.el-message--error {
-  background: #C91052;
+.el-message {
+  min-width: 380px;
+  box-sizing: border-box;
   border-radius: 12px;
   border: none;
+  position: fixed;
+  left: 50%;
+  top: 36px !important;
+  transform: translateX(-50%);
+  background-color: #edf2fc;
+  transition: opacity 0.3s, transform .4s, top 0.4s;
+  overflow: hidden;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+}
+
+.el-message--error {
+  background: #C91052;
 
   .el-message__content {
     font-family: Roboto;
-    font-weight: 400;
-    font-size: 14px;
+    font-weight: 500;
+    font-size: 16px;
     color: #fff;
   }
 }
@@ -1842,6 +1854,24 @@ table {
 .el-message .el-icon-error {
   color: #fff;
 }
+
+.el-message--success {
+  background: #10C986;
+
+  .el-message__content {
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 16px;
+    color: #fff;
+  }
+}
+
+.el-message .el-icon-success {
+  color: #fff;
+}
+
+
+
 
 
 // search elements
@@ -1864,5 +1894,101 @@ table {
     span {
       color: #2161ED;
     }
+  }
+}
+
+
+.el-tag.el-tag--info {
+  border: none;
+  background-color: transparent !important;
+}
+
+
+// modal forms
+
+.form-100 {
+  display: grid;
+  height: auto;
+  width: calc(100% - 48px);
+  grid-column: 1 /span4;
+  column-gap: 24px;
+  row-gap: 24px;
+  grid-template-columns: calc(25% - 24px) calc(25% - 24px) calc(25% - 24px) 25%;
+  grid-template-rows: auto;
+  margin: 24px 0;
+}
+
+
+.modal-div {
+  display: flex;
+  flex-direction: column;
+  width: 84%;
+  height: 600px;
+  align-items: center;
+  z-index: 2000;
+  background: #fff;
+  border-radius: 12px;
+  filter: drop-shadow(0px 6px 16px rgba(50, 52, 56, 0.36));
+
+  h3 {
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 16px;
+    text-align: center;
+    color: #323438;
+    margin: 16px 0;
+  }
+
+  h4 {
+    font-family: Roboto;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    text-align: center;
+    color: #83858A;
+    margin-top: 12px;
+    margin-bottom: 0;
+  }
+}
+
+
+
+
+// @media requests
+
+@media only screen and (max-width: 1520px) {
+  .con-page-grid {
+    margin-top: 24px;
+    width: 100%;
+    display: grid;
+    grid-column: 1 /span3;
+    column-gap: 24px;
+    row-gap: 24px;
+    grid-template-columns: calc(33% - 24px) calc(33% - 24px) 34%;
+    grid-template-rows: auto;
+  }
+}
+
+@media only screen and (max-width: 1609px) {
+  .con-page-grid5 {
+    grid-column: 1 /span4;
+    grid-template-columns: calc((100% - 72px) / 4) calc((100% - 72px) / 4) calc((100% - 72px) / 4) calc((100% - 72px) / 4);
+  }
+}
+
+@media only screen and (max-width: 1335px) {
+  .con-page-grid5 {
+    grid-column: 1 /span3;
+    grid-template-columns: calc((100% - 48px) / 3) calc((100% - 48px) / 3) calc((100% - 48px) / 3);
+  }
+}
+
+@media only screen and (max-height: 624px) {
+  .sidebar-closed {
+    overflow-y: scroll;
+  }
+  .sidebar-open {
+    overflow-y: scroll;
   }
 }
