@@ -8,24 +8,24 @@
     <div class="con-page-grid">
       <router-link
         class="set-card"
-        v-for="stng in settingcards"
-        :key="stng"
+        v-for="(id, idx) in settingcards"
+        :key="idx"
         tag="div"
-        :to="stng.path"
+        :to="id.path"
       >
         <div class="set-card-titleblock">
-          <svg  width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" v-html="stng.svg" ></svg>
-          <h3>{{stng.title}}</h3>
+          <svg  width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" v-html="id.svg" ></svg>
+          <h3>{{id.title}}</h3>
         </div>
-        <div v-if="stng.necessarily === true" class="filling-icon">
+        <div v-if="id.necessarily === true" class="filling-icon">
           <img
-            v-if="stng.filling === 'filled'" 
+            v-if="id.filling === 'filled'" 
             src="@/assets/icons/Filled.svg" alt="">
           <img
-            v-if="stng.filling === 'notfilled'"
+            v-if="id.filling === 'notfilled'"
             src="@/assets/icons/NotFilled.svg" alt="">
           <img
-            v-if="stng.filling === 'particularly'"
+            v-if="id.filling === 'particularly'"
             src="@/assets/icons/Particularly.svg" alt="">
         </div>
       </router-link>

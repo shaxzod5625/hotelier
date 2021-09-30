@@ -136,26 +136,6 @@
       v-if="selected === 'Профили гостей'"
       class="tab-conpage"
     >
-      <div class="filter-block">
-        <div class="search-bar">
-          <input type="text" placeholder="Введите имя гостя или серию и номер паспорта" v-model="search">
-
-          <h3>Сортировка: <span>Все</span></h3>
-        </div>
-        <div class="button-bar">
-          <div class="btns">
-            <button class="sec-btn">
-              <img src="@/assets/icons/Filter-sm.svg" alt="">
-              <span>Фильтр</span>
-            </button>
-          </div>
-          <h3>
-            Вид:
-            <span>Карточки</span>
-            <img src="@/assets/icons/Arrow-dwn.svg" alt="">
-          </h3>
-        </div>
-      </div>
       <Guestprofile/>
     </div>
   </div>
