@@ -1,23 +1,20 @@
 <template>
   <div id="app">
-    <LoginPage v-if="login === true" />
-    <MainLayout v-else/>
+    <MainLayout/>
   </div>
 </template>
 
 <script>
 import MainLayout from './layouts/MainLayout.vue'
-import LoginPage from './layouts/LoginPage.vue'
 
 export default {
   name: 'app',
 
   components: {
-    MainLayout, LoginPage
+    MainLayout
   },
 
   data: () => ({
-    login: false
-  })
+  }),
 }
 </script>

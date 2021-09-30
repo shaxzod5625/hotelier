@@ -262,6 +262,7 @@ export default {
     Category: '',
     Citizenship: '',
     Paymentstatus: '',
+    checklist: [],
 
     filcats: [{
         Category: 'Стандарт',
@@ -288,13 +289,13 @@ export default {
       }],
 
       filpaymenstatus: [{
-        Paymentstatus: 'Оплачено'
+        Paymentstatus: 'Оплачен'
       }, {
-        Paymentstatus: 'Не оплачено'
+        Paymentstatus: 'Не оплачен'
       }, {
         Paymentstatus: 'По договору'
       }, {
-        Paymentstatus: 'Частично оплачено'
+        Paymentstatus: 'Частично оплачен'
       }],
   }),
 

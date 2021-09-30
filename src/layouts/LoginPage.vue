@@ -107,14 +107,18 @@ export default {
         return
       }
 
-      let user = await this.$store.dispatch('loginUser', this.loginInfo)
-    
-      if(user.error) {
+      try {
+        await this.$store.dispatch('loginUser', this.loginInfo)
+        this.$router.push('/dashboard')
+        let uid = await JSON.parse(window.localStorage.currentUser)
+        this.$message({
+        message: "Добро пожаловать в Hotelier, " + uid.user.firstName,
+        type: 'success'})
+      } catch (e) {
         this.$message.error('Oops, this is a error message.');
-      } else {
-        alert("You're signed in!" + user.name)
       }
     },
+    
     nothing() {
 
     }
