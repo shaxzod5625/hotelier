@@ -115,9 +115,21 @@ export default new Vuex.Store({
         let response = await Api().post('/user/login', loginInfo)
         let user = response.data
         commit('SET_CURRENT_USER', user)
-      } catch {
-        return {error: "error appeared"}
-      }
+      } catch (error) {
+        // if (error.response) {
+        // //   // Request made and server responded
+        // //   console.log(error.response.data);
+        // //   console.log(error.response.status);
+        // //   console.log(error.response.headers);
+        // // } else if (error.request) {
+        // //   // The request was made but no response was received
+        // //   console.log(error.request);
+        // // } else {
+        // //   // Something happened in setting up the request that triggered an Error
+        //   console.log('Error', error.message);
+        // }
+    
+      };
     },
     async getCharts({commit}) {
       let response = await Api().post('/user/charts')

@@ -114,8 +114,9 @@ export default {
         this.$message({
         message: "Добро пожаловать в Hotelier, " + uid.user.firstName,
         type: 'success'})
-      } catch (e) {
-        this.$message.error('Oops, this is a error message.');
+      } catch {
+        // return {error: error.message}
+        // this.$message.error('Oops, this is a error message.');
       }
     },
     
