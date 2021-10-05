@@ -50,13 +50,12 @@
             <img src="@/assets/User.png" alt="">
           </div>
           <div>
-            <h3>{{uid.user.lastName}} {{uid.user.firstName}}</h3>
-            <span>{{uid.user.position}} {{uid.user.functions}}</span>
+            <!-- <h3>{{ uid.user.lastName }} {{ uid.user.firstName }}</h3>
+            <span>{{ uid.user.position }} {{ uid.user.functions }}</span> -->
           </div>
         </li>
       </ul>
     </div>
-
     <div :class="side ? 'narrow' : 'wide'">
       <router-view/>
     </div>
@@ -68,6 +67,7 @@
 <script>
 
 export default {
+  name: 'main-layout',
   data: () => ({
     side: true,
     newmessage: false,
@@ -155,12 +155,11 @@ export default {
   
 
   methods: {
-
     async logout() {
       localStorage.removeItem('currentUser')
       this.$router.push('/login')
       await this.$store.dispatch('logout')
-    },
-  }
+    }
+  }      
 }
 </script>
