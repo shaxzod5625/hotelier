@@ -5,162 +5,100 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    path: '/',
+    name: 'HomePage',
+    meta: {layout: 'additional', auth: true},
+    // component: () => import ('../views/Home.vue'),
+  },
+  {
     path: '/login',
     name: 'LoginPage',
-    component: () => import ('../layouts/LoginPage.vue'),
+    meta: {layout: 'additional', auth: false},
+    component: () => import ('../views/LoginPage.vue'),
   },
   {
     path: '/dashboard',
     name: 'Dashboard',
+    meta: {layout: 'main', auth: true},
     component: () => import ('../views/Dashboard.vue'),
-    beforeEnter: (to, from, next) => {
-      const uid = localStorage.getItem('currentUser')
-      if (uid == null) {next({path: '/login'})
-      } else {next()}
-    }
   },
   {
     path: '/frontdesk',
     name: 'Frontdesk',
+    meta: {layout: 'main', auth: true},
     component: () => import ('../views/Frontdesk.vue'),
-
-    beforeEnter: (to, from, next) => {
-      const uid = localStorage.getItem('currentUser')
-      if (uid == null) {next({path: '/login'})
-      } else {next()}
-    }
   },
   {
     path: '/cashier',
     name: 'Cashier',
+    meta: {layout: 'main', auth: true},
     component: () => import ('../views/Cashier.vue'),
-
-    beforeEnter: (to, from, next) => {
-      const uid = localStorage.getItem('currentUser')
-      if (uid == null) {next({path: '/login'})
-      } else {next()}
-    }
   },
   {
     path: '/folio',
     name: 'Folio',
+    meta: {layout: 'main', auth: true},
     // component: () => import ('../views/Folio.vue'),
-
-    beforeEnter: (to, from, next) => {
-      const uid = localStorage.getItem('currentUser')
-      if (uid == null) {next({path: '/login'})
-      } else {next()}
-    }
   },
   {
     path: '/calendar',
     name: 'Calendar',
+    meta: {layout: 'main', auth: true},
     // component: () => import ('../views/Calendar.vue'),
-
-    beforeEnter: (to, from, next) => {
-      const uid = localStorage.getItem('currentUser')
-      if (uid == null) {next({path: '/login'})
-      } else {next()}
-    }
   },
   {
     path: '/statistics',
     name: 'Statistics',
+    meta: {layout: 'main', auth: true},
     // component: () => import ('../views/Statistics.vue'),
-
-    beforeEnter: (to, from, next) => {
-      const uid = localStorage.getItem('currentUser')
-      if (uid == null) {next({path: '/login'})
-      } else {next()}
-    }
   },
   {
     path: '/reports',
     name: 'Reports',
+    meta: {layout: 'main', auth: true},
     // component: () => import ('../views/Reports.vue'),
-
-    beforeEnter: (to, from, next) => {
-      const uid = localStorage.getItem('currentUser')
-      if (uid == null) {next({path: '/login'})
-      } else {next()}
-    }
   },
   {
     path: '/room-board',
     name: 'Roomboard',
+    meta: {layout: 'main', auth: true},
     // component: () => import ('../views/Roomboard.vue'),
-
-    beforeEnter: (to, from, next) => {
-      const uid = localStorage.getItem('currentUser')
-      if (uid == null) {next({path: '/login'})
-      } else {next()}
-    }
   },
   {
     path: '/channel-manager',
     name: 'Channel-manager',
+    meta: {layout: 'main', auth: true},
     // component: () => import ('../views/Channel-manager.vue'),
-
-    beforeEnter: (to, from, next) => {
-      const uid = localStorage.getItem('currentUser')
-      if (uid == null) {next({path: '/login'})
-      } else {next()}
-    }
   },
   {
     path: '/settings/',
     name: 'Settings',
+    meta: {layout: 'main', auth: true},
     component: () => import ('../views/Settings.vue'),
-    
-    beforeEnter: (to, from, next) => {
-      const uid = localStorage.getItem('currentUser')
-      if (uid == null) {next({path: '/login'})
-      } else {next()}
-    }
   },
   {
     path: '/settings/object-registration',
     name: 'Registration',
+    meta: {layout: 'main', auth: true},
     component: () => import ('../views/settings/ObjectReg.vue'),
-
-    beforeEnter: (to, from, next) => {
-      const uid = localStorage.getItem('currentUser')
-      if (uid == null) {next({path: '/login'})
-      } else {next()}
-    }
   },
   {
     path: '/settings/requisites',
     name: 'Requisites',
+    meta: {layout: 'main', auth: true},
     component: () => import ('../views/settings/Requisites.vue'),
-
-    beforeEnter: (to, from, next) => {
-      const uid = localStorage.getItem('currentUser')
-      if (uid == null) {next({path: '/login'})
-      } else {next()}
-    }
   },
   {
     path: '/settings/employees',
     name: 'Employees',
+    meta: {layout: 'main', auth: true},
     component: () => import ('../views/settings/Employees.vue'),
-
-    beforeEnter: (to, from, next) => {
-      const uid = localStorage.getItem('currentUser')
-      if (uid == null) {next({path: '/login'})
-      } else {next()}
-    }
   },
   {
     path: '/settings/employees/receptionists',
     name: 'Receptionists',
+    meta: {layout: 'main', auth: true},
     component: () => import ('../views/settings/employees/Receptionists.vue'),
-
-    beforeEnter: (to, from, next) => {
-      const uid = localStorage.getItem('currentUser')
-      if (uid == null) {next({path: '/login'})
-      } else {next()}
-    }
   },
 
   
@@ -170,6 +108,14 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeResolve((to, from, next) => {
+  const uid = JSON.parse(window.localStorage.currentUser)
+  const requireAuth = to.matched.some(record => record.meta.auth)
+  console.log(uid);
+  if ((uid === "Unauthorized" && requireAuth) || (uid === null && requireAuth)) {next({path: '/login'})
+  } else {next()}
 })
 
 export default router

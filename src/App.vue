@@ -1,20 +1,26 @@
 <template>
   <div id="app">
-    <MainLayout/>
+    <component :is="layout">
+      <router-view/>
+    </component>
   </div>
 </template>
 
 <script>
+import AdditionalLayout from './layouts/AdditionalLayout.vue'
 import MainLayout from './layouts/MainLayout.vue'
 
 export default {
   name: 'app',
 
   components: {
-    MainLayout
+    MainLayout, AdditionalLayout
   },
 
-  data: () => ({
-  }),
+  computed: {
+    layout() {
+      return (this.$route.meta.layout || 'additional') + '-layout'
+    }
+  },
 }
 </script>

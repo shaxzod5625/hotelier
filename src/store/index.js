@@ -131,7 +131,7 @@ export default new Vuex.Store({
         let response = await Api().post('/user/login', loginInfo)
         let user = response.data
         commit('SET_CURRENT_USER', user)
-      } catch (error) {
+      } catch {
       };
     },
     async getCharts({commit}) {

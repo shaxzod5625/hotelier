@@ -1,13 +1,16 @@
 <template>
   <div class="login-page">
     <div class="blur-back">
-      <form class="login-form" @submit.prevent="nothing">
+      <form class="login-form" @submit.prevent="loginUser">
 
         <div class="greetings">
           <h3>Добро пожаловать в Hotelier PMS</h3>
         </div>
 
-        <div class="login-inputs">
+        <div
+          class="login-inputs"
+          @keyup.enter="loginUser"
+        >
           <div class="w-100">
             <el-input
               type="text"
@@ -31,10 +34,7 @@
             </span>
           </div>
           
-          <div
-            class="w-100"
-            @keyup.enter="loginUser"
-          >
+          <div class="w-100">
             <el-input
               type="password"
               placeholder="Введите пароль"
@@ -110,19 +110,15 @@ export default {
       try {
         await this.$store.dispatch('loginUser', this.loginInfo)
         this.$router.push('/dashboard')
-        let uid = await JSON.parse(window.localStorage.currentUser)
         this.$message({
-        message: "Добро пожаловать в Hotelier, " + uid.user.firstName,
+        message: "Добро пожаловать в Hotelier, " + JSON.parse(window.localStorage.currentUser).user.firstName,
         type: 'success'})
       } catch {
-        return {error}
-        // this.$message.error('Oops, this is a error message.');
-      }
+        if(JSON.parse(window.localStorage.currentUser) === 'Unauthorized') {
+          this.$message.error('Введенные данные не верны. Проверьте, пожалуйста, логин и пароль')
+        } else {this.$message.error('Войдите в систему повторно')}
+      };
     },
-    
-    nothing() {
-
-    }
   }
 }
 </script> 
