@@ -9,7 +9,7 @@
 
         <div
           class="login-inputs"
-          @keyup.enter="loginUser"
+          @keyup.prevent.enter="loginUser"
         >
           <div class="w-100">
             <el-input
@@ -109,14 +109,15 @@ export default {
 
       try {
         await this.$store.dispatch('loginUser', this.loginInfo)
+        let curUser = await window.localStorage.currentUser
         this.$router.push('/dashboard')
         this.$message({
-        message: "Добро пожаловать в Hotelier, " + JSON.parse(window.localStorage.currentUser).user.firstName,
+        message: "Добро пожаловать в Hotelier, " + curUser.user.firstName,
         type: 'success'})
       } catch {
         if(JSON.parse(window.localStorage.currentUser) === 'Unauthorized') {
           this.$message.error('Введенные данные не верны. Проверьте, пожалуйста, логин и пароль')
-        } else {this.$message.error('Войдите в систему повторно')}
+        } else {}
       };
     },
   }

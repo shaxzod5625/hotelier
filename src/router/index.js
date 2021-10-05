@@ -111,11 +111,12 @@ const router = new VueRouter({
 })
 
 router.beforeResolve((to, from, next) => {
-  const uid = JSON.parse(window.localStorage.currentUser)
   const requireAuth = to.matched.some(record => record.meta.auth)
-  console.log(uid);
-  if ((uid === "Unauthorized" && requireAuth) || (uid === null && requireAuth)) {next({path: '/login'})
-  } else {next()}
+  if (requireAuth && window.localStorage.currentUser === undefined) {next({path: '/login'})
+  } else if (requireAuth && JSON.parse(window.localStorage.currentUser) === "Unauthorized") {
+    next({path: '/login'})
+  }
+  else {next()}
 })
 
 export default router

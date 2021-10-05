@@ -4,7 +4,6 @@ export default () => {
   return axios.create({
     baseURL: 'http://195.158.30.34:1894/',
     withCredentials: true,
-    timeout: 5000,
     validateStatus: function(status) {
       return status < 501;
     },

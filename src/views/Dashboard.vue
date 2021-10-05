@@ -6,7 +6,7 @@
       </el-breadcrumb>
     </div>
     <div class="dash-numbers">
-      <div @click="getCharts" class="dash-card">
+      <div class="dash-card">
         <div class="dash-icons">
           <img src="@/assets/icons/keys-1.svg" alt="">
           <img class="white-icon" src="@/assets/icons/keys-1-white.svg" alt="">
@@ -490,14 +490,14 @@ export default {
     }],
   }),
 
-  methods: {
-    async getCharts() {
-      try {
-        await this.$store.dispatch('getCharts')
-      } catch (e) {
-      } 
-    },
-    async isAuthenticated() {}
-  }
+  // methods: {
+  //   async getCharts() {
+  //     try {
+  //       await this.$store.dispatch('getCharts')
+  //     } catch (e) {
+  //     } 
+  //   },
+  //   async isAuthenticated() {}
+  // }
 }
 </script>
