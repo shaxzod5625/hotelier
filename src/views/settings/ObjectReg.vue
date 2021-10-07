@@ -14,7 +14,7 @@
             <el-option
               v-for="obj in objregistration"
               :key="obj.id"
-              :label="obj"
+              :label="obj"  
               :value="obj">
             </el-option>
           </el-select>

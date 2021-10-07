@@ -1951,8 +1951,113 @@ table {
     margin-bottom: 0;
   }
 }
-
-
+.roomFund-tabbar {
+  background: #FFFFFF;
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  &__btns {
+    display: flex;
+    & .ghost-btn {
+      border: 1px solid #2161ED;
+      margin-right: 24px;
+    }
+  }
+  h2 {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 16px;
+    color: #83858A;
+    span {
+      color: #000;
+    }
+  }
+}
+.roomFund-table {
+  background: #FFFFFF;
+  border-radius: 12px;
+  & tr th {
+    border-bottom: none;
+  }
+  td {
+    padding: 17px 0 17px 24px;
+    border-top: 1px solid #E0E1E2;
+    width: 30%;
+    &:nth-of-type(1) {
+      color: #323438;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    &:nth-last-child(1) {
+      display: flex;
+      align-items: center;
+      width: initial;
+      padding-left: 0;
+      & button {
+        border: none;
+        background: transparent;
+        margin-right: 20px;
+        cursor: pointer;
+        & img {
+          width: 18px;
+          height: 18px;
+        }
+      }
+    }
+  }
+  th {
+    padding: 16px 0 8px 24px;
+  }
+}
+.roomFund-table.standart {
+  td {
+    cursor: text;
+  }
+}
+.roomFund-form .modal-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.standart-form {
+  height: 500px;
+  display: block;
+  &__content {
+    padding: 24px 24px 0 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    &_div {
+      max-width: 49%;
+      width: 100%;
+    }
+  }
+  label {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 16px;
+    color: #83858A;
+    margin-bottom: 8px;
+    display: block;
+  }
+}
+.standart-modal__btns {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+.standart-form__content_div.w-33 {
+  width: 32% !important;
+}
 
 
 // @media requests

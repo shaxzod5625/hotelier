@@ -162,8 +162,26 @@ const routes = [
       } else {next()}
     }
   },
-
-  
+  {
+    path: '/settings/room-fund',
+    name: 'Room-fund',
+    component: () => import ('../views/settings/Room-fund.vue'),
+    beforeEnter: (to, from, next) => {
+      const uid = localStorage.getItem('currentUser')
+      if (uid == null) {next({path: '/login'})
+      } else {next()}
+    }
+  },
+  {
+    path: '/settings/room-fund/standart',
+    name: 'Room-fund',
+    component: () => import ('../views/settings/room-fund/Room-fund_standart'),
+    beforeEnter: (to, from, next) => {
+      const uid = localStorage.getItem('currentUser')
+      if (uid == null) {next({path: '/login'})
+      } else {next()}
+    }
+  }
 ]
 
 const router = new VueRouter({

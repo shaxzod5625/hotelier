@@ -15,7 +15,8 @@
             :key="item.Category"
             :label="item.Category"
             :value="item.Category">
-          </el-option>
+          </el-option>,
+          
         </el-select>
 
         <label for="select">Гражданство гостя</label>
