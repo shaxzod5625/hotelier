@@ -6,6 +6,11 @@
       </el-breadcrumb>
     </div>
     
+    <CheckIn
+      v-if="checkIn"
+      @close="close"
+    />
+    
     <div class="tabbar">
       <TabBar
         :tabs="['Проживают', 'Заезжают', 'Выехали', 'Брони', 'Профили гостей']"
@@ -22,6 +27,7 @@
 
       <button class="tabbar-btn"
         v-else
+        @click="checkIn = true"
       >
         Разместить
       </button>
@@ -149,24 +155,30 @@ import Checkingin from './frontdesk/Checkingin.vue'
 import Checkedout from './frontdesk/Checkedout.vue'
 import Bookings from './frontdesk/Bookings.vue'
 import Guestprofile from './frontdesk/Guestprofile.vue'
+import CheckIn from './frontdesk/CheckIn.vue'
 
 
 export default {
   name: 'Frontdesk',
   
   components: {
-    TabBar, Tab, Reside, Checkingin, Checkedout, Bookings, Guestprofile
+    TabBar, Tab, Reside, Checkingin, Checkedout, Bookings, Guestprofile, CheckIn
   },
 
   data: () => ({
       selected: 'Проживают',
-      input: ''
+      input: '',
+      checkIn: false
   }),
 
   methods: {
     setSelected(tab) {
       this.selected = tab;
-    }
+    },
+
+    close() {
+      this.checkIn = false
+    },
   }
 }
 </script>

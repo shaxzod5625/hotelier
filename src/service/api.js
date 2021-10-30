@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default () => {
   return axios.create({
-    baseURL: 'http://195.158.30.34:1894/',
+    baseURL: 'https://hotelier.uz:3000/',
     withCredentials: true,
     validateStatus: function(status) {
       return status < 501;

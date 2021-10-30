@@ -4,7 +4,7 @@
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/settings'}" class="breadcrump">Настройки</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: '/settings/employees'}" class="breadcrump">Сотрудники</el-breadcrumb-item>
-        <el-breadcrumb-item class="breadcrump">Администраторы</el-breadcrumb-item>
+        <el-breadcrumb-item class="breadcrump">Повара</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
 
@@ -68,13 +68,24 @@
     <EditingEmployee
       v-if="edit"
       @closeEdit="closeEdit"
+
+      :lastName="lastName"
+      :name="name"
+      :familyName="familyName" 
+      :position="position"
+      :post="post"
+      :sex="sex"
+      :phoneNumber="phoneNumber"
+      :email="email"
+      :login="login"
+      :langs="langs"
     />
 
     <DeleteEmployee
       v-if="deleteEmpl"
       @closeDelete="closeDelete"
     />
-    
+
     <div class="con-page-grid5">
       <Employee-card
         @edit="editEmployee"
@@ -85,7 +96,9 @@
         :imageUrl="employee.imageUrl"
         :position="employee.position"
         :post="employee.post"
-        :nfl="employee.nfl"
+        :name="employee.name"
+        :lastName="employee.lastName"
+        :familyName="employee.familyName"
         :sex="employee.sex"
       />
     </div>
@@ -100,7 +113,7 @@ import EditingEmployee from './EditingEmployee.vue'
 import DeleteEmployee from './DeleteEmployee.vue'
 
 export default {
-  name: 'Receptionists',
+  name: 'Managers',
 
   components: {
     EmployeeCard, Accesses, NewEmployee, EditingEmployee, DeleteEmployee
@@ -127,61 +140,75 @@ export default {
     positions: [
       {
       value: 'Senior',
-      label: 'Старший администратор'
+      label: 'Старший повар'
       },
       {
       value: 'Junior',
-      label: 'Младший администратор'
+      label: 'Младший повар'
       },
       {
       value: 'Day',
-      label: 'Дневной администратор'
+      label: 'Дневной повар'
       },
       {
       value: 'Night',
-      label: 'Ночной администратор'
+      label: 'Ночной повар'
+      },
+      {
+      value: 'Main',
+      label: 'Главный повар'
       }
     ],
 
-    clerks: [
+    employees: [
       {
-        admin: '1',
+        emplId: '001',
         imageUrl: 'https://cdn2.momjunction.com/wp-content/uploads/2021/02/What-Is-A-Sigma-Male-And-Their-Common-Personality-Trait-910x1024.jpg',
         position: 'Старший',
-        post: 'администратор',
-        nfl: 'Aleksandrov Aleksandr Aleksandrovich',
+        post: 'повар',
+        name: 'Aleksandr',
+        lastName: 'Aleksandrov',
+        familyName: 'Aleksandrovich',
         sex: 'male'
       },
       {
-        admin: '2',
+        emplId: '002',
         imageUrl: '',
         position: 'Младший',
-        post: 'администратор',
-        nfl: 'Murzakov Ilya Ashkinaziyevich',
+        post: 'повар',
+        name: 'Ilya',
+        lastName: 'Murzakov',
+        familyName: 'Ashkinaziyevich',
         sex: 'male'
       },
       {
-        admin: '3',
+        emplId: '003',
         imageUrl: '',
         position: 'Дневной',
-        post: 'администратор',
-        nfl: 'Lebedeva Valeriya Ignatiyevna',
+        post: 'повар',
+        name: 'Valeriya',
+        lastName: 'Lebedeva',
+        familyName: 'Ignatiyevna',
         sex: 'female'
       },
       {
-        admin: '4',
+        emplId: '004',
         imageUrl: '',
         position: 'Ночной',
-        post: 'администратор',
-        nfl: 'Arutunyan Alina Nikolayevna',
+        post: 'повар',
+        name: 'Alina',
+        lastName: 'Arutunyan',
+        familyName: 'Nikolayevna',
         sex: 'female'
       },
       {
-        admin: '5',
+        emplId: '005',
         imageUrl: '',
-        position: 'Ночной',
-        post: 'администратор',
-        nfl: 'Saveleva Yekaterina Pavlovna',
+        position: 'Главный',
+        post: 'повар',
+        name: 'Yekaterina',
+        lastName: 'Saveleva',
+        familyName: 'Pavlovna',
         sex: 'female'
       },
     ]
@@ -189,8 +216,10 @@ export default {
 
   computed: {
     searchEmployee(){
-      return this.clerks.filter(post => {
-        return post.nfl.toLowerCase().includes(this.search.toLowerCase())
+      return this.employees.filter(post => {
+        return post.name.toLowerCase().includes(this.search.toLowerCase())
+        && post.lastName.toLowerCase().includes(this.search.toLowerCase())
+        && post.familyName.toLowerCase().includes(this.search.toLowerCase())
       })
     }
   },
@@ -212,7 +241,7 @@ export default {
       this.deleteEmpl = false
     },
 
-    editEmployee() {
+    editEmployee(emplId) {
       this.edit = true
     },
 

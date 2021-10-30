@@ -16,8 +16,8 @@
               v-if="item.vip === true"
             >
           <div class="iconblc">
-            <img src="@/assets/icons/Edit.svg" alt="">
-            <img src="@/assets/icons/Checkin.svg" alt="">
+            <img class="icon-box" src="@/assets/icons/Edit.svg" alt="">
+            <img class="icon-box" src="@/assets/icons/Checkin.svg" alt="">
             <el-checkbox v-model="checked"></el-checkbox>
           </div>
         </div>

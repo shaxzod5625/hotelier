@@ -109,13 +109,20 @@ export default {
 
       try {
         await this.$store.dispatch('loginUser', this.loginInfo)
-        let curUser = await window.localStorage.currentUser
-        this.$router.push('/dashboard')
+        this.$router.push('/dashboard').catch(err => {
+          if (
+            err.name !== 'NavigationDuplicated' &&
+            !err.message.includes('Avoided redundant navigation to current location')
+          ) {
+            logError(err);
+          }
+        });
+
         this.$message({
-        message: "Добро пожаловать в Hotelier, " + curUser.user.firstName,
+        message: "Добро пожаловать в Hotelier, " + JSON.parse(window.sessionStorage.currentUser).user.firstName,
         type: 'success'})
       } catch {
-        if(JSON.parse(window.localStorage.currentUser) === 'Unauthorized') {
+        if(JSON.parse(window.sessionStorage.currentUser) === 'Unauthorized') {
           this.$message.error('Введенные данные не верны. Проверьте, пожалуйста, логин и пароль')
         } else {}
       };

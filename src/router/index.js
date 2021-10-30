@@ -9,6 +9,7 @@ const routes = [
     name: 'HomePage',
     meta: {layout: 'additional', auth: true},
     // component: () => import ('../views/Home.vue'),
+    redirect: '/dashboard',
   },
   {
     path: '/login',
@@ -95,13 +96,54 @@ const routes = [
     component: () => import ('../views/settings/Employees.vue'),
   },
   {
+    path: '/settings/room-fund',
+    name: 'RoomFund',
+    meta: {layout: 'main', auth: true},
+    component: () => import ('../views/settings/RoomFund.vue'),
+  },
+  {
+    path: '/settings/room-fund/:id',
+    name: 'Category Window',
+    meta: {layout: 'main', auth: true},
+    params: true,
+    component: () => import ('../views/settings/roomfund/CategoryWindow.vue'),
+  },
+  {
     path: '/settings/employees/receptionists',
     name: 'Receptionists',
     meta: {layout: 'main', auth: true},
     component: () => import ('../views/settings/employees/Receptionists.vue'),
   },
-
-  
+  {
+    path: '/settings/employees/managers',
+    name: 'Managers',
+    meta: {layout: 'main', auth: true},
+    component: () => import ('../views/settings/employees/Managers.vue'),
+  },
+  {
+    path: '/settings/employees/restaurant-managers',
+    name: 'Restaurant Managers',
+    meta: {layout: 'main', auth: true},
+    component: () => import ('../views/settings/employees/RestaurantManagers.vue'),
+  },
+  {
+    path: '/settings/employees/maids',
+    name: 'Maids',
+    meta: {layout: 'main', auth: true},
+    component: () => import ('../views/settings/employees/Maids.vue'),
+  },
+  {
+    path: '/settings/employees/waiters',
+    name: 'Waiters',
+    meta: {layout: 'main', auth: true},
+    component: () => import ('../views/settings/employees/Waiters.vue'),
+  },
+  {
+    path: '/settings/employees/cooks',
+    name: 'Cooks',
+    meta: {layout: 'main', auth: true},
+    component: () => import ('../views/settings/employees/Cooks.vue'),
+  },
 ]
 
 const router = new VueRouter({
@@ -112,8 +154,8 @@ const router = new VueRouter({
 
 router.beforeResolve((to, from, next) => {
   const requireAuth = to.matched.some(record => record.meta.auth)
-  if (requireAuth && window.localStorage.currentUser === undefined) {next({path: '/login'})
-  } else if (requireAuth && JSON.parse(window.localStorage.currentUser) === "Unauthorized") {
+  if (requireAuth && window.sessionStorage.currentUser === undefined) {next({path: '/login'})
+  } else if (requireAuth && JSON.parse(window.sessionStorage.currentUser) === "Unauthorized") {
     next({path: '/login'})
   }
   else {next()}
