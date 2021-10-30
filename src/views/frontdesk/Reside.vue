@@ -68,7 +68,7 @@
         <h3>Распечатать карточки</h3>
         <div class="divider"></div>
         <h3 class="cardsectitle">Количество выбранных гостей:</h3>
-        <h3 class="cardcount">12</h3>
+        <h3 class="cardcount">{{checkList.length}}</h3>
         <h3 class="cardquest">Распечатать регистрационные карточки?</h3>
         <div class="modal-btns">
           <button
@@ -95,11 +95,11 @@
       v-if="checkingout"
     >
       <div class="form-filter">
-        <h3>Распечатать карточки</h3>
+        <h3>Выселение</h3>
         <div class="divider"></div>
         <h3 class="cardsectitle">Количество выбранных гостей:</h3>
-        <h3 class="cardcount">12</h3>
-        <h3 class="cardquest">Распечатать регистрационные карточки?</h3>
+        <h3 class="cardcount">{{checkList.length}}</h3>
+        <h3 class="cardquest">Выселить гостей?</h3>
         <div class="modal-btns">
           <button
             class="sec-btn"
@@ -119,35 +119,19 @@
       </div>
     </div>
 
+    <ExtendingModal
+      @closeExtend="closeExtend"
+      v-if="extending"
+      :nfl="nfl"
+      :checkoutDate="mcheckout"
+    />
 
-<!-- residing modal -->
-    <div class="modal"
+    <ResidingModal
+      @close="close"
       v-if="residing"
-    >
-      <div class="form-filter">
-        <h3>Переселение гостя</h3>
-        <div class="divider"></div>
-        <h3 class="cardsectitle">Abdullayev Abdulla Abdullayevich</h3>
-        <h3 class="cardcount">12</h3>
-        <h3 class="cardquest">Распечатать регистрационные карточки?</h3>
-        <div class="modal-btns">
-          <button
-            class="sec-btn"
-            @click="residing = false"
-          >
-            <span>Отмена</span>
-          </button>
-
-          <button class="prim-btn">
-            <span>OK</span>
-          </button>
-        </div>
-      </div>
-      <div class="modal-back"
-        @click="residing = false"
-      >
-      </div>
-    </div>
+      :room="modalRoom"
+      :nfl="nfl"
+    />
 
     <div class="filter-block">
       <div class="search-bar">
@@ -193,52 +177,24 @@
     </div>
 
     <div v-if="filterReside != ''">
-      <div class="guest-card"
-        v-for="(id, idx) in filterReside"
-        :key="idx"
-      >
-        <div class="card-header">
-          <div class="nfl">
-            <h3>{{id.nfl}}</h3>
-          </div>
-          <div class="r-n">
-            <h3 class="room-num">{{id.roomcat}} {{id.roomtype}} № {{id.roomnum}}</h3>
-          </div>
-          <div class="l-ic">
-              <img class="card-label" src="@/assets/icons/VIP.svg" alt=""
-                v-if="id.vip === true"
-              >
-            <div class="iconblc">
-              <img src="@/assets/icons/Extend.svg" alt="">
-              <img
-                src="@/assets/icons/Relocate.svg" alt=""
-                @click="residing = true"
-              >
-              <el-checkbox v-model="checked"></el-checkbox>
-            </div>
-          </div>
-        </div>
-        <table>
-          <tr>
-            <th class="pad-l-24">Регистрационный номер</th>
-            <th>Гражданство</th>
-            <th>Номер брони</th>
-            <th>Заезд</th>
-            <th>Выезд</th>
-            <th>Сумма к оплате</th>
-            <th class="pad-r-24">Статус оплаты</th>
-          </tr>
-          <tr>
-            <td class="pad-l-24">{{id.regnum}}</td>
-            <td>{{id.citizenship}}</td>
-            <td class="bookingnum">{{id.bookingnum}}</td>
-            <td>{{id.checkin}}</td>
-            <td>{{id.checkout}}</td>
-            <td>{{id.amounttopay}}</td>
-            <td class="pad-r-24">{{id.paymentstatus}}</td>
-          </tr>
-        </table>
-      </div>
+      <GuestCard v-for="(guest, idx) in filterReside" :key="idx" @open="open" @checkedBx="checkedBx" @openExtend="openExtend"
+      
+        :id="guest.id"
+        :nfl="guest.nfl"
+        :vip="guest.vip"
+        :roomcat="guest.roomcat"
+        :roomtype="guest.roomtype"
+        :roomnum="guest.roomnum"
+        :regnum="guest.regnum"
+        :citizenship="guest.citizenship"
+        :bookingnum="guest.bookingnum"
+        :checkin="guest.checkin"
+        :checkout="guest.checkout"
+        :amounttopay="guest.amounttopay"
+        :paymentstatus="guest.paymentstatus"
+        :checked="guest.checked"
+        :idx="guest.index"
+      />
     </div>
     <div
       v-else
@@ -250,53 +206,66 @@
 </template>
 
 <script>
+import _ from 'lodash'
+import ResidingModal from "./resideUtils/ResidingModal.vue"
+import ExtendingModal from "./resideUtils/ExtendingModal.vue"
+import GuestCard from "./GuestCard.vue"
+
 
 export default {
   name: 'Reside',
+
+  components: {
+    ResidingModal, GuestCard, ExtendingModal
+  },
+  
   data: () => ({
     search: '',
     filtering: false,
     printout: false,
     checkingout: false,
     residing: false,
+    extending: false,
     Category: '',
     Citizenship: '',
     Paymentstatus: '',
-    checklist: [],
+    modalRoom: '',
+    nfl: '',
+    mcheckout: '',
 
-    filcats: [{
-        Category: 'Стандарт',
-      }, {
-        Category: 'Люкс',
-      }, {
-        Category: 'Апартаменты',
-      }, {
-        Category: 'Family',
-      }, {
-        Category: 'Suite',
-      }],
+  filcats: [{
+      Category: 'Стандарт',
+    }, {
+      Category: 'Люкс',
+    }, {
+      Category: 'Апартаменты',
+    }, {
+      Category: 'Family',
+    }, {
+      Category: 'Suite',
+    }],
 
-      filcitizenship: [{
-        Citizenship: 'USA'
-      }, {
-        Citizenship: 'Uzbekistan'
-      }, {
-        Citizenship: 'Ukraine'
-      }, {
-        Citizenship: 'Kazakhstan'
-      }, {
-        Citizenship: 'Japan'
-      }],
+    filcitizenship: [{
+      Citizenship: 'USA'
+    }, {
+      Citizenship: 'Uzbekistan'
+    }, {
+      Citizenship: 'Ukraine'
+    }, {
+      Citizenship: 'Kazakhstan'
+    }, {
+      Citizenship: 'Japan'
+    }],
 
-      filpaymenstatus: [{
-        Paymentstatus: 'Оплачен'
-      }, {
-        Paymentstatus: 'Не оплачен'
-      }, {
-        Paymentstatus: 'По договору'
-      }, {
-        Paymentstatus: 'Частично оплачен'
-      }],
+    filpaymenstatus: [{
+      Paymentstatus: 'Оплачен'
+    }, {
+      Paymentstatus: 'Не оплачен'
+    }, {
+      Paymentstatus: 'По договору'
+    }, {
+      Paymentstatus: 'Частично оплачен'
+    }],
   }),
 
   computed: {
@@ -306,11 +275,18 @@ export default {
         || post.bookingnum.toLowerCase().includes(this.search.toLowerCase())
       })
     },
+
     filterReside(){
       return this.searchReside.filter(post => {
         return post.roomcat.toLowerCase().includes(this.Category.toLowerCase())
         && post.citizenship.toLowerCase().includes(this.Citizenship.toLowerCase())
         && post.paymentstatus.toLowerCase().includes(this.Paymentstatus.toLowerCase())
+      })
+    },
+
+    checkList(){
+      return this.filterReside.filter(post => {
+        return post.checked === true
       })
     }
   },
@@ -320,6 +296,35 @@ export default {
       this.Category = ''
       this.Citizenship = ''
       this.Paymentstatus = ''
+    },
+
+    residingModal() {
+      this.$emit("guest", this.filterReside.id)
+    },
+
+    close() {
+      this.residing = false
+    },
+
+    open(rn,fio) {
+      this.modalRoom = rn
+      this.nfl = fio
+      this.residing = true
+    },
+
+    openExtend(fio, cd) {
+      this.nfl = fio
+      this.mcheckout = cd
+      this.extending = true
+    },
+
+    closeExtend() {
+      this.extending = false
+    },
+
+    checkedBx(cbstatus) {
+      let guest = _.find(this.filterReside, {id: cbstatus.idex})
+      guest.checked = cbstatus.cbstatus
     }
   }
 }

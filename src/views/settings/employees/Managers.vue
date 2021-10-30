@@ -4,7 +4,7 @@
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/settings'}" class="breadcrump">Настройки</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: '/settings/employees'}" class="breadcrump">Сотрудники</el-breadcrumb-item>
-        <el-breadcrumb-item class="breadcrump">Администраторы</el-breadcrumb-item>
+        <el-breadcrumb-item class="breadcrump">Менеджеры</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
 
@@ -64,7 +64,7 @@
       v-if="addEmployee"
       @close="close"
     />
-    
+
     <EditingEmployee
       v-if="edit"
       @closeEdit="closeEdit"
@@ -100,7 +100,7 @@ import EditingEmployee from './EditingEmployee.vue'
 import DeleteEmployee from './DeleteEmployee.vue'
 
 export default {
-  name: 'Receptionists',
+  name: 'Managers',
 
   components: {
     EmployeeCard, Accesses, NewEmployee, EditingEmployee, DeleteEmployee
@@ -127,19 +127,23 @@ export default {
     positions: [
       {
       value: 'Senior',
-      label: 'Старший администратор'
+      label: 'Старший менеджер'
       },
       {
       value: 'Junior',
-      label: 'Младший администратор'
+      label: 'Младший менеджер'
       },
       {
       value: 'Day',
-      label: 'Дневной администратор'
+      label: 'Дневной менеджер'
       },
       {
       value: 'Night',
-      label: 'Ночной администратор'
+      label: 'Ночной менеджер'
+      },
+      {
+      value: 'Main',
+      label: 'Главный менеджер'
       }
     ],
 
@@ -148,7 +152,7 @@ export default {
         admin: '1',
         imageUrl: 'https://cdn2.momjunction.com/wp-content/uploads/2021/02/What-Is-A-Sigma-Male-And-Their-Common-Personality-Trait-910x1024.jpg',
         position: 'Старший',
-        post: 'администратор',
+        post: 'менеджер',
         nfl: 'Aleksandrov Aleksandr Aleksandrovich',
         sex: 'male'
       },
@@ -156,7 +160,7 @@ export default {
         admin: '2',
         imageUrl: '',
         position: 'Младший',
-        post: 'администратор',
+        post: 'менеджер',
         nfl: 'Murzakov Ilya Ashkinaziyevich',
         sex: 'male'
       },
@@ -164,7 +168,7 @@ export default {
         admin: '3',
         imageUrl: '',
         position: 'Дневной',
-        post: 'администратор',
+        post: 'менеджер',
         nfl: 'Lebedeva Valeriya Ignatiyevna',
         sex: 'female'
       },
@@ -172,15 +176,15 @@ export default {
         admin: '4',
         imageUrl: '',
         position: 'Ночной',
-        post: 'администратор',
+        post: 'менеджер',
         nfl: 'Arutunyan Alina Nikolayevna',
         sex: 'female'
       },
       {
         admin: '5',
         imageUrl: '',
-        position: 'Ночной',
-        post: 'администратор',
+        position: 'Главный',
+        post: 'менеджер',
         nfl: 'Saveleva Yekaterina Pavlovna',
         sex: 'female'
       },

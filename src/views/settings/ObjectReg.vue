@@ -34,7 +34,8 @@
               v-for="str in givenstars"
               :key="str.id"
               :label="str.stars"
-              :value="str.starvalue">
+              :value="str.starvalue"
+            >
             </el-option>
           </el-select>
           <span v-if="$v.starvalue.$dirty && !$v.starvalue.required" class="validation-error">Пожалуйста, выберите количество звезд</span>

@@ -9,11 +9,15 @@ import Vuelidate from 'vuelidate'
 import './plugins/element.js'
 import '@/style/MyStyles.scss'
 import VueApexCharts from 'vue-apexcharts'
+import VueTheMask from 'vue-the-mask'
+
 
 
 Vue.use(Vuelidate)
 Vue.use(VueAxios, axios)
 Vue.use(VueApexCharts)
+Vue.use(VueTheMask)
+
 
 Vue.component('apexchart', VueApexCharts)
 

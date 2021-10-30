@@ -2,10 +2,16 @@
   <div>
     <div class="img-cards">
       <div class="card-btns">
-        <button class="icn-btn-opcty">
+        <button
+          class="icn-btn-opcty"
+          @click="editEmployee"
+        >
           <img src="@/assets/icons/Edit-prim.svg" alt="">
         </button>
-        <button class="icn-btn-opcty">
+        <button
+          class="icn-btn-opcty"
+          @click="deleteEmployee"
+        >
           <img src="@/assets/icons/Delete.svg" alt="">
         </button>
       </div>
@@ -14,7 +20,7 @@
       <img v-else src="@/assets/Female-employee.png" alt="">
       <div class="empl-info">
         <span>{{position}} {{post}}</span>
-        <h3>{{nfl}}</h3>
+        <h3>{{lastName}} {{name}} {{familyName}}</h3>
       </div>
     </div>
   </div>
@@ -29,9 +35,22 @@ export default {
     imageUrl: String,
     position: String,
     post: String,
-    nfl: String,
+    name: String,
+    lastName: String,
+    familyName: String,
     sex: String
+  },
+
+  methods: {
+    editEmployee() {
+      let emplId = this.emplId
+      this.$emit('edit', emplId)
     },
+
+    deleteEmployee() {
+      this.$emit('deleteEmployee')
+    }
+  }
 }
 </script>
 

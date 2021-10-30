@@ -105,8 +105,8 @@
                 v-if="id.vip === 'VIP гость'"
               >
             <div class="iconblc">
-              <img src="@/assets/icons/Open.svg" alt="">
-              <img src="@/assets/icons/Checkin.svg" alt="">
+              <img class="icon-box" src="@/assets/icons/Open.svg" alt="">
+              <img class="icon-box" src="@/assets/icons/Checkin.svg" alt="">
             </div>
           </div>
         </div>

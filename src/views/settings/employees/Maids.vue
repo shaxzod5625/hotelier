@@ -4,7 +4,7 @@
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/settings'}" class="breadcrump">Настройки</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: '/settings/employees'}" class="breadcrump">Сотрудники</el-breadcrumb-item>
-        <el-breadcrumb-item class="breadcrump">Администраторы</el-breadcrumb-item>
+        <el-breadcrumb-item class="breadcrump">Горничные</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
 
@@ -74,7 +74,7 @@
       v-if="deleteEmpl"
       @closeDelete="closeDelete"
     />
-    
+
     <div class="con-page-grid5">
       <Employee-card
         @edit="editEmployee"
@@ -100,7 +100,7 @@ import EditingEmployee from './EditingEmployee.vue'
 import DeleteEmployee from './DeleteEmployee.vue'
 
 export default {
-  name: 'Receptionists',
+  name: 'Maids',
 
   components: {
     EmployeeCard, Accesses, NewEmployee, EditingEmployee, DeleteEmployee
@@ -127,19 +127,23 @@ export default {
     positions: [
       {
       value: 'Senior',
-      label: 'Старший администратор'
+      label: 'Старшая горничная'
       },
       {
       value: 'Junior',
-      label: 'Младший администратор'
+      label: 'Младшая горничная'
       },
       {
       value: 'Day',
-      label: 'Дневной администратор'
+      label: 'Дневная горничная'
       },
       {
       value: 'Night',
-      label: 'Ночной администратор'
+      label: 'Ночная горничная'
+      },
+      {
+      value: 'Main',
+      label: 'Главная горничная'
       }
     ],
 
@@ -147,40 +151,40 @@ export default {
       {
         admin: '1',
         imageUrl: 'https://cdn2.momjunction.com/wp-content/uploads/2021/02/What-Is-A-Sigma-Male-And-Their-Common-Personality-Trait-910x1024.jpg',
-        position: 'Старший',
-        post: 'администратор',
+        position: 'Старшая',
+        post: 'горничная',
         nfl: 'Aleksandrov Aleksandr Aleksandrovich',
         sex: 'male'
       },
       {
         admin: '2',
         imageUrl: '',
-        position: 'Младший',
-        post: 'администратор',
+        position: 'Младшая',
+        post: 'горничная',
         nfl: 'Murzakov Ilya Ashkinaziyevich',
         sex: 'male'
       },
       {
         admin: '3',
         imageUrl: '',
-        position: 'Дневной',
-        post: 'администратор',
+        position: 'Дневная',
+        post: 'горничная',
         nfl: 'Lebedeva Valeriya Ignatiyevna',
         sex: 'female'
       },
       {
         admin: '4',
         imageUrl: '',
-        position: 'Ночной',
-        post: 'администратор',
+        position: 'Ночная',
+        post: 'горничная',
         nfl: 'Arutunyan Alina Nikolayevna',
         sex: 'female'
       },
       {
         admin: '5',
         imageUrl: '',
-        position: 'Ночной',
-        post: 'администратор',
+        position: 'Главная',
+        post: 'горничная',
         nfl: 'Saveleva Yekaterina Pavlovna',
         sex: 'female'
       },

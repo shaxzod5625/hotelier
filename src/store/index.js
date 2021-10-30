@@ -10,24 +10,108 @@ export default new Vuex.Store({
     chartOptions: [],
     logoutInfo: [],
 
-    uidtst: [
-      {filling: 'filled'},
-      {filling: 'notfilled'},
-      {filling: 'particularly'},
-      {filling: 'notfilled'},
-      {filling: 'filled'},
-      {filling: 'particularly'},
-      {filling: 'filled'},
-      {filling: 'notfilled'},
-      {filling: 'particularly'},
-      {filling: 'notfilled'},
-      {filling: 'filled'},
-      {filling: 'particularly'},
-      {filling: 'filled'}
+    roomFund: [
+      {catName: 'Стандарт',
+      catID: 'standart',
+        rooms: [
+          {roomNumber: '112', mainBeds: 2, additionalBeds: 1, bathroom: 'United', bedType: 'Standart Single', forSmokers: true, roomArea: 48},
+          {roomNumber: '113', mainBeds: 2, additionalBeds: 0, bathroom: 'Joint', bedType: 'Standart Single', forSmokers: false, roomArea: 48},
+          {roomNumber: '114', mainBeds: 2, additionalBeds: 0, bathroom: 'United', bedType: 'Standart Double', forSmokers: true, roomArea: 48},
+          {roomNumber: '115', mainBeds: 2, additionalBeds: 1, bathroom: 'Separated', bedType: 'Standart Single', forSmokers: false, roomArea: 48},
+          {roomNumber: '116', mainBeds: 2, additionalBeds: 1, bathroom: 'United', bedType: 'Standart Triple', forSmokers: false, roomArea: 48},
+          {roomNumber: '117', mainBeds: 2, additionalBeds: 0, bathroom: 'Joint', bedType: 'Standart Double', forSmokers: false, roomArea: 48}
+        ]},
+      {catName: 'Семейная комната',
+      catID: 'family-room',
+        rooms: [
+          {roomNumber: '112', mainBeds: 2, additionalBeds: 1, bathroom: 'Separated', bedType: 'Standart Single', forSmokers: true, roomArea: 48},
+          {roomNumber: '113', mainBeds: 2, additionalBeds: 0, bathroom: 'United', bedType: 'Standart Double', forSmokers: false, roomArea: 48},
+          {roomNumber: '114', mainBeds: 2, additionalBeds: 0, bathroom: 'Separated', bedType: 'Standart Double', forSmokers: true, roomArea: 48},
+          {roomNumber: '115', mainBeds: 2, additionalBeds: 1, bathroom: 'Separated', bedType: 'Standart Double', forSmokers: false, roomArea: 48},
+          {roomNumber: '116', mainBeds: 2, additionalBeds: 1, bathroom: 'United', bedType: 'Standart Single', forSmokers: true, roomArea: 48},
+          {roomNumber: '117', mainBeds: 2, additionalBeds: 0, bathroom: 'Joint', bedType: 'Standart Triple', forSmokers: true, roomArea: 48},
+          {roomNumber: '118', mainBeds: 2, additionalBeds: 1, bathroom: 'United', bedType: 'Standart Single', forSmokers: false, roomArea: 48},
+          {roomNumber: '119', mainBeds: 2, additionalBeds: 0, bathroom: 'Separated', bedType: 'Standart Double', forSmokers: false, roomArea: 48},
+        ]},
+      {catName: 'Люкс',
+      catID: 'lux',
+        rooms: [
+          {roomNumber: '112', mainBeds: 2, additionalBeds: 1, bathroom: 'United', bedType: 'Standart Single', forSmokers: false, roomArea: 48},
+          {roomNumber: '113', mainBeds: 2, additionalBeds: 0, bathroom: 'Joint', bedType: 'Standart Double', forSmokers: true, roomArea: 48},
+          {roomNumber: '114', mainBeds: 2, additionalBeds: 0, bathroom: 'Joint', bedType: 'Standart Single', forSmokers: false, roomArea: 48},
+          {roomNumber: '115', mainBeds: 2, additionalBeds: 1, bathroom: 'United', bedType: 'Standart Single', forSmokers: true, roomArea: 48},
+          {roomNumber: '116', mainBeds: 2, additionalBeds: 1, bathroom: 'Separated', bedType: 'Standart Double', forSmokers: true, roomArea: 48},
+          {roomNumber: '117', mainBeds: 2, additionalBeds: 0, bathroom: 'Separated', bedType: 'Standart Single', forSmokers: true, roomArea: 48},
+          {roomNumber: '118', mainBeds: 2, additionalBeds: 1, bathroom: 'Joint', bedType: 'Standart Triple', forSmokers: false, roomArea: 48},
+          {roomNumber: '119', mainBeds: 2, additionalBeds: 0, bathroom: 'Joint', bedType: 'Standart Triple', forSmokers: true, roomArea: 48},
+          {roomNumber: '120', mainBeds: 2, additionalBeds: 1, bathroom: 'United', bedType: 'Standart Single', forSmokers: false, roomArea: 48},
+          {roomNumber: '121', mainBeds: 2, additionalBeds: 0, bathroom: 'United', bedType: 'Standart Double', forSmokers: false, roomArea: 48},
+        ]},
+      {catName: 'Апартаменты',
+      catID: 'apartments',
+        rooms: [
+          {roomNumber: '112', mainBeds: 2, additionalBeds: 1, bathroom: 'Joint', bedType: 'Standart Double', forSmokers: true, roomArea: 48},
+          {roomNumber: '113', mainBeds: 2, additionalBeds: 0, bathroom: 'Separated', bedType: 'Standart Double', forSmokers: false, roomArea: 48},
+          {roomNumber: '114', mainBeds: 2, additionalBeds: 0, bathroom: 'United', bedType: 'Standart Double', forSmokers: false, roomArea: 48},
+          {roomNumber: '115', mainBeds: 2, additionalBeds: 1, bathroom: 'Separated', bedType: 'Standart Triple', forSmokers: false, roomArea: 48},
+          {roomNumber: '116', mainBeds: 2, additionalBeds: 1, bathroom: 'Joint', bedType: 'Standart Triple', forSmokers: true, roomArea: 48},
+          {roomNumber: '117', mainBeds: 2, additionalBeds: 0, bathroom: 'Joint', bedType: 'Standart Double', forSmokers: false, roomArea: 48},
+          {roomNumber: '118', mainBeds: 2, additionalBeds: 1, bathroom: 'Separated', bedType: 'Standart Single', forSmokers: true, roomArea: 48},
+          {roomNumber: '119', mainBeds: 2, additionalBeds: 0, bathroom: 'Separated', bedType: 'Standart Single', forSmokers: false, roomArea: 48},
+          {roomNumber: '120', mainBeds: 2, additionalBeds: 1, bathroom: 'United', bedType: 'Standart Double', forSmokers: false, roomArea: 48},
+          {roomNumber: '121', mainBeds: 2, additionalBeds: 0, bathroom: 'Separated', bedType: 'Standart Single', forSmokers: true, roomArea: 48},
+          {roomNumber: '122', mainBeds: 2, additionalBeds: 1, bathroom: 'Joint', bedType: 'Standart Triple', forSmokers: false, roomArea: 48},
+          {roomNumber: '123', mainBeds: 2, additionalBeds: 0, bathroom: 'Separated', bedType: 'Standart Double', forSmokers: true, roomArea: 48},
+        ]},
+    ],
+
+    employees: [
+      
+    ],
+
+    dashPermission: [
+      {value: '1', label: 'HTML'}, {value: '2', label: 'CSS'}, {value: '3', label: 'JavaScript'}
+    ],
+
+    frontPermission: [
+      {value: 'HTML', label: 'HTML'}, {value: 'CSS', label: 'CSS'}, {value: 'JavaScript', label: 'JavaScript'}
+    ],
+
+    cashierPermission: [
+      {value: 'HTML', label: 'HTML'}, {value: 'CSS', label: 'CSS'}, {value: 'JavaScript', label: 'JavaScript'}
+    ],
+
+    folioPermission: [
+      {value: 'HTML', label: 'HTML'}, {value: 'CSS', label: 'CSS'}, {value: 'JavaScript', label: 'JavaScript'}
+    ],
+
+    chessPermission: [
+      {value: 'HTML', label: 'HTML'}, {value: 'CSS', label: 'CSS'}, {value: 'JavaScript', label: 'JavaScript'}
+    ],
+
+    statsPermission: [
+      {value: 'HTML', label: 'HTML'}, {value: 'CSS', label: 'CSS'}, {value: 'JavaScript', label: 'JavaScript'}
+    ],
+
+    reportsPermission: [
+      {value: 'HTML', label: 'HTML'}, {value: 'CSS', label: 'CSS'}, {value: 'JavaScript', label: 'JavaScript'}
+    ],
+
+    roomboardPermission: [
+      {value: 'HTML', label: 'HTML'}, {value: 'CSS', label: 'CSS'}, {value: 'JavaScript', label: 'JavaScript'}
+    ],
+
+    channelManagerPermission: [
+      {value: 'HTML', label: 'HTML'}, {value: 'CSS', label: 'CSS'}, {value: 'JavaScript', label: 'JavaScript'}
+    ],
+
+    settingsPermission: [
+      {value: 'HTML', label: 'HTML'}, {value: 'CSS', label: 'CSS'}, {value: 'JavaScript', label: 'JavaScript'}
     ],
 
     reside: [
       {
+        id: 123456,
         nfl: 'ABDULLAYEV ABDULLA ABDULLAYEVICH',
         vip: true,
         roomcat: 'Стандарт',
@@ -39,10 +123,12 @@ export default new Vuex.Store({
         checkin: '01/01/2021 14:00',
         checkout: '15/01/2021 11:00',
         amounttopay: '7 250 000 UZS',
-        paymentstatus: 'Не оплачен'
+        paymentstatus: 'Не оплачен',
+        checked: false
       },
 
       {
+        id: 123457,
         nfl: 'TOXIROV TOXIR TOXIROVICH',
         vip: false,
         roomcat: 'Люкс',
@@ -54,9 +140,11 @@ export default new Vuex.Store({
         checkin: '01/01/2021 14:00',
         checkout: '15/01/2021 11:00',
         amounttopay: '7 250 000 UZS',
-        paymentstatus: 'Оплачен'
+        paymentstatus: 'Оплачен',
+        checked: false
       },
       {
+        id: 123458,
         nfl: 'THOMAS FRANCIS MCDONNEL',
         vip: true,
         roomcat: 'Апартаменты',
@@ -68,7 +156,8 @@ export default new Vuex.Store({
         checkin: '01/01/2021 14:00',
         checkout: '15/01/2021 11:00',
         amounttopay: '7 250 000 UZS',
-        paymentstatus: 'Оплачен'
+        paymentstatus: 'Оплачен',
+        checked: false
       },
     ],
 
@@ -114,21 +203,52 @@ export default new Vuex.Store({
   mutations: {
     SET_CURRENT_USER(state, user) {
       state.currentUser = user
-      window.localStorage.currentUser = JSON.stringify(user)
+      window.sessionStorage.currentUser = JSON.stringify(user)
     },
+
     SET_CHARTS_OPTIONS(state, chartOption) {
       state.chartOptions = chartOption
       window.localStorage.chartOptions = JSON.stringify(chartOption)
     },
+
     SET_USER_LOGOUT(state, logoutInfo) {
       state.logoutInfo = logoutInfo
       window.localStorage.logoutInfo = JSON.stringify(logoutInfo)
+    },
+
+    ADD_NEW_CATEGORY(state, newCategory) {
+      let addingCat = newCategory.reduce(function(result, item) {
+        var key = Object.keys(item)[0];
+        result[key] = item[key];
+        return result;
+      }, {});
+      let roomFund = state.roomFund.concat(addingCat)
+      state.roomFund = roomFund
+    },
+
+    ADD_NEW_ROOM(state, newRoomInfo) {
+      const newRoom = newRoomInfo[0]
+
+      const ID = newRoomInfo[1]
+      const rf = state.roomFund
+      const rooms = rf.find(cat => cat.catID == ID)
+      let addingNewRoom = rooms.rooms.concat(newRoom)
+      const editedCat = [
+        {catID: ID,
+          catName: rooms.catName,
+          rooms: addingNewRoom
+      }]
+
+      let newRoomFund =  state.roomFund.map(obj => editedCat.find(o => o.catID == obj.catID) || obj);
+      state.roomFund = newRoomFund
     }
   },
+
+
   actions: {
     async loginUser({commit}, loginInfo) {
       try {
-        let response = await Api().post('/user/login', loginInfo)
+        let response = await Api().post('/api/login', loginInfo)
         let user = response.data
         commit('SET_CURRENT_USER', user)
       } catch {
@@ -141,15 +261,23 @@ export default new Vuex.Store({
     },
 
     async logout({}) {
-      await Api().get('/logout')
+      await Api().get('api/logout')
     },
 
     async isAuthenticated() {
       try {
-        await Api().get('/authenticated')
+        await Api().get('api/authenticated')
       } catch {
         return {error: 'woops!'}
       }
+    },
+
+    async createNewCategory({commit}, newCategory) {
+      commit('ADD_NEW_CATEGORY', newCategory)
+    },
+
+    async createNewRoom({commit}, newRoomInfo) {
+      commit('ADD_NEW_ROOM', newRoomInfo)
     }
   },
   modules: {
