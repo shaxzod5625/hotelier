@@ -9,6 +9,7 @@
     "nw-serve": "nw ."
   },
   "dependencies": {
+    "@vue/composition-api": "^1.3.3",
     "apexcharts": "^3.28.1",
     "axios": "^0.21.4",
     "core-js": "^3.6.5",
@@ -18,6 +19,7 @@
     "vue": "^2.6.11",
     "vue-apexcharts": "^1.6.2",
     "vue-axios": "^3.3.6",
+    "vue-currency-input": "^2.1.2",
     "vue-router": "^3.2.0",
     "vue-the-mask": "^0.11.1",
     "vuelidate": "^0.7.6",

@@ -1,0 +1,29 @@
+<template>
+  <div>
+    <el-input 
+      ref="inputRef"
+      type="text"
+      :value="formattedValue"
+    >
+    </el-input>
+  </div>
+</template>
+
+<script>
+import { useCurrencyInput } from 'vue-currency-input'
+
+export default {
+  name: 'CurrencyInput',
+
+  props: {
+    value: String,
+    options: Object
+  },
+
+  setup (props) {
+    const { formattedValue, inputRef } = useCurrencyInput(props.options)
+
+    return { inputRef, formattedValue }
+  }
+}
+</script>

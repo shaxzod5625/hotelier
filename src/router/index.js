@@ -144,6 +144,61 @@ const routes = [
     meta: {layout: 'main', auth: true},
     component: () => import ('../views/settings/employees/Cooks.vue'),
   },
+  {
+    path: '/settings/blocks',
+    name: 'Blocks',
+    meta: {layout: 'main', auth: true},
+    component: () => import ('../views/settings/Blocks.vue'),
+  },
+  {
+    path: '/settings/blocks/:id',
+    name: 'Block Window',
+    meta: {layout: 'main', auth: true},
+    params: true,
+    component: () => import ('../views/settings/blocksAndFloors/BlockWindow.vue'),
+  },
+  {
+    path: '/settings/partners',
+    name: 'Partners',
+    meta: {layout: 'main', auth: true},
+    component: () => import ('../views/settings/Partners.vue'),
+  },
+  {
+    path: '/settings/partners/tour-agencies',
+    name: 'Tour Agencies',
+    meta: {layout: 'main', auth: true},
+    component: () => import ('../views/settings/partners/TourAgencies.vue'),
+  },
+  {
+    path: '/settings/partners/partner-companies',
+    name: 'Partner Companies',
+    meta: {layout: 'main', auth: true},
+    component: () => import ('../views/settings/partners/PartnerCompanies.vue'),
+  },
+  {
+    path: '/settings/partners/agents',
+    name: 'Agents',
+    meta: {layout: 'main', auth: true},
+    component: () => import ('../views/settings/partners/Agents.vue'),
+  },
+  {
+    path: '/settings/booking-rules',
+    name: 'Booking Rules',
+    meta: {layout: 'main', auth: true},
+    component: () => import ('../views/settings/BookingRules.vue'),
+  },
+  {
+    path: '/settings/document-forms',
+    name: 'Document Forms',
+    meta: {layout: 'main', auth: true},
+    component: () => import ('../views/settings/DocumentForms.vue'),
+  },
+  {
+    path: '/settings/document-forms/settings',
+    name: 'Document Forms Settings',
+    meta: {layout: 'main', auth: true},
+    component: () => import ('../views/settings/documentForms/DocFormsSettings.vue'),
+  },
 ]
 
 const router = new VueRouter({
@@ -156,6 +211,10 @@ router.beforeResolve((to, from, next) => {
   const requireAuth = to.matched.some(record => record.meta.auth)
   if (requireAuth && window.sessionStorage.currentUser === undefined) {next({path: '/login'})
   } else if (requireAuth && JSON.parse(window.sessionStorage.currentUser) === "Unauthorized") {
+    next({path: '/login'})
+  } else if (requireAuth && JSON.parse(window.sessionStorage.currentUser) === 'Invalid Credentials') {
+    next({path: '/login'})
+  } else if (requireAuth && JSON.parse(window.sessionStorage.currentUser).error === 'invalid password') {
     next({path: '/login'})
   }
   else {next()}
