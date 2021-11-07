@@ -113,17 +113,17 @@ export default {
           if (
             err.name !== 'NavigationDuplicated' &&
             !err.message.includes('Avoided redundant navigation to current location')
-          ) {
-            logError(err);
-          }
+          ) {}
         });
 
         this.$message({
         message: "Добро пожаловать в Hotelier, " + JSON.parse(window.sessionStorage.currentUser).user.firstName,
         type: 'success'})
       } catch {
-        if(JSON.parse(window.sessionStorage.currentUser) === 'Unauthorized') {
-          this.$message.error('Введенные данные не верны. Проверьте, пожалуйста, логин и пароль')
+        if(JSON.parse(window.sessionStorage.currentUser) === 'Invalid Credentials') {
+          this.$message.error('Не верный логин. Проверьте, пожалуйста, логин')
+        } else if(JSON.parse(window.sessionStorage.currentUser).error === "invalid password") {
+          this.$message.error('Не верный пароль. Проверьте, пожалуйста, пароль')
         } else {}
       };
     },

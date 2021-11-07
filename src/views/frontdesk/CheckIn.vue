@@ -320,10 +320,12 @@ export default {
 
     addChild () {
       this.children.push({
-        name: '',
-        party: ''
+        childName: '',
+        childLastName: '',
+        childFamilyName: '',
+        childSex: '',
+        childBirthDate: '',
       })
-      console.log(this.children)
     },
 
     removeChild (index) {

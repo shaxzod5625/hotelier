@@ -10,6 +10,39 @@ export default new Vuex.Store({
     chartOptions: [],
     logoutInfo: [],
 
+
+    blocks: [{
+      blockID: 1,
+      blockName: 'Основной',
+      type: 'Основной',
+      floors: [
+        {
+          level: 1,
+          floorName: 'Этаж “Лобби”',
+          rooms: ['101', '102', '103', '104', '105', '106']
+        },
+        {
+          level: 2,
+          floorName: 'Служебный этаж',
+          rooms: ['201', '202', '203', '204', '205', '206']
+        },
+        {
+          level: 3,
+          floorName: '3й этаж',
+          rooms: ['301', '302', '303', '304', '305', '306']
+        },
+        {
+          level: 4,
+          floorName: '4й этаж',
+          rooms: ['401', '402', '403', '444', '405']
+        },
+        {
+          level: 5,
+          floorName: '5й этаж',
+          rooms: ['501', '502', '503', '504', '505', '506']
+        },
+      ]}],
+
     roomFund: [
       {catName: 'Стандарт',
       catID: 'standart',
@@ -241,7 +274,7 @@ export default new Vuex.Store({
 
       let newRoomFund =  state.roomFund.map(obj => editedCat.find(o => o.catID == obj.catID) || obj);
       state.roomFund = newRoomFund
-    }
+    },
   },
 
 
@@ -278,7 +311,7 @@ export default new Vuex.Store({
 
     async createNewRoom({commit}, newRoomInfo) {
       commit('ADD_NEW_ROOM', newRoomInfo)
-    }
+    },
   },
   modules: {
   }

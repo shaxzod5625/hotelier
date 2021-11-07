@@ -490,14 +490,7 @@ export default {
     }],
   }),
 
-  // methods: {
-  //   async getCharts() {
-  //     try {
-  //       await this.$store.dispatch('getCharts')
-  //     } catch (e) {
-  //     } 
-  //   },
-  //   async isAuthenticated() {}
-  // }
+  methods: {
+  }
 }
 </script>
