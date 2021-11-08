@@ -199,6 +199,18 @@ const routes = [
     meta: {layout: 'main', auth: true},
     component: () => import ('../views/settings/documentForms/DocFormsSettings.vue'),
   },
+  {
+    path: '/settings/facilities',
+    name: 'Facilities',
+    meta: {layout: 'main', auth: true},
+    component: () => import ('../views/settings/Facilities.vue'),
+  },
+  {
+    path: '/settings/tariffs',
+    name: 'Tariffs',
+    meta: {layout: 'main', auth: true},
+    component: () => import ('../views/settings/Tariffs.vue'),
+  },
 ]
 
 const router = new VueRouter({
