@@ -16,6 +16,20 @@
       :categoryID="categoryID"
     />
 
+    <EditRoom
+      v-if="editRoomModal"
+
+      @closeEditRoom="closeEditRoom"
+
+      :roomNumber="editRoomNumber"
+      :bedType="editBedType"
+      :mainBeds="editMainBeds"
+      :additionalBeds="editAdditionalBeds"
+      :bathroom="editBathroom"
+      :roomArea="editRoomArea"
+      :forSmokers="editForSmokers"
+    />
+
     <div>
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/settings'}" class="breadcrump">Настройки</el-breadcrumb-item>
@@ -56,6 +70,7 @@
             <div class="list-content">
               <td
                 class="room-list-element"
+                @click="editRoom(rooms)"
               >
                 № {{rooms.roomNumber}}
               </td>
@@ -67,6 +82,7 @@
                   <img
                     class="icon-box" 
                     src="@/assets/icons/Edit.svg" alt=""
+                    @click="editRoom(rooms)"
                   >
                   <img
                     @click="deleteChosenRoom(rooms.roomNumber)"
@@ -86,6 +102,7 @@
 <script>
 import DeleteRoom from './category/DeleteRoom.vue'
 import CreateNewRoom from './category/CreateNewRoom.vue'
+import EditRoom from './category/EditRoom.vue'
 
 
 export default {
@@ -95,13 +112,22 @@ export default {
   data: () => ({
     createRoom: false,
     deleteRoomModal: false,
+    editRoomModal: false,
+
+    editRoomNumber: '',
+    editBedType: '',
+    editMainBeds: '',
+    editAdditionalBedsBeds: '',
+    editBathroom: '',
+    editRoomArea: '',
+    editForSmokers: '',
 
     roomNumber: '',
     categoryID: '',
   }),
 
   components: {
-    DeleteRoom, CreateNewRoom,
+    DeleteRoom, CreateNewRoom, EditRoom
   },
 
   computed: {
@@ -113,6 +139,18 @@ export default {
   methods: {
     creatingNewRoom() {
       this.createRoom = true
+    },
+
+    editRoom(rooms) {
+      this.editRoomNumber = rooms.roomNumber
+      this.editBedType = rooms.bedType
+      this.editMainBeds = rooms.mainBeds
+      this.editAdditionalBeds = rooms.additionalBeds
+      this.editBathroom = rooms.bathroom
+      this.editRoomArea = rooms.roomArea
+      this.editForSmokers = rooms.forSmokers
+
+      this.editRoomModal = true
     },
 
     deleteChosenRoom(roomNumber) {
@@ -129,6 +167,10 @@ export default {
 
     closeCreateRoom() {
       this.createRoom = false
+    },
+
+    closeEditRoom() {
+      this.editRoomModal = false
     }
   }
 }

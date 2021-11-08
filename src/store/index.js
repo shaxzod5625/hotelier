@@ -43,6 +43,32 @@ export default new Vuex.Store({
         },
       ]}],
 
+    servicesList: [
+      {name: 'Услуга “Будильник”', cost: '15000', payFreeRoomCats: ['Люкс', 'Апартаменты'], category: 'cat1', measurementUnit: 'Разовая стоимость', availability: true},
+      {name: 'Доставка цветов', cost: '22000', payFreeRoomCats: ['Люкс', 'Апартаменты'], category: 'cat1', measurementUnit: 'Разовая стоимость', availability: false},
+      {name: 'Wi-Fi', cost: 'free', payFreeRoomCats: [], category: 'cat2', measurementUnit: 'За один день', availability: true},
+      {name: 'Аренда планшета', cost: '50000', payFreeRoomCats: ['Люкс', 'Апартаменты'], category: 'cat1', measurementUnit: 'За один день', availability: false},
+      {name: 'Бассейн', cost: '35000', payFreeRoomCats: [], category: 'cat3', measurementUnit: 'За один день', availability: false},
+      {name: 'Глажка', cost: '15000', payFreeRoomCats: [], category: 'cat4', measurementUnit: 'За каждую вещь', availability: true},
+      {name: 'Хим-чистка', cost: '40000', payFreeRoomCats: [], category: 'cat4', measurementUnit: 'За каждую вещь', availability: true},
+      {name: 'Услуги трансфера', cost: '110000', payFreeRoomCats: [], category: 'cat1', measurementUnit: 'Разовая стоимость', availability: false},
+      {name: 'Услуга “NETFLIX”', cost: '10000', payFreeRoomCats: ['Люкс', 'Семейная комната', 'Апартаменты'], category: 'cat2', measurementUnit: 'За один день', availability: true},
+      {name: 'Аренда ноутбука', cost: '75000', payFreeRoomCats: [], category: 'cat2', measurementUnit: 'За один день', availability: false},
+    ],
+
+    facilitiesList: [
+      {name: 'Гладильная доска', cost: '40000', payFreeRoomCats: ['Люкс', 'Апартаменты'], category: 'cat1', measurementUnit: 'Разовая стоимость', availability: true},
+      {name: 'LCD телевизор', cost: 'free', payFreeRoomCats: ['Люкс', 'Апартаменты'], category: 'cat1', measurementUnit: 'За все время проживания', availability: false},
+      {name: 'Диван', cost: 'free', payFreeRoomCats: [], category: 'cat2', measurementUnit: 'За все время проживания', availability: true},
+      {name: 'Видео-проигрыватель', cost: '25000', payFreeRoomCats: ['Люкс', 'Апартаменты'], category: 'cat1', measurementUnit: 'За один день', availability: false},
+      {name: 'Компьютер', cost: '70000', payFreeRoomCats: [], category: 'cat3', measurementUnit: 'За один день', availability: false},
+      {name: 'Вентиляция', cost: 'free', payFreeRoomCats: [], category: 'cat4', measurementUnit: 'За все время проживания', availability: true},
+      {name: 'Вид на озеро', cost: 'free', payFreeRoomCats: [], category: 'cat4', measurementUnit: 'За все время проживания', availability: true},
+      {name: 'Вид на лес', cost: 'free', payFreeRoomCats: [], category: 'cat1', measurementUnit: 'За все время проживания', availability: false},
+      {name: 'Вид на город', cost: 'free', payFreeRoomCats: ['Люкс', 'Семейная комната', 'Апартаменты'], category: 'cat2', measurementUnit: 'За все время проживания', availability: true},
+      {name: 'Туалетные принадлежности', cost: 'free', payFreeRoomCats: [], category: 'cat2', measurementUnit: 'За все время проживания', availability: false},
+    ],
+
     roomFund: [
       {catName: 'Стандарт',
       catID: 'standart',

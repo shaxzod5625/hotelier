@@ -66,190 +66,171 @@
       <div
         class="doc-card"
       >
-      <div class="big-icon">
-        <img src="@/assets/icons/Big-dollar.svg" alt="">
-      </div>
+        <div class="big-icon">
+          <img src="@/assets/icons/Big-dollar.svg" alt="">
+        </div>
 
-      <div class="div-card-body">
-        <div class="card-icons">
-          <img
-            class="icon-box"
-            src="@/assets/icons/Edit.svg"
-            alt=""
-            @click="invoiceForm = true"
-          >
-          <img class="icon-box" src="@/assets/icons/Print.svg" alt="">
+        <div class="div-card-body">
+          <div class="card-icons">
+            <img
+              class="icon-box"
+              src="@/assets/icons/Edit.svg"
+              alt=""
+              @click="invoiceForm = true"
+            >
+            <img class="icon-box" src="@/assets/icons/Print.svg" alt="">
+          </div>
+          <div class="card-body-title">
+            <h3>Инвойс</h3>
+          </div>
         </div>
-        <div class="card-body-title">
-          <h3>Инвойс</h3>
-        </div>
-      </div>
         
       </div>
 
       <div
         class="doc-card"
       >
-      <div class="big-icon">
-        <img src="@/assets/icons/Big-lock.svg" alt="">
-      </div>
-
-      <div class="div-card-body">
-        <div class="card-icons">
-          <img
-            class="icon-box"
-            src="@/assets/icons/Edit.svg"
-            alt=""
-
-            @click="bookingConfForm = true"
-          >
-          <img class="icon-box" src="@/assets/icons/Print.svg" alt="">
+        <div class="big-icon">
+          <img src="@/assets/icons/Big-lock.svg" alt="">
         </div>
-        <div class="card-body-title">
-          <h3>Подтверждение брони</h3>
+
+        <div class="div-card-body">
+          <div class="card-icons">
+            <img
+              class="icon-box"
+              src="@/assets/icons/Edit.svg"
+              alt=""
+
+              @click="bookingConfForm = true"
+            >
+            <img class="icon-box" src="@/assets/icons/Print.svg" alt="">
+          </div>
+          <div class="card-body-title">
+            <h3>Подтверждение брони</h3>
+          </div>
         </div>
-      </div>
         
       </div>
 
       <div
         class="doc-card"
       >
-      <div class="big-icon">
-        <img src="@/assets/icons/Big-lock-cancelled.svg" alt="">
-      </div>
-
-      <div class="div-card-body">
-        <div class="card-icons">
-          <img
-            class="icon-box"
-            src="@/assets/icons/Edit.svg"
-            alt=""
-
-            @click="bookingCancelForm = true"
-          >
-          <img class="icon-box" src="@/assets/icons/Print.svg" alt="">
+        <div class="big-icon">
+          <img src="@/assets/icons/Big-lock-cancelled.svg" alt="">
         </div>
-        <div class="card-body-title">
-          <h3>Аннуляция брони</h3>
+
+        <div class="div-card-body">
+          <div class="card-icons">
+            <img
+              class="icon-box"
+              src="@/assets/icons/Edit.svg"
+              alt=""
+
+              @click="bookingCancelForm = true"
+            >
+            <img class="icon-box" src="@/assets/icons/Print.svg" alt="">
+          </div>
+          <div class="card-body-title">
+            <h3>Аннуляция брони</h3>
+          </div>
         </div>
-      </div>
         
       </div>
 
       <div
         class="doc-card"
       >
-      <div class="big-icon">
-        <img src="@/assets/icons/Big-doc.svg" alt="">
-      </div>
+        <div class="big-icon">
+          <img src="@/assets/icons/Big-doc.svg" alt="">
+        </div>
 
-      <div class="div-card-body">
-        <div class="card-icons">
-          <img
-            class="icon-box"
-            src="@/assets/icons/Edit.svg"
-            alt=""
-            @click="internalRulesForm = true"
-          >
-          <img class="icon-box" src="@/assets/icons/Print.svg" alt="">
+        <div class="div-card-body">
+          <div class="card-icons">
+            <img
+              class="icon-box"
+              src="@/assets/icons/Edit.svg"
+              alt=""
+              @click="internalRulesForm = true"
+            >
+            <img class="icon-box" src="@/assets/icons/Print.svg" alt="">
+          </div>
+          <div class="card-body-title">
+            <h3>Внутренние правила</h3>
+          </div>
         </div>
-        <div class="card-body-title">
-          <h3>Внутренние правила</h3>
-        </div>
-      </div>
         
       </div>
 
       <div
         class="doc-card"
       >
-      <div class="big-icon">
-        <img src="@/assets/icons/Big-checkin.svg" alt="">
-      </div>
-
-      <div class="div-card-body">
-        <div class="card-icons">
-          <img
-            class="icon-box"
-            src="@/assets/icons/Edit.svg"
-            alt=""
-
-            @click="checkInRulesForm = true"
-          >
-          <img class="icon-box" src="@/assets/icons/Print.svg" alt="">
+        <div class="big-icon">
+          <img src="@/assets/icons/Big-checkin.svg" alt="">
         </div>
-        <div class="card-body-title">
-          <h3>Правила заезда</h3>
+
+        <div class="div-card-body">
+          <div class="card-icons">
+            <img
+              class="icon-box"
+              src="@/assets/icons/Edit.svg"
+              alt=""
+
+              @click="checkInRulesForm = true"
+            >
+            <img class="icon-box" src="@/assets/icons/Print.svg" alt="">
+          </div>
+          <div class="card-body-title">
+            <h3>Правила заезда</h3>
+          </div>
         </div>
-      </div>
         
       </div>
 
       <div
         class="doc-card"
       >
-      <div class="big-icon">
-        <img src="@/assets/icons/Big-reports.svg" alt="">
-      </div>
+        <div class="big-icon">
+          <img src="@/assets/icons/Big-reports.svg" alt="">
+        </div>
 
-      <div class="div-card-body">
-        <div class="card-icons">
-          <img
-            class="icon-box"
-            src="@/assets/icons/Edit.svg"
-            alt=""
-            @click="reportsForm = true"
-          >
-          <img class="icon-box" src="@/assets/icons/Print.svg" alt="">
+        <div class="div-card-body">
+          <div class="card-icons">
+            <img
+              class="icon-box"
+              src="@/assets/icons/Edit.svg"
+              alt=""
+              @click="reportsForm = true"
+            >
+            <img class="icon-box" src="@/assets/icons/Print.svg" alt="">
+          </div>
+          <div class="card-body-title">
+            <h3>Отчёты</h3>
+          </div>
         </div>
-        <div class="card-body-title">
-          <h3>Отчёты</h3>
-        </div>
-      </div>
         
       </div>
 
       <div
         class="doc-card"
       >
-      <div class="big-icon">
-        <img src="@/assets/icons/Big-cashierbox.svg" alt="">
-      </div>
+        <div class="big-icon">
+          <img src="@/assets/icons/Big-tariffs.svg" alt="">
+        </div>
 
-      <div class="div-card-body">
-        <div class="card-icons">
-          <img class="icon-box" src="@/assets/icons/Edit.svg" alt="">
-          <img class="icon-box" src="@/assets/icons/Print.svg" alt="">
+        <div class="div-card-body">
+          <div class="card-icons">
+            <img
+              class="icon-box"
+              src="@/assets/icons/Edit.svg"
+              alt=""
+              @click="tariffsForm = true"
+            >
+            <img class="icon-box" src="@/assets/icons/Print.svg" alt="">
+          </div>
+          <div class="card-body-title">
+            <h3>Тарифы и цены</h3>
+          </div>
         </div>
-        <div class="card-body-title">
-          <h3>Реестр кассы</h3>
-        </div>
-      </div>
-        
-      </div>
-
-      <div
-        class="doc-card"
-      >
-      <div class="big-icon">
-        <img src="@/assets/icons/Big-tariffs.svg" alt="">
-      </div>
-
-      <div class="div-card-body">
-        <div class="card-icons">
-          <img
-            class="icon-box"
-            src="@/assets/icons/Edit.svg"
-            alt=""
-            @click="tariffsForm = true"
-          >
-          <img class="icon-box" src="@/assets/icons/Print.svg" alt="">
-        </div>
-        <div class="card-body-title">
-          <h3>Тарифы и цены</h3>
-        </div>
-      </div>
         
       </div>
 
