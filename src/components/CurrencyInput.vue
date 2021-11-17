@@ -2,8 +2,10 @@
   <div>
     <el-input 
       ref="inputRef"
+      :placeholder="options.placeholder"
       type="text"
       :value="formattedValue"
+      :disabled="options.disabled"
     >
     </el-input>
   </div>

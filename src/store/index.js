@@ -40,8 +40,15 @@ export default new Vuex.Store({
           level: 5,
           floorName: '5й этаж',
           rooms: ['501', '502', '503', '504', '505', '506']
-        },
-      ]}],
+        },]
+    }],
+
+    activeTariffs: [
+      {name: 'Основной', type: 'main', discount: {availability: false, discountType: undefined, discountAmount: undefined}, startTerm: '01/01/2021', stopTerm: '31/12/2021', activity: 'pending'},
+      {name: 'Тариф “Весенний”', type: 'discount', discount: {availability: true, discountType: 'percent', discountAmount: '20'}, startTerm: '01/01/2021', stopTerm: '31/12/2021', activity: 'active'},
+      {name: 'Тариф “Новогодние скидки”', type: 'discount', discount: {availability: true, discountType: 'UZS', discountAmount: '100000'}, startTerm: '01/01/2021', stopTerm: '31/12/2021', activity: 'notActive'},
+      {name: 'Тариф “Летние скидки”', type: 'discount', discount: {availability: true, discountType: 'individual', discountAmount: undefined}, startTerm: '01/01/2021', stopTerm: '31/12/2021', activity: 'notActive'},
+    ],
 
     servicesList: [
       {name: 'Услуга “Будильник”', cost: '15000', payFreeRoomCats: ['Люкс', 'Апартаменты'], category: 'cat1', measurementUnit: 'Разовая стоимость', availability: true},
@@ -69,59 +76,62 @@ export default new Vuex.Store({
       {name: 'Туалетные принадлежности', cost: 'free', payFreeRoomCats: [], category: 'cat2', measurementUnit: 'За все время проживания', availability: false},
     ],
 
-    roomFund: [
-      {catName: 'Стандарт',
+    roomFund: [{
+      catName: 'Стандарт',
       catID: 'standart',
-        rooms: [
-          {roomNumber: '112', mainBeds: 2, additionalBeds: 1, bathroom: 'United', bedType: 'Standart Single', forSmokers: true, roomArea: 48},
-          {roomNumber: '113', mainBeds: 2, additionalBeds: 0, bathroom: 'Joint', bedType: 'Standart Single', forSmokers: false, roomArea: 48},
-          {roomNumber: '114', mainBeds: 2, additionalBeds: 0, bathroom: 'United', bedType: 'Standart Double', forSmokers: true, roomArea: 48},
-          {roomNumber: '115', mainBeds: 2, additionalBeds: 1, bathroom: 'Separated', bedType: 'Standart Single', forSmokers: false, roomArea: 48},
-          {roomNumber: '116', mainBeds: 2, additionalBeds: 1, bathroom: 'United', bedType: 'Standart Triple', forSmokers: false, roomArea: 48},
-          {roomNumber: '117', mainBeds: 2, additionalBeds: 0, bathroom: 'Joint', bedType: 'Standart Double', forSmokers: false, roomArea: 48}
-        ]},
-      {catName: 'Семейная комната',
+      rooms: [
+        {roomNumber: '112', mainBeds: 2, additionalBeds: 1, bathroom: 'United', bedType: 'Standart Single', forSmokers: true, roomArea: 48},
+        {roomNumber: '113', mainBeds: 2, additionalBeds: 0, bathroom: 'Joint', bedType: 'Standart Single', forSmokers: false, roomArea: 48},
+        {roomNumber: '114', mainBeds: 2, additionalBeds: 0, bathroom: 'United', bedType: 'Standart Double', forSmokers: true, roomArea: 48},
+        {roomNumber: '115', mainBeds: 2, additionalBeds: 1, bathroom: 'Separated', bedType: 'Standart Single', forSmokers: false, roomArea: 48},
+        {roomNumber: '116', mainBeds: 2, additionalBeds: 1, bathroom: 'United', bedType: 'Standart Triple', forSmokers: false, roomArea: 48},
+        {roomNumber: '117', mainBeds: 2, additionalBeds: 0, bathroom: 'Joint', bedType: 'Standart Double', forSmokers: false, roomArea: 48}
+      ]},
+      {
+      catName: 'Семейная комната',
       catID: 'family-room',
-        rooms: [
-          {roomNumber: '112', mainBeds: 2, additionalBeds: 1, bathroom: 'Separated', bedType: 'Standart Single', forSmokers: true, roomArea: 48},
-          {roomNumber: '113', mainBeds: 2, additionalBeds: 0, bathroom: 'United', bedType: 'Standart Double', forSmokers: false, roomArea: 48},
-          {roomNumber: '114', mainBeds: 2, additionalBeds: 0, bathroom: 'Separated', bedType: 'Standart Double', forSmokers: true, roomArea: 48},
-          {roomNumber: '115', mainBeds: 2, additionalBeds: 1, bathroom: 'Separated', bedType: 'Standart Double', forSmokers: false, roomArea: 48},
-          {roomNumber: '116', mainBeds: 2, additionalBeds: 1, bathroom: 'United', bedType: 'Standart Single', forSmokers: true, roomArea: 48},
-          {roomNumber: '117', mainBeds: 2, additionalBeds: 0, bathroom: 'Joint', bedType: 'Standart Triple', forSmokers: true, roomArea: 48},
-          {roomNumber: '118', mainBeds: 2, additionalBeds: 1, bathroom: 'United', bedType: 'Standart Single', forSmokers: false, roomArea: 48},
-          {roomNumber: '119', mainBeds: 2, additionalBeds: 0, bathroom: 'Separated', bedType: 'Standart Double', forSmokers: false, roomArea: 48},
-        ]},
-      {catName: 'Люкс',
+      rooms: [
+        {roomNumber: '112', mainBeds: 2, additionalBeds: 1, bathroom: 'Separated', bedType: 'Standart Single', forSmokers: true, roomArea: 48},
+        {roomNumber: '113', mainBeds: 2, additionalBeds: 0, bathroom: 'United', bedType: 'Standart Double', forSmokers: false, roomArea: 48},
+        {roomNumber: '114', mainBeds: 2, additionalBeds: 0, bathroom: 'Separated', bedType: 'Standart Double', forSmokers: true, roomArea: 48},
+        {roomNumber: '115', mainBeds: 2, additionalBeds: 1, bathroom: 'Separated', bedType: 'Standart Double', forSmokers: false, roomArea: 48},
+        {roomNumber: '116', mainBeds: 2, additionalBeds: 1, bathroom: 'United', bedType: 'Standart Single', forSmokers: true, roomArea: 48},
+        {roomNumber: '117', mainBeds: 2, additionalBeds: 0, bathroom: 'Joint', bedType: 'Standart Triple', forSmokers: true, roomArea: 48},
+        {roomNumber: '118', mainBeds: 2, additionalBeds: 1, bathroom: 'United', bedType: 'Standart Single', forSmokers: false, roomArea: 48},
+        {roomNumber: '119', mainBeds: 2, additionalBeds: 0, bathroom: 'Separated', bedType: 'Standart Double', forSmokers: false, roomArea: 48},
+      ]},
+      {
+      catName: 'Люкс',
       catID: 'lux',
-        rooms: [
-          {roomNumber: '112', mainBeds: 2, additionalBeds: 1, bathroom: 'United', bedType: 'Standart Single', forSmokers: false, roomArea: 48},
-          {roomNumber: '113', mainBeds: 2, additionalBeds: 0, bathroom: 'Joint', bedType: 'Standart Double', forSmokers: true, roomArea: 48},
-          {roomNumber: '114', mainBeds: 2, additionalBeds: 0, bathroom: 'Joint', bedType: 'Standart Single', forSmokers: false, roomArea: 48},
-          {roomNumber: '115', mainBeds: 2, additionalBeds: 1, bathroom: 'United', bedType: 'Standart Single', forSmokers: true, roomArea: 48},
-          {roomNumber: '116', mainBeds: 2, additionalBeds: 1, bathroom: 'Separated', bedType: 'Standart Double', forSmokers: true, roomArea: 48},
-          {roomNumber: '117', mainBeds: 2, additionalBeds: 0, bathroom: 'Separated', bedType: 'Standart Single', forSmokers: true, roomArea: 48},
-          {roomNumber: '118', mainBeds: 2, additionalBeds: 1, bathroom: 'Joint', bedType: 'Standart Triple', forSmokers: false, roomArea: 48},
-          {roomNumber: '119', mainBeds: 2, additionalBeds: 0, bathroom: 'Joint', bedType: 'Standart Triple', forSmokers: true, roomArea: 48},
-          {roomNumber: '120', mainBeds: 2, additionalBeds: 1, bathroom: 'United', bedType: 'Standart Single', forSmokers: false, roomArea: 48},
-          {roomNumber: '121', mainBeds: 2, additionalBeds: 0, bathroom: 'United', bedType: 'Standart Double', forSmokers: false, roomArea: 48},
-        ]},
-      {catName: 'Апартаменты',
+      rooms: [
+        {roomNumber: '112', mainBeds: 2, additionalBeds: 1, bathroom: 'United', bedType: 'Standart Single', forSmokers: false, roomArea: 48},
+        {roomNumber: '113', mainBeds: 2, additionalBeds: 0, bathroom: 'Joint', bedType: 'Standart Double', forSmokers: true, roomArea: 48},
+        {roomNumber: '114', mainBeds: 2, additionalBeds: 0, bathroom: 'Joint', bedType: 'Standart Single', forSmokers: false, roomArea: 48},
+        {roomNumber: '115', mainBeds: 2, additionalBeds: 1, bathroom: 'United', bedType: 'Standart Single', forSmokers: true, roomArea: 48},
+        {roomNumber: '116', mainBeds: 2, additionalBeds: 1, bathroom: 'Separated', bedType: 'Standart Double', forSmokers: true, roomArea: 48},
+        {roomNumber: '117', mainBeds: 2, additionalBeds: 0, bathroom: 'Separated', bedType: 'Standart Single', forSmokers: true, roomArea: 48},
+        {roomNumber: '118', mainBeds: 2, additionalBeds: 1, bathroom: 'Joint', bedType: 'Standart Triple', forSmokers: false, roomArea: 48},
+        {roomNumber: '119', mainBeds: 2, additionalBeds: 0, bathroom: 'Joint', bedType: 'Standart Triple', forSmokers: true, roomArea: 48},
+        {roomNumber: '120', mainBeds: 2, additionalBeds: 1, bathroom: 'United', bedType: 'Standart Single', forSmokers: false, roomArea: 48},
+        {roomNumber: '121', mainBeds: 2, additionalBeds: 0, bathroom: 'United', bedType: 'Standart Double', forSmokers: false, roomArea: 48},
+      ]},
+      {
+      catName: 'Апартаменты',
       catID: 'apartments',
-        rooms: [
-          {roomNumber: '112', mainBeds: 2, additionalBeds: 1, bathroom: 'Joint', bedType: 'Standart Double', forSmokers: true, roomArea: 48},
-          {roomNumber: '113', mainBeds: 2, additionalBeds: 0, bathroom: 'Separated', bedType: 'Standart Double', forSmokers: false, roomArea: 48},
-          {roomNumber: '114', mainBeds: 2, additionalBeds: 0, bathroom: 'United', bedType: 'Standart Double', forSmokers: false, roomArea: 48},
-          {roomNumber: '115', mainBeds: 2, additionalBeds: 1, bathroom: 'Separated', bedType: 'Standart Triple', forSmokers: false, roomArea: 48},
-          {roomNumber: '116', mainBeds: 2, additionalBeds: 1, bathroom: 'Joint', bedType: 'Standart Triple', forSmokers: true, roomArea: 48},
-          {roomNumber: '117', mainBeds: 2, additionalBeds: 0, bathroom: 'Joint', bedType: 'Standart Double', forSmokers: false, roomArea: 48},
-          {roomNumber: '118', mainBeds: 2, additionalBeds: 1, bathroom: 'Separated', bedType: 'Standart Single', forSmokers: true, roomArea: 48},
-          {roomNumber: '119', mainBeds: 2, additionalBeds: 0, bathroom: 'Separated', bedType: 'Standart Single', forSmokers: false, roomArea: 48},
-          {roomNumber: '120', mainBeds: 2, additionalBeds: 1, bathroom: 'United', bedType: 'Standart Double', forSmokers: false, roomArea: 48},
-          {roomNumber: '121', mainBeds: 2, additionalBeds: 0, bathroom: 'Separated', bedType: 'Standart Single', forSmokers: true, roomArea: 48},
-          {roomNumber: '122', mainBeds: 2, additionalBeds: 1, bathroom: 'Joint', bedType: 'Standart Triple', forSmokers: false, roomArea: 48},
-          {roomNumber: '123', mainBeds: 2, additionalBeds: 0, bathroom: 'Separated', bedType: 'Standart Double', forSmokers: true, roomArea: 48},
-        ]},
+      rooms: [
+        {roomNumber: '112', mainBeds: 2, additionalBeds: 1, bathroom: 'Joint', bedType: 'Standart Double', forSmokers: true, roomArea: 48},
+        {roomNumber: '113', mainBeds: 2, additionalBeds: 0, bathroom: 'Separated', bedType: 'Standart Double', forSmokers: false, roomArea: 48},
+        {roomNumber: '114', mainBeds: 2, additionalBeds: 0, bathroom: 'United', bedType: 'Standart Double', forSmokers: false, roomArea: 48},
+        {roomNumber: '115', mainBeds: 2, additionalBeds: 1, bathroom: 'Separated', bedType: 'Standart Triple', forSmokers: false, roomArea: 48},
+        {roomNumber: '116', mainBeds: 2, additionalBeds: 1, bathroom: 'Joint', bedType: 'Standart Triple', forSmokers: true, roomArea: 48},
+        {roomNumber: '117', mainBeds: 2, additionalBeds: 0, bathroom: 'Joint', bedType: 'Standart Double', forSmokers: false, roomArea: 48},
+        {roomNumber: '118', mainBeds: 2, additionalBeds: 1, bathroom: 'Separated', bedType: 'Standart Single', forSmokers: true, roomArea: 48},
+        {roomNumber: '119', mainBeds: 2, additionalBeds: 0, bathroom: 'Separated', bedType: 'Standart Single', forSmokers: false, roomArea: 48},
+        {roomNumber: '120', mainBeds: 2, additionalBeds: 1, bathroom: 'United', bedType: 'Standart Double', forSmokers: false, roomArea: 48},
+        {roomNumber: '121', mainBeds: 2, additionalBeds: 0, bathroom: 'Separated', bedType: 'Standart Single', forSmokers: true, roomArea: 48},
+        {roomNumber: '122', mainBeds: 2, additionalBeds: 1, bathroom: 'Joint', bedType: 'Standart Triple', forSmokers: false, roomArea: 48},
+        {roomNumber: '123', mainBeds: 2, additionalBeds: 0, bathroom: 'Separated', bedType: 'Standart Double', forSmokers: true, roomArea: 48},
+      ]},
     ],
 
     employees: [

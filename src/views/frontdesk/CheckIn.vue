@@ -72,7 +72,7 @@
           <div class="w-100-r">
             <el-date-picker
               class="calendar"
-              :disabled="true"
+              disabled
               v-model="nowDate"
               type="date"
               placeholder="Выберите дату"
@@ -83,7 +83,7 @@
             <el-time-select
               class="time"
               v-model="nowTime"
-              :disabled="true"
+              disabled
               :picker-options="{
                 start: '00:00',
                 step: '00:01',
