@@ -10,6 +10,9 @@ import './plugins/element.js'
 import '@/style/MyStyles.scss'
 import VueApexCharts from 'vue-apexcharts'
 import VueTheMask from 'vue-the-mask'
+import MaskedInput from 'vue-text-mask'
+import createNumberMask from 'text-mask-addons/dist/createNumberMask'
+import money from 'v-money'
 
 
 
@@ -17,6 +20,9 @@ Vue.use(Vuelidate)
 Vue.use(VueAxios, axios)
 Vue.use(VueApexCharts)
 Vue.use(VueTheMask)
+Vue.use(MaskedInput)
+Vue.use(createNumberMask)
+Vue.use(money, {precision: 4})
 
 
 Vue.component('apexchart', VueApexCharts)

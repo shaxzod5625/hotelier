@@ -71,30 +71,37 @@ const routes = [
     meta: {layout: 'main', auth: true},
     // component: () => import ('../views/Channel-manager.vue'),
   },
+
+  //settings
+
   {
     path: '/settings/',
     name: 'Settings',
     meta: {layout: 'main', auth: true},
     component: () => import ('../views/Settings.vue'),
   },
+
+  //settings - object-registration
+
   {
     path: '/settings/object-registration',
     name: 'Registration',
     meta: {layout: 'main', auth: true},
     component: () => import ('../views/settings/ObjectReg.vue'),
   },
+
+  //settings - requisites
+
   {
     path: '/settings/requisites',
     name: 'Requisites',
     meta: {layout: 'main', auth: true},
     component: () => import ('../views/settings/Requisites.vue'),
   },
-  {
-    path: '/settings/employees',
-    name: 'Employees',
-    meta: {layout: 'main', auth: true},
-    component: () => import ('../views/settings/Employees.vue'),
-  },
+  
+
+  //settings - room-fund
+
   {
     path: '/settings/room-fund',
     name: 'RoomFund',
@@ -107,6 +114,15 @@ const routes = [
     meta: {layout: 'main', auth: true},
     params: true,
     component: () => import ('../views/settings/roomfund/CategoryWindow.vue'),
+  },
+
+  //settings - employees
+
+  {
+    path: '/settings/employees',
+    name: 'Employees',
+    meta: {layout: 'main', auth: true},
+    component: () => import ('../views/settings/Employees.vue'),
   },
   {
     path: '/settings/employees/receptionists',
@@ -144,6 +160,9 @@ const routes = [
     meta: {layout: 'main', auth: true},
     component: () => import ('../views/settings/employees/Cooks.vue'),
   },
+
+  //settings - block
+
   {
     path: '/settings/blocks',
     name: 'Blocks',
@@ -157,6 +176,9 @@ const routes = [
     params: true,
     component: () => import ('../views/settings/blocksAndFloors/BlockWindow.vue'),
   },
+
+  //settings - partners
+
   {
     path: '/settings/partners',
     name: 'Partners',
@@ -181,12 +203,18 @@ const routes = [
     meta: {layout: 'main', auth: true},
     component: () => import ('../views/settings/partners/Agents.vue'),
   },
+
+  //settings - booking-rules
+
   {
     path: '/settings/booking-rules',
     name: 'Booking Rules',
     meta: {layout: 'main', auth: true},
     component: () => import ('../views/settings/BookingRules.vue'),
   },
+
+  //settings - document-forms
+
   {
     path: '/settings/document-forms',
     name: 'Document Forms',
@@ -199,17 +227,44 @@ const routes = [
     meta: {layout: 'main', auth: true},
     component: () => import ('../views/settings/documentForms/DocFormsSettings.vue'),
   },
+
+  //settings - facilities
+
   {
     path: '/settings/facilities',
     name: 'Facilities',
     meta: {layout: 'main', auth: true},
     component: () => import ('../views/settings/Facilities.vue'),
   },
+
+  //settings - tariffs
+
   {
     path: '/settings/tariffs',
     name: 'Tariffs',
     meta: {layout: 'main', auth: true},
     component: () => import ('../views/settings/Tariffs.vue'),
+  },
+  {
+    path: '/settings/tariffs/editing/:id',
+    name: 'Editing Tariff',
+    meta: {layout: 'main', auth: true},
+    params: true,
+    component: () => import ('../views/settings/tariffs/EditingTariff.vue'),
+  },
+  {
+    path: '/settings/tariffs/configurations',
+    name: 'Tariffs Settings',
+    meta: {layout: 'main', auth: true},
+    params: true,
+    component: () => import ('../views/settings/tariffs/TariffsSettings.vue'),
+  },
+  {
+    path: '/settings/tariffs/configurations/calculation-rules',
+    name: 'Calculation Rules',
+    meta: {layout: 'main', auth: true},
+    params: true,
+    component: () => import ('../views/settings/tariffs/tariffsSettings/CalculationRules.vue'),
   },
 ]
 
