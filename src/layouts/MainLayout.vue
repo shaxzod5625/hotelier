@@ -20,9 +20,10 @@
             tag="li"
             :to="item.path"
             v-show="item.accessible"
-            >
-              <svg  width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" v-html="item.svg" ></svg>
-              <span>{{item.name}}</span>
+            @click.native="getInfo(item.path)"
+          >
+            <svg  width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" v-html="item.svg" ></svg>
+            <span>{{item.name}}</span>
           </router-link>
         </ul>
       </div>
@@ -187,8 +188,15 @@ export default {
   methods: {
     async logout() {
       sessionStorage.removeItem('currentUser')
+      sessionStorage.removeItem('myObject')
       this.$router.push('/login')
       await this.$store.dispatch('logout')
+    },
+
+    async getInfo(path) {
+      if(path === '/settings') {
+        await this.$store.dispatch('getMyObject')
+      }
     }
   }      
 }

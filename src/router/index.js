@@ -266,6 +266,24 @@ const routes = [
     params: true,
     component: () => import ('../views/settings/tariffs/tariffsSettings/CalculationRules.vue'),
   },
+
+  //settings - price policy
+
+  {
+    path: '/settings/price-policy',
+    name: 'Price Policy',
+    meta: {layout: 'main', auth: true},
+    component: () => import ('../views/settings/PricePolicy.vue'),
+  },
+
+  //settings - pproduct activation
+
+  {
+    path: '/settings/product-activation',
+    name: 'PRoduct Activation',
+    meta: {layout: 'main', auth: true},
+    component: () => import ('../views/settings/ProductActivation.vue'),
+  },
 ]
 
 const router = new VueRouter({
@@ -282,6 +300,9 @@ router.beforeResolve((to, from, next) => {
   } else if (requireAuth && JSON.parse(window.sessionStorage.currentUser) === 'Invalid Credentials') {
     next({path: '/login'})
   } else if (requireAuth && JSON.parse(window.sessionStorage.currentUser).error === 'invalid password') {
+    next({path: '/login'})
+  } else if (requireAuth && window.sessionStorage.myObject && JSON.parse(window.sessionStorage.myObject) === 'Invalid Token') {
+    sessionStorage.removeItem('myObject')
     next({path: '/login'})
   }
   else {next()}

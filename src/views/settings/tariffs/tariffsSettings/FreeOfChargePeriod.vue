@@ -15,7 +15,7 @@
             :picker-options="{
               start: '00:00',
               step: '00:01',
-              end: '23:59'
+              end: startTimeUntil
             }"
             placeholder="Введите время"
             v-mask="'##:##'"
@@ -27,15 +27,13 @@
           <label for="input">ДО</label>
           <el-time-select
             class="time"
-            v-model="freeOfCharge.checkInStopTime"
             disabled
             :picker-options="{
               start: '00:00',
               step: '00:01',
               end: '23:59'
             }"
-            placeholder="11:59"
-            v-mask="'##:##'"
+            :placeholder="untilZeroHour"
           >
           </el-time-select>
         </div>
@@ -50,14 +48,13 @@
           <label for="input">С</label>
           <el-time-select
             class="time"
-            v-model="freeOfCharge.checkOutStartTime"
             disabled
             :picker-options="{
               start: '00:00',
               step: '00:01',
               end: '23:59'
             }"
-            placeholder="12:00"
+            :placeholder="untilZeroHour"
             v-mask="'##:##'"
           >
           </el-time-select>
@@ -69,7 +66,7 @@
             class="time"
             v-model="freeOfCharge.checkOutStopTime"
             :picker-options="{
-              start: '00:00',
+              start: stopTimefrom,
               step: '00:01',
               end: '23:59'
             }"
@@ -111,11 +108,59 @@ export default {
   data:() => ({
     freeOfCharge: [
       {
+        zeroHour: '',
         checkInStartTime: '', checkInStopTime: '',
         checkOutStartTime: '', checkOutStopTime: ''
       }
     ]
   }),
+
+  computed: {
+    startTimeUntil() {
+      let zh = this.freeOfCharge.zeroHour
+      const timeParts = String(zh).split(":")
+      const strtTm = Number(timeParts[0]) * 60 + Number(timeParts[1]) - 2
+
+      const hours = Math.floor(strtTm / 60)
+      const minutes = strtTm%60
+
+      if (this.freeOfCharge.zeroHour !== '') {
+        return String(hours+":"+minutes)
+      } else {
+        return undefined
+      }
+    },
+
+    stopTimefrom() {
+      let zh = this.freeOfCharge.zeroHour
+      const timeParts = String(zh).split(":")
+      const strtTm = Number(timeParts[0]) * 60 + Number(timeParts[1]) + 1
+
+      const hours = Math.floor(strtTm / 60)
+      const minutes = strtTm%60
+
+      if (this.freeOfCharge.zeroHour !== '') {
+        return String(hours+":"+minutes)
+      } else {
+        return undefined
+      }
+    },
+
+    untilZeroHour() {
+      let zh = this.freeOfCharge.zeroHour
+      const timeParts = String(zh).split(":")
+      const strtTm = Number(timeParts[0]) * 60 + Number(timeParts[1]) - 1
+
+      const hours = Math.floor(strtTm / 60)
+      const minutes = strtTm%60
+
+      if (this.freeOfCharge.zeroHour !== '') {
+        return String(hours+":"+minutes)
+      } else {
+        return undefined
+      }
+    },
+  },
 
   methods: {
     closeModal() {

@@ -173,8 +173,10 @@ export default {
         return this.settingcards.map((item, i) => Object.assign({}, item, this.filling[i]));
       } else {this.$router.push('/login')}
     }
+  },
+
+  methods: {
   }
-  
 }
 </script>
 

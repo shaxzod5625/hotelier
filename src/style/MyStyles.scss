@@ -1232,6 +1232,11 @@ table {
       }
     }
 
+    .list-first-el {
+      font-weight: 500;
+      user-select: none;
+    }
+
     .list-last-el {
       display: flex;
       flex-direction: row;
@@ -1512,6 +1517,20 @@ table {
   opacity: 0;
 }
 
+
+// transition of router view
+
+.slide-fade-enter-active {
+  transition: all .3s ease;
+}
+.slide-fade-leave-active {
+  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active до версии 2.1.8 */ {
+  transform: translateX(10px);
+  opacity: 0;
+}
 
 
 
@@ -1832,6 +1851,42 @@ table {
     transition: all 250ms;
   }
 }
+
+
+.sqr-btn-prim {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  width: 48px;
+  height: 48px;
+  background: #2161ED;
+  border: none;
+  border-radius: 8px;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 16px;
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+  transition: all 250ms;
+
+  &:hover {
+    background: #6B96F3;
+    transition: all 250ms;
+  }
+
+  &:active {
+    background: #0030AD;
+    transition: all 250ms;
+  }
+}
+
+
+
+
 
 .prim-btn {
   display: flex;
@@ -2459,6 +2514,26 @@ table {
   }
 }
 
+
+
+.input-grid-padless {
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-top: 24px;
+  border-radius: 12px;
+
+  h4 {
+    text-align: center;
+    font-family: Roboto;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 16px;
+    color: #83858A;
+  }
+}
+
 .el-select {
   width: 100%;
   min-width: 180px;
@@ -2551,6 +2626,87 @@ table {
     line-height: 16px;
     margin-bottom: 8px;
     color: #83858A;
+  }
+}
+
+.w-50-div {
+  width: 50%;
+  padding: 0 24px
+}
+
+.div-tbl {
+  display: flex;
+  flex-direction: row;
+
+  p {
+    font-family: Roboto;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 14px;
+    color: #83858A;
+  }
+
+  .row-name {
+    width: 25%
+  }
+
+  .row-content {
+    width: 75%;
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 14px;
+    color: #323438;
+
+    &.danger {
+      color: #C91052;
+    }
+
+    &.success {
+      color: #10C986;
+    }
+
+    &.warning {
+      color: #C5C910;
+    }
+  }
+}
+
+
+.div-tbl-r {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  cursor: pointer;
+
+  img {
+    width: 24px;
+    height: 24px;
+  }
+
+  p {
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 14px;
+    color: #2161ED;
+    cursor: pointer;
+    transition: all 250ms;
+    user-select: none;
+  }
+
+  &:hover {
+    p {
+      color: #6B96F3;
+    }
+  }
+
+  &:active {
+    p {
+      color: #0030AD;
+    }
   }
 }
 
@@ -2723,6 +2879,13 @@ table {
 
 .col-1 {
   display: flex;
+  width: 100%;
+  margin-top: 24px;
+}
+
+.col-1-mini {
+  display: flex;
+  gap: 24px;
   width: 100%;
   margin-top: 24px;
 }
@@ -3182,6 +3345,19 @@ table {
 
 label {
   user-select: none;
+}
+
+
+.form-5 {
+  display: grid;
+  height: auto;
+  width: calc(100% - 48px);
+  grid-column: 1 /span5;
+  column-gap: 24px;
+  row-gap: 24px;
+  grid-template-columns: calc(20% - 19px) calc(20% - 19px) calc(20% - 20px) calc(20% - 19px) calc(20% - 19px);
+  grid-template-rows: auto;
+  margin: 24px 0;
 }
 
 

@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <component :is="layout">
-      <router-view/>
+      <transition name="slide-fade" appear>
+        <router-view/>
+      </transition>
     </component>
   </div>
 </template>

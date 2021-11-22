@@ -275,6 +275,11 @@ export default new Vuex.Store({
       window.sessionStorage.currentUser = JSON.stringify(user)
     },
 
+    SET_MY_OBJECT(state, myObject) {
+      state.myObject = myObject
+      window.sessionStorage.myObject = JSON.stringify(myObject)
+    },
+
     SET_CHARTS_OPTIONS(state, chartOption) {
       state.chartOptions = chartOption
       window.localStorage.chartOptions = JSON.stringify(chartOption)
@@ -323,6 +328,41 @@ export default new Vuex.Store({
       } catch {
       };
     },
+
+    async objectReg({commit}, myObject) {
+      try {
+        let myObj = JSON.parse(window.sessionStorage.myObject)
+
+        if(myObj.objectRegister === undefined || myObj.objectRegister === null) {
+          let responsee = await Api().post('api/settings/object-registration', myObject)
+          console.log(responsee);
+
+          let response = await Api().get('/api/settings/object-registration')
+          let object = response.data
+          console.log(object);
+
+          commit('SET_MY_OBJECT', object)
+
+        } else {
+          await Api().put('api/settings/object-registration', myObject)
+          let response = await Api().get('/api/settings/object-registration')
+          let object = response.data
+
+          commit('SET_MY_OBJECT', object)
+        }
+      } catch {
+      }
+    },
+
+    async getMyObject({commit}) {
+      try {
+        let response = await Api().get('/api/settings/object-registration')
+        let myObject = response.data
+
+        commit('SET_MY_OBJECT', myObject)
+      } catch {}
+    },
+
     async getCharts({commit}) {
       let response = await Api().post('/user/charts')
       let chartOption = response.data
