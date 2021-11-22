@@ -6,7 +6,7 @@
         <el-breadcrumb-item class="breadcrump">Объект размещения</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    <form class="input-grid" @submit.prevent="submitHandler">
+    <form class="input-grid">
       <div class="col-3">
         <div class="w-33">
           <label for="select">Категория объекта размещения</label>
@@ -42,11 +42,23 @@
         </div>
       </div>
 
-      <div class="col-1">
+      <div class="col-2">
         <div class="w-100">
           <label for="input">Адрес объекта размещения</label>
           <el-input type="text" placeholder="Введите адрес объекта размещения" :class="{invalid: ($v.coordinates.$dirty && !$v.coordinates.required)}" v-model="coordinates"></el-input>
           <span v-if="$v.coordinates.$dirty && !$v.coordinates.required" class="validation-error">Пожалуйста, укажите адрес</span>
+        </div>
+
+        <div
+          class="w-100"
+          style="width: 48px"
+        >
+          <label style="opacity: 0" for="input">Label</label>
+          <button
+            class="sqr-btn-prim"
+          >
+            <img src="@/assets/icons/Location.svg" alt="">
+          </button>
         </div>
       </div>
 
@@ -54,18 +66,31 @@
       <div class="col-3">
         <div class="w-33">
           <label for="input">Основной номер телефона</label>
-          <el-input type="tel" placeholder="Введите основной номер телефона" :class="{invalid: ($v.MainPhoneNumber.$dirty && !$v.MainPhoneNumber.required)}" v-model="MainPhoneNumber"></el-input>
+          <el-input
+            placeholder="Введите основной номер телефона"
+            :class="{invalid: ($v.MainPhoneNumber.$dirty && !$v.MainPhoneNumber.required)}"
+            v-model="MainPhoneNumber"
+            v-mask="'+###(##) ###-##-##'"
+          />
           <span v-if="$v.MainPhoneNumber.$dirty && !$v.MainPhoneNumber.required" class="validation-error">Пожалуйста, укажите номер</span>
         </div>
 
         <div class="w-33">
           <label for="input">Дополнительный номер телефона</label>
-          <el-input type="tel" placeholder="Введите дополнительный номер телефона" v-model="AdditPhoneNumber"></el-input>
+          <el-input
+            placeholder="Введите дополнительный номер телефона"
+            v-model="AdditPhoneNumber"
+            v-mask="'+###(##) ###-##-##'"
+          />
         </div>
 
         <div class="w-33">
           <label for="input">Номер факса</label>
-          <el-input type="tel" placeholder="Введите номер факса" v-model="FaxNumber"></el-input>
+          <el-input
+            placeholder="Введите номер факса"
+            v-model="FaxNumber"
+            v-mask="'+###(##) ###-##-##'"
+          />
         </div>
       </div>
 
@@ -83,16 +108,25 @@
 
         <div class="w-33">
           <label for="input">Почтовый индекс</label>
-          <el-input type="text" placeholder="Введите почтовый индекс" v-model="MailIndex"></el-input>
+          <el-input
+            placeholder="Введите почтовый индекс"
+            v-model="MailIndex"
+            v-mask="'######'"
+          />
         </div>
       </div>
+
+      <h3>{{myRegisteredObject}}</h3>
 
       <div class="input-grid-btns">
         <button class="sec-btn" @click.prevent="onCancel">
           <span>Отмена</span>
         </button>
 
-        <button class="prim-btn" type="submit">
+        <button
+          class="prim-btn"
+          @click.prevent="saveMyObject"  
+        >
           <span>Сохранить</span>
         </button>
       </div>
@@ -103,7 +137,6 @@
 
 <script>
 import {email, required} from 'vuelidate/lib/validators'
-
 
 export default {
   name: 'Registration',
@@ -148,17 +181,51 @@ export default {
   },
 
   methods: {
-    submitHandler() {
+    async saveMyObject() {
       if (this.$v.$invalid) {
         this.$v.$touch()
         return
       }
-      this.$router.push('/settings')
+      const myObject = {
+        typeOfObject: this.catvalue,
+        name: this.CompanyName,
+        rating: this.starvalue,
+        address: this.coordinates,
+        mainPhone: this.MainPhoneNumber,
+        emailAddress: this.MainEmail,
+        extraPhone: this.AdditPhoneNumber,
+        faks: this.FaxNumber,
+        extraEmailAddress: this.AdditEmail,
+        emailIndex: this.MailIndex
+      }
+
+      await this.$store.dispatch('objectReg', myObject)
+
+      console.log(myObject);
     },
 
     onCancel(){
         this.show = false;
         this.$router.push('/settings');
+    }
+  },
+
+  computed: {
+    myRegisteredObject() {
+      if(window.sessionStorage.myObject === null || window.sessionStorage.myObject === undefined) {
+        return ''
+      } else {
+        this.catvalue = JSON.parse(window.sessionStorage.myObject).objectRegister.typeOfObject
+        this.starvalue = String(JSON.parse(window.sessionStorage.myObject).objectRegister.rating)
+        this.CompanyName = JSON.parse(window.sessionStorage.myObject).objectRegister.name
+        this.coordinates = JSON.parse(window.sessionStorage.myObject).objectRegister.address
+        this.MainPhoneNumber = JSON.parse(window.sessionStorage.myObject).objectRegister.mainPhone
+        this.AdditPhoneNumber = JSON.parse(window.sessionStorage.myObject).objectRegister.extraPhone
+        this.FaxNumber = JSON.parse(window.sessionStorage.myObject).objectRegister.faks
+        this.MainEmail = JSON.parse(window.sessionStorage.myObject).objectRegister.emailAddress
+        this.AdditEmail = JSON.parse(window.sessionStorage.myObject).objectRegister.extraEmailAddress
+        this.MailIndex = JSON.parse(window.sessionStorage.myObject).objectRegister.emailIndex
+      }
     }
   }
 }

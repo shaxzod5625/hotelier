@@ -25,6 +25,16 @@ Vue.use(createNumberMask)
 Vue.use(money, {precision: 4})
 
 
+Vue.directive("uppercase", {
+  bind(el, binding, vnode) {
+      el.style.textTransform = 'uppercase';
+  },
+  update(el, binding, vnode) {
+      el.style.textTransform = 'uppercase';
+  }
+});
+
+
 Vue.component('apexchart', VueApexCharts)
 
 
