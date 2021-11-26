@@ -134,10 +134,6 @@ export default new Vuex.Store({
       ]},
     ],
 
-    employees: [
-      
-    ],
-
     dashPermission: [
       {value: '1', label: 'HTML'}, {value: '2', label: 'CSS'}, {value: '3', label: 'JavaScript'}
     ],
@@ -195,7 +191,134 @@ export default new Vuex.Store({
         paymentstatus: 'Не оплачен',
         checked: false
       },
-
+      {
+        id: 123457,
+        nfl: 'TOXIROV TOXIR TOXIROVICH',
+        vip: false,
+        roomcat: 'Люкс',
+        roomtype: 'Одноместный',
+        roomnum: '311',
+        regnum: '12346-1234-2021',
+        citizenship: 'UZBEKISTAN',
+        bookingnum: '00133 - 01/01/2020',
+        checkin: '01/01/2021 14:00',
+        checkout: '15/01/2021 11:00',
+        amounttopay: '7 250 000 UZS',
+        paymentstatus: 'Оплачен',
+        checked: false
+      },
+      {
+        id: 123458,
+        nfl: 'THOMAS FRANCIS MCDONNEL',
+        vip: true,
+        roomcat: 'Апартаменты',
+        roomtype: 'Двухместный',
+        roomnum: '312',
+        regnum: '12347-1234-2021',
+        citizenship: 'GREAT BRITAIN',
+        bookingnum: '00134 - 01/01/2020',
+        checkin: '01/01/2021 14:00',
+        checkout: '15/01/2021 11:00',
+        amounttopay: '7 250 000 UZS',
+        paymentstatus: 'Оплачен',
+        checked: false
+      },
+      {
+        id: 123457,
+        nfl: 'TOXIROV TOXIR TOXIROVICH',
+        vip: false,
+        roomcat: 'Люкс',
+        roomtype: 'Одноместный',
+        roomnum: '311',
+        regnum: '12346-1234-2021',
+        citizenship: 'UZBEKISTAN',
+        bookingnum: '00133 - 01/01/2020',
+        checkin: '01/01/2021 14:00',
+        checkout: '15/01/2021 11:00',
+        amounttopay: '7 250 000 UZS',
+        paymentstatus: 'Оплачен',
+        checked: false
+      },
+      {
+        id: 123458,
+        nfl: 'THOMAS FRANCIS MCDONNEL',
+        vip: true,
+        roomcat: 'Апартаменты',
+        roomtype: 'Двухместный',
+        roomnum: '312',
+        regnum: '12347-1234-2021',
+        citizenship: 'GREAT BRITAIN',
+        bookingnum: '00134 - 01/01/2020',
+        checkin: '01/01/2021 14:00',
+        checkout: '15/01/2021 11:00',
+        amounttopay: '7 250 000 UZS',
+        paymentstatus: 'Оплачен',
+        checked: false
+      },
+      {
+        id: 123457,
+        nfl: 'TOXIROV TOXIR TOXIROVICH',
+        vip: false,
+        roomcat: 'Люкс',
+        roomtype: 'Одноместный',
+        roomnum: '311',
+        regnum: '12346-1234-2021',
+        citizenship: 'UZBEKISTAN',
+        bookingnum: '00133 - 01/01/2020',
+        checkin: '01/01/2021 14:00',
+        checkout: '15/01/2021 11:00',
+        amounttopay: '7 250 000 UZS',
+        paymentstatus: 'Оплачен',
+        checked: false
+      },
+      {
+        id: 123458,
+        nfl: 'THOMAS FRANCIS MCDONNEL',
+        vip: true,
+        roomcat: 'Апартаменты',
+        roomtype: 'Двухместный',
+        roomnum: '312',
+        regnum: '12347-1234-2021',
+        citizenship: 'GREAT BRITAIN',
+        bookingnum: '00134 - 01/01/2020',
+        checkin: '01/01/2021 14:00',
+        checkout: '15/01/2021 11:00',
+        amounttopay: '7 250 000 UZS',
+        paymentstatus: 'Оплачен',
+        checked: false
+      },
+      {
+        id: 123457,
+        nfl: 'TOXIROV TOXIR TOXIROVICH',
+        vip: false,
+        roomcat: 'Люкс',
+        roomtype: 'Одноместный',
+        roomnum: '311',
+        regnum: '12346-1234-2021',
+        citizenship: 'UZBEKISTAN',
+        bookingnum: '00133 - 01/01/2020',
+        checkin: '01/01/2021 14:00',
+        checkout: '15/01/2021 11:00',
+        amounttopay: '7 250 000 UZS',
+        paymentstatus: 'Оплачен',
+        checked: false
+      },
+      {
+        id: 123458,
+        nfl: 'THOMAS FRANCIS MCDONNEL',
+        vip: true,
+        roomcat: 'Апартаменты',
+        roomtype: 'Двухместный',
+        roomnum: '312',
+        regnum: '12347-1234-2021',
+        citizenship: 'GREAT BRITAIN',
+        bookingnum: '00134 - 01/01/2020',
+        checkin: '01/01/2021 14:00',
+        checkout: '15/01/2021 11:00',
+        amounttopay: '7 250 000 UZS',
+        paymentstatus: 'Оплачен',
+        checked: false
+      },
       {
         id: 123457,
         nfl: 'TOXIROV TOXIR TOXIROVICH',
@@ -275,10 +398,104 @@ export default new Vuex.Store({
       window.sessionStorage.currentUser = JSON.stringify(user)
     },
 
+    SET_SETTINGS_FILLING(state, filling) {
+      state.settingsFilling = filling
+      window.sessionStorage.settingsFilling = JSON.stringify(filling)
+    },
+
     SET_MY_OBJECT(state, myObject) {
       state.myObject = myObject
       window.sessionStorage.myObject = JSON.stringify(myObject)
     },
+
+    SET_MY_REQUISITES(state, reqs) {
+      state.requisites = reqs
+      window.sessionStorage.requisites = JSON.stringify(reqs)
+    },
+
+    SET_MY_EMPLOYEES(state, emps) {
+      state.employees = emps
+      window.sessionStorage.employees = JSON.stringify(emps)
+    },
+
+
+// Setting up Employees
+
+    SET_MY_MANAGERS(state, myManagers) {
+      state.managers = myManagers
+      window.sessionStorage.managers = JSON.stringify(myManagers)
+    },
+
+    SET_MY_RESTAURANT_MANAGERS(state, myRestaurantManagers) {
+      state.restaurantManagers = myRestaurantManagers
+      window.sessionStorage.restaurantManagers = JSON.stringify(myRestaurantManagers)
+    },
+
+    SET_MY_RECEPTIONISTS(state, myReceptionists) {
+      state.receptionists = myReceptionists
+      window.sessionStorage.receptionists = JSON.stringify(myReceptionists)
+    },
+
+    SET_MY_COOKS(state, myCooks) {
+      state.cooks = myCooks
+      window.sessionStorage.cooks = JSON.stringify(myCooks)
+    },
+
+    SET_MY_MAIDS(state, myMaids) {
+      state.maids = myMaids
+      window.sessionStorage.maids = JSON.stringify(myMaids)
+    },
+
+    SET_MY_WAITERS(state, myWaiters) {
+      state.waiters = myWaiters
+      window.sessionStorage.waiters = JSON.stringify(myWaiters)
+    },
+
+//////////
+
+
+    SET_RESPONSE_STATUS(state, responseStatus) {
+      state.status = responseStatus
+    },
+
+
+    
+// Setting Accesses of Employees
+
+    SET_ACCESSES_MANAGERS(state, accesses) {
+      state.managerAccesses = accesses
+      window.sessionStorage.managerAccesses = JSON.stringify(accesses)
+    },
+
+    SET_ACCESSES_RECEPTIONISTS(state, accesses) {
+      state.receptionistAccesses = accesses
+      window.sessionStorage.receptionistAccesses = JSON.stringify(accesses)
+    },
+
+    SET_ACCESSES_RESTAURANT_MANAGERS(state, accesses) {
+      state.restaurantManagerAccesses = accesses
+      window.sessionStorage.restaurantManagerAccesses = JSON.stringify(accesses)
+    },
+
+    SET_ACCESSES_MAIDS(state, accesses) {
+      state.maidAccesses = accesses
+      window.sessionStorage.maidAccesses = JSON.stringify(accesses)
+    },
+
+    SET_ACCESSES_WAITERS(state, accesses) {
+      state.waiterAccesses = accesses
+      window.sessionStorage.waiterAccesses = JSON.stringify(accesses)
+    },
+
+    SET_ACCESSES_COOKS(state, accesses) {
+      state.cookAccesses = accesses
+      window.sessionStorage.cookAccesses = JSON.stringify(accesses)
+    },
+
+///////////////////////////////////////
+
+
+
 
     SET_CHARTS_OPTIONS(state, chartOption) {
       state.chartOptions = chartOption
@@ -325,21 +542,106 @@ export default new Vuex.Store({
         let response = await Api().post('/api/login', loginInfo)
         let user = response.data
         commit('SET_CURRENT_USER', user)
+        
+        if(JSON.parse(window.sessionStorage.currentUser) != undefined && JSON.parse(window.sessionStorage.currentUser) != null) {
+          let settingsResponse = await Api().get('/api/settings')
+          let filling = settingsResponse.data
+          commit('SET_SETTINGS_FILLING', filling)
+        } else {}
       } catch {
       };
     },
+
+    async getSettingsFilling({commit}) {
+      try {
+        let settingsResponse = await Api().get('/api/settings')
+        let filling = settingsResponse.data
+        commit('SET_SETTINGS_FILLING', filling)
+      } catch {}
+    },
+
+
+// Getting Accesses of employees
+
+    async getAccessesManagers({commit}, name) {
+      const position = name
+
+      try {
+        let response = await Api().get(`api/settings/employee/access/${position}`)
+        let accesses = response.data
+
+        commit('SET_ACCESSES_MANAGERS', accesses)
+      } catch {}
+    },
+
+    async getAccessesReceptionists({commit}, name) {
+      const position = name
+
+      try {
+        let response = await Api().get(`api/settings/employee/access/${position}`)
+        let accesses = response.data
+
+        commit('SET_ACCESSES_RECEPTIONISTS', accesses)
+      } catch {}
+    },
+
+    async getAccessesRestaurantManagers({commit}, name) {
+      const position = name
+
+      try {
+        let response = await Api().get(`api/settings/employee/access/${position}`)
+        let accesses = response.data
+
+        commit('SET_ACCESSES_RESTAURANT_MANAGERS', accesses)
+      } catch {}
+    },
+
+    async getAccessesMaids({commit}, name) {
+      const position = name
+
+      try {
+        let response = await Api().get(`api/settings/employee/access/${position}`)
+        let accesses = response.data
+
+        commit('SET_ACCESSES_MAIDS', accesses)
+      } catch {}
+    },
+
+    async getAccessesWaiters({commit}, name) {
+      const position = name
+
+      try {
+        let response = await Api().get(`api/settings/employee/access/${position}`)
+        let accesses = response.data
+
+        commit('SET_ACCESSES_WAITERS', accesses)
+      } catch {}
+    },
+
+    async getAccessesCooks({commit}, name) {
+      const position = name
+
+      try {
+        let response = await Api().get(`api/settings/employee/access/${position}`)
+        let accesses = response.data
+
+        commit('SET_ACCESSES_COOKS', accesses)
+      } catch {}
+    },
+
+///////////////
+
+
 
     async objectReg({commit}, myObject) {
       try {
         let myObj = JSON.parse(window.sessionStorage.myObject)
 
         if(myObj.objectRegister === undefined || myObj.objectRegister === null) {
-          let responsee = await Api().post('api/settings/object-registration', myObject)
-          console.log(responsee);
+          await Api().post('api/settings/object-registration', myObject)
 
           let response = await Api().get('/api/settings/object-registration')
           let object = response.data
-          console.log(object);
 
           commit('SET_MY_OBJECT', object)
 
@@ -354,6 +656,30 @@ export default new Vuex.Store({
       }
     },
 
+    async requisite({commit}, myRequisites) {
+      try {
+        let requisit = JSON.parse(window.sessionStorage.requisites)
+
+        if(requisit.requisite === undefined || requisit.requisite === null) {
+          let responsee = await Api().post('/api/settings/requisite', myRequisites)
+          console.log(responsee);
+
+          let response = await Api().get('/api/settings/requisite')
+          let reqs = response.data
+
+          commit('SET_MY_REQUISITES', reqs)
+        } else {
+          let responsee = await Api().put('/api/settings/requisite', myRequisites)
+          console.log(responsee);
+
+          let response = await Api().get('/api/settings/requisite')
+          let reqs = response.data
+
+          commit('SET_MY_REQUISITES', reqs)
+        }
+      } catch {}
+    },
+
     async getMyObject({commit}) {
       try {
         let response = await Api().get('/api/settings/object-registration')
@@ -363,6 +689,115 @@ export default new Vuex.Store({
       } catch {}
     },
 
+    async getMyRequisites({commit}) {
+      try {
+        let response = await Api().get('/api/settings/requisite')
+        let myRequisites = response.data
+
+        commit('SET_MY_REQUISITES', myRequisites)
+      } catch {}
+    },
+
+    async getMyEmployeesCount({commit}) {
+      try {
+        let response = await Api().get('/api/settings/employee')
+        let myEmployees = response.data
+
+        commit('SET_MY_EMPLOYEES', myEmployees)
+      } catch {}
+    },
+
+    async getMyEmployeesManagers({commit}) {
+      try {
+        let response = await Api().get('/api/settings/employee/managers')
+        let myManagers = response.data
+
+        commit('SET_MY_MANAGERS', myManagers)
+      } catch {}
+    },
+
+    async getMyEmployeesRestaurantManagers({commit}) {
+      try {
+        let response = await Api().get('/api/settings/employee/restaurantManagers')
+        let myRestaurantManagers = response.data
+
+        commit('SET_MY_RESTAURANT_MANAGERS', myRestaurantManagers)
+      } catch {}
+    },
+
+    async getMyEmployeesReceptionists({commit}) {
+      try {
+        let response = await Api().get('/api/settings/employee/receptionists')
+        let myReceptionists = response.data
+
+        commit('SET_MY_RECEPTIONISTS', myReceptionists)
+      } catch {}
+    },
+
+    async getMyEmployeesCooks({commit}) {
+      try {
+        let response = await Api().get('/api/settings/employee/cooks')
+        let myCooks = response.data
+
+        commit('SET_MY_COOKS', myCooks)
+      } catch {}
+    },
+
+    async getMyEmployeesMaids({commit}) {
+      try {
+        let response = await Api().get('/api/settings/employee/maids')
+        let myMaids = response.data
+
+        commit('SET_MY_MAIDS', myMaids)
+      } catch {}
+    },
+
+    async getMyEmployeesWaiters({commit}) {
+      try {
+        let response = await Api().get('/api/settings/employee/waiters')
+        let myWaiters = response.data
+
+        commit('SET_MY_WAITERS', myWaiters)
+      } catch {}
+    },
+
+    async newEmployee({commit}, employee) {
+      const position = employee.position
+
+      try {
+        let response = await Api().post(`/api/settings/employee/${position.value}s`, employee)
+        let responseStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', responseStatus)
+      } catch {}
+    },
+
+    async editEmployee({commit}, employee) {
+      const position = employee.position
+      const id = employee.id
+
+      try {
+        let response = await Api().put(`/api/settings/employee/${position}/${id}`, employee)
+        let responseStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', responseStatus)
+      } catch {}
+    },
+
+    async deleteEmployee({commit}, employee) {
+      const position = employee.position
+      const id = employee._id
+
+      try {
+        let response = await Api().delete(`/api/settings/employee/${position}/${id}`)
+        let responseStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', responseStatus)
+      } catch {}
+    },
+
+
+//////////////////////////////////////
     async getCharts({commit}) {
       let response = await Api().post('/user/charts')
       let chartOption = response.data

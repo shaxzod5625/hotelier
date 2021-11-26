@@ -1,17 +1,19 @@
 <template>
   <div class="con-page">
     
-    <GuaranteedBooking
-      v-if="guaranteedBookingModal"
+    <transition name="component-fade" mode="out-in">
+      <GuaranteedBooking
+        v-if="guaranteedBookingModal"
 
-      @closeGuaranteedBooking="closeGuaranteedBooking"
-    />
+        @closeGuaranteedBooking="closeGuaranteedBooking"
+      />
 
-    <NotGuaranteedBooking
-      v-if="notguaranteedBookingModal"
+      <NotGuaranteedBooking
+        v-if="notguaranteedBookingModal"
 
-      @closeNotGuaranteedBooking="closeNotGuaranteedBooking"
-    />
+        @closeNotGuaranteedBooking="closeNotGuaranteedBooking"
+      />
+    </transition>
 
     <div>
       <el-breadcrumb separator-class="el-icon-arrow-right">

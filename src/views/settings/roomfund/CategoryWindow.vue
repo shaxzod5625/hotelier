@@ -1,34 +1,36 @@
 <template>
   <div class="con-page">
     
-    <CreateNewRoom
-      @closeCreateRoom="closeCreateRoom"
+    <transition name="component-fade" mode="out-in">
+      <CreateNewRoom
+        @closeCreateRoom="closeCreateRoom"
 
-      v-if="createRoom"
-    />
+        v-if="createRoom"
+      />
 
-    <DeleteRoom
-      @closeDeleteRoom="closeDeleteRoom"
+      <DeleteRoom
+        @closeDeleteRoom="closeDeleteRoom"
 
-      v-if="deleteRoomModal"
+        v-if="deleteRoomModal"
 
-      :roomNumber="roomNumber"
-      :categoryID="categoryID"
-    />
+        :roomNumber="roomNumber"
+        :categoryID="categoryID"
+      />
 
-    <EditRoom
-      v-if="editRoomModal"
+      <EditRoom
+        v-if="editRoomModal"
 
-      @closeEditRoom="closeEditRoom"
+        @closeEditRoom="closeEditRoom"
 
-      :roomNumber="editRoomNumber"
-      :bedType="editBedType"
-      :mainBeds="editMainBeds"
-      :additionalBeds="editAdditionalBeds"
-      :bathroom="editBathroom"
-      :roomArea="editRoomArea"
-      :forSmokers="editForSmokers"
-    />
+        :roomNumber="editRoomNumber"
+        :bedType="editBedType"
+        :mainBeds="editMainBeds"
+        :additionalBeds="editAdditionalBeds"
+        :bathroom="editBathroom"
+        :roomArea="editRoomArea"
+        :forSmokers="editForSmokers"
+      />
+    </transition>
 
     <div>
       <el-breadcrumb separator-class="el-icon-arrow-right">

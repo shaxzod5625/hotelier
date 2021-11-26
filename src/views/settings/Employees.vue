@@ -10,16 +10,18 @@
     <div class="con-page-grid">
       <router-link
         class="employee-card"
-        v-for="emplc in employeecards"
-        :key="emplc"
+        v-for="(employeesCard, idx) in employeesAmount"
+        :key="idx"
         tag="div"
-        :to="emplc.path"
+        :to="employeesCard.path"
+        @click.native="getAccesses(employeesCard.name)"
       >
         <div class="employee-card-titleblock">
-          <h1>{{emplc.count}}</h1>
-          <h3>{{emplc.title}}</h3>
+          <h1>{{employeesCard.count}}</h1>
+          <h3>{{employeesCard.title}}</h3>
         </div>
       </router-link>
+
     </div>
   </div>
 </template>
@@ -33,29 +35,74 @@ export default {
 
     employeecards: [
       {title: 'Менеджеры',
-      count: '4',
-      path: './employees/managers'},
+      path: './employees/managers',
+      name: 'managers'},
 
       {title: 'Администраторы',
-      count: '12',
-      path: './employees/receptionists'},
+      path: './employees/receptionists',
+      name: 'receptionists'},
 
       {title: 'Заведующие залом',
-      count: '2',
-      path: './employees/restaurant-managers'},
+      path: './employees/restaurant-managers',
+      name: 'restaurantManagers'},
 
       {title: 'Горничные',
-      count: '6',
-      path: './employees/maids'},
+      path: './employees/maids',
+      name: 'maids'},
 
       {title: 'Официанты',
-      count: '22',
-      path: './employees/waiters'},
+      path: './employees/waiters',
+      name: 'waiters'},
 
       {title: 'Повара',
-      count: '6',
-      path: './employees/cooks'},
+      path: './employees/cooks',
+      name: 'cooks'},
       ]
   }),
+
+  computed: {
+    parsed() {
+      if(window.sessionStorage.employees !== undefined) {
+        const parsedVar = JSON.parse(window.sessionStorage.employees)
+
+        const maids = parsedVar.maids
+        const cooks = parsedVar.cooks
+        const restaurantManagers = parsedVar.restaurantManagers
+        const managers = parsedVar.managers
+        const receptionists = parsedVar.receptionists
+        const waiters = parsedVar.waiters
+        
+        const parsedLoop = [{count: managers}, {count: receptionists}, {count: restaurantManagers}, {count: maids}, {count: waiters}, {count: cooks}]
+        return parsedLoop
+      } else {
+        this.$router.push('/login')
+      }
+    },
+
+    employeesAmount() {
+      if(window.sessionStorage.employees !== undefined) {
+        const listLoop = this.employeecards.map((item, i) => Object.assign({}, item, this.parsed[i]));
+        return listLoop
+      } else {this.$router.push('/login')}
+    }
+  },
+
+  methods: {
+    getAccesses(name) {
+      if(name === 'managers') {
+        this.$store.dispatch('getAccessesManagers', name)
+      } else if(name === 'receptionists') {
+        this.$store.dispatch('getAccessesReceptionists', name)
+      } else if(name === 'restaurantManagers') {
+        this.$store.dispatch('getAccessesRestaurantManagers', name)
+      } else if(name === 'maids') {
+        this.$store.dispatch('getAccessesMaids', name)
+      } else if(name === 'waiters') {
+        this.$store.dispatch('getAccessesWaiters', name)
+      } else if(name === 'cooks') {
+        this.$store.dispatch('getAccessesCooks', name)
+      }
+    }
+  }
 }
 </script>

@@ -6,10 +6,12 @@
       </el-breadcrumb>
     </div>
     
-    <CheckIn
-      v-if="checkIn"
-      @close="close"
-    />
+    <transition name="component-fade" mode="out-in">
+      <CheckIn
+        v-if="checkIn"
+        @close="close"
+      />
+    </transition>
     
     <div class="tabbar">
       <TabBar
@@ -34,116 +36,119 @@
 
     </div>
 
-    <div
-      v-if="selected === 'Проживают'"
-      class="tab-conpage"
-    >
-      <Reside/>
-    </div>
-
-    <div
-      v-if="selected === 'Заезжают'"
-      class="tab-conpage"
-    >
-      <div class="filter-block">
-        <div class="search-bar">
-          <input type="text" placeholder="Введите имя гостя или номер брони" v-model="search">
-
-          <h3>Сортировка: <span>Все</span></h3>
-        </div>
-        <div class="button-bar">
-          <div class="btns">
-            <button class="sec-btn">
-              <img src="@/assets/icons/Filter-sm.svg" alt="">
-              <span>Фильтр</span>
-            </button>
-            <button class="sec-btn">
-              <img src="@/assets/icons/Print-sm.svg" alt="">
-              <span>Распечатать</span>
-            </button>
-          </div>
-          <h3>
-            Вид: 
-            <span>Карточки</span>
-            <img src="@/assets/icons/Arrow-dwn.svg" alt="">
-          </h3>
-        </div>
+    <transition name="slide-fade" mode="out-in">
+      <div
+        v-if="selected === 'Проживают'"
+        class="tab-conpage"
+      >
+        <Reside/>
       </div>
-      <Checkingin/>
-    </div>
 
-    <div
-      v-if="selected === 'Выехали'"
-      class="tab-conpage"
-    >
-      <div class="filter-block">
-        <div class="search-bar">
-          <input type="text" placeholder="Введите имя гостя или номер брони" v-model="search">
+      <div
+        v-if="selected === 'Заезжают'"
+        class="tab-conpage"
+      >
+        <div class="filter-block">
+          <div class="search-bar">
+            <input type="text" placeholder="Введите имя гостя или номер брони" v-model="search">
 
-          <h3>Сортировка: <span>Все</span></h3>
-        </div>
-        <div class="button-bar">
-          <div class="btns">
-            <button class="sec-btn">
-              <img src="@/assets/icons/Filter-sm.svg" alt="">
-              <span>Фильтр</span>
-            </button>
-            <button class="sec-btn">
-              <img src="@/assets/icons/Print-sm.svg" alt="">
-              <span>Распечатать</span>
-            </button>
+            <h3>Сортировка: <span>Все</span></h3>
           </div>
-          <h3>
-            Вид: 
-            <span>Карточки</span>
-            <img src="@/assets/icons/Arrow-dwn.svg" alt="">
-          </h3>
-        </div>
-      </div>
-      <Checkedout/>
-    </div>
-
-    <div
-      v-if="selected === 'Брони'"
-      class="tab-conpage"
-    >
-      <div class="filter-block">
-        <div class="search-bar">
-          <input type="text" placeholder="Введите имя гостя или номер брони" v-model="search">
-
-          <h3>Сортировка: <span>Все</span></h3>
-        </div>
-        <div class="button-bar">
-          <div class="btns">
-            <button class="sec-btn">
-              <img src="@/assets/icons/Filter-sm.svg" alt="">
-              <span>Фильтр</span>
-            </button>
-            <button class="sec-btn">
-              <img src="@/assets/icons/Print-sm.svg" alt="">
-              <span>Распечатать</span>
-            </button>
-            <button class="sec-btn">
-              <img src="@/assets/icons/Cancel-sm.svg" alt="">
-              <span>Аннулировать</span>
-            </button>
+          <div class="button-bar">
+            <div class="btns">
+              <button class="sec-btn">
+                <img src="@/assets/icons/Filter-sm.svg" alt="">
+                <span>Фильтр</span>
+              </button>
+              <button class="sec-btn">
+                <img src="@/assets/icons/Print-sm.svg" alt="">
+                <span>Распечатать</span>
+              </button>
+            </div>
+            <h3>
+              Вид: 
+              <span>Карточки</span>
+              <img src="@/assets/icons/Arrow-dwn.svg" alt="">
+            </h3>
           </div>
-          <h3>
-            Вид: 
-            <span>Карточки</span>
-            <img src="@/assets/icons/Arrow-dwn.svg" alt="">
-          </h3>
         </div>
+        <Checkingin/>
       </div>
-      <Bookings/>
-    </div>
 
-    <div
-      v-if="selected === 'Профили гостей'"
-      class="tab-conpage"
-    >
-      <Guestprofile/>
-    </div>
+      <div
+        v-if="selected === 'Выехали'"
+        class="tab-conpage"
+      >
+        <div class="filter-block">
+          <div class="search-bar">
+            <input type="text" placeholder="Введите имя гостя или номер брони" v-model="search">
+
+            <h3>Сортировка: <span>Все</span></h3>
+          </div>
+          <div class="button-bar">
+            <div class="btns">
+              <button class="sec-btn">
+                <img src="@/assets/icons/Filter-sm.svg" alt="">
+                <span>Фильтр</span>
+              </button>
+              <button class="sec-btn">
+                <img src="@/assets/icons/Print-sm.svg" alt="">
+                <span>Распечатать</span>
+              </button>
+            </div>
+            <h3>
+              Вид: 
+              <span>Карточки</span>
+              <img src="@/assets/icons/Arrow-dwn.svg" alt="">
+            </h3>
+          </div>
+        </div>
+        <Checkedout/>
+      </div>
+
+      <div
+        v-if="selected === 'Брони'"
+        class="tab-conpage"
+      >
+        <div class="filter-block">
+          <div class="search-bar">
+            <input type="text" placeholder="Введите имя гостя или номер брони" v-model="search">
+
+            <h3>Сортировка: <span>Все</span></h3>
+          </div>
+          <div class="button-bar">
+            <div class="btns">
+              <button class="sec-btn">
+                <img src="@/assets/icons/Filter-sm.svg" alt="">
+                <span>Фильтр</span>
+              </button>
+              <button class="sec-btn">
+                <img src="@/assets/icons/Print-sm.svg" alt="">
+                <span>Распечатать</span>
+              </button>
+              <button class="sec-btn">
+                <img src="@/assets/icons/Cancel-sm.svg" alt="">
+                <span>Аннулировать</span>
+              </button>
+            </div>
+            <h3>
+              Вид: 
+              <span>Карточки</span>
+              <img src="@/assets/icons/Arrow-dwn.svg" alt="">
+            </h3>
+          </div>
+        </div>
+        <Bookings/>
+      </div>
+
+      <div
+        v-if="selected === 'Профили гостей'"
+        class="tab-conpage"
+      >
+        <Guestprofile/>
+      </div>
+    </transition>
+
   </div>
 </template>
 

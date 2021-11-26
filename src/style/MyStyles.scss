@@ -115,12 +115,16 @@
     user-select: none;
     
     li {
+      display: flex;
+      align-items: center;
       padding-left: 22px;
       height: 48px;
       cursor: pointer;
+      transition: all 250ms;
 
       svg path {
         fill: #83858A;
+        transition: all 250ms;
       }
 
       &:hover {
@@ -132,7 +136,7 @@
       &:active {
 
         svg path {
-            fill: #2161ED;
+            fill: #0030AD;
         }
       }
     }
@@ -589,6 +593,7 @@
     background: #fff;
     border-radius: 12px;
     padding: 24px;
+    user-select: none;
     
     &:hover {
       background: #2161ED;
@@ -809,6 +814,7 @@
   border: none;
   text-align: center;
   justify-content: center;
+  transition: all 250ms;
 
   &:hover {
     background: #6B96F3;
@@ -1329,13 +1335,14 @@ table {
         cursor: pointer;
         width: 100%;
         user-select: none;
+        transition: all 250ms;
 
         &:hover {
           color: #6B96F3;
         }
 
         &:active {
-          color: #2161ED;
+          color: #0030AD;
         }
       }
 
@@ -1344,13 +1351,14 @@ table {
         cursor: pointer;
         width: calc(100% - 3);
         user-select: none;
+        transition: all 250ms;
 
         &:hover {
           color: #6B96F3;
         }
 
         &:active {
-          color: #2161ED;
+          color: #0030AD;
         }
       }
     }
@@ -1521,14 +1529,15 @@ table {
 // transition of router view
 
 .slide-fade-enter-active {
-  transition: all .3s ease;
+  transition: all .25s ease;
 }
 .slide-fade-leave-active {
-  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  height: 10px;
+  transition: all .25s cubic-bezier(1.0, 0.5, 0.8, 1.0);
 }
-.slide-fade-enter, .slide-fade-leave-to
-/* .slide-fade-leave-active до версии 2.1.8 */ {
-  transform: translateX(10px);
+.slide-fade-enter, .slide-fade-leave-to {
+  height: 100px;
+  transform: translateX(0%);
   opacity: 0;
 }
 
@@ -1573,6 +1582,7 @@ table {
 .form-filter {
   display: flex;
   flex-direction: column;
+  position: fixed;
   align-items: center;
   width: 446px;
   height: auto;
@@ -1980,6 +1990,7 @@ table {
         border: none;
         background: rgba(255, 255, 255, 0.36);
         cursor: pointer;
+        transition: all 250ms;
 
         img {
           width: 24px;
@@ -2968,6 +2979,7 @@ table {
       font-size: 14px;
       line-height: 16px;
       color: #323438;
+      transition: all 250ms;
   
       &:hover {
         border-color: #6B96F3;
@@ -3525,15 +3537,18 @@ label {
 
 
 .modal-div {
+  position: fixed;
   display: flex;
   flex-direction: column;
   width: 84%;
   height: auto;
+  max-height: calc(100% - 96px);
   align-items: center;
   z-index: 2000;
   background: #fff;
   border-radius: 12px;
   filter: drop-shadow(0px 6px 16px rgba(50, 52, 56, 0.36));
+  overflow-y: auto;
 
   h3 {
     font-family: Roboto;

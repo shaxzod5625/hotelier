@@ -54,17 +54,21 @@
         </li>
         <li class="sidebar-profile" @click="logout">
           <div class="user-pic">
-            <img src="@/assets/User.png" alt="">
+            <img v-if="currentUser.imageUrl !== '' && currentUser.imageUrl !== undefined && currentUser.imageUrl !== null" :src="(currentUser.imageUrl)" alt="">
+            <img v-else-if="currentUser.gender === 'male'" src="@/assets/Male-employee.png" alt="">
+            <img v-else src="@/assets/Female-employee.png" alt="">
           </div>
           <div>
-            <h3>{{ uid.user.lastName }} {{ uid.user.firstName }}</h3>
-            <span>{{ uid.user.position }} {{ uid.user.functions }}</span>
+            <h3>{{ currentUser.lastName }} {{ currentUser.name }}</h3>
+            <span>{{ subPositionLbl }} {{ positionLbl }}</span>
           </div>
         </li>
       </ul>
     </div>
     <div :class="side ? 'narrow' : 'wide'">
-      <router-view/>
+      <transition name="slide-fade" mode="out-in">
+        <router-view/>
+      </transition>
     </div>
   </div>
 </template>
@@ -147,10 +151,51 @@ export default {
       }
     ],
 
-    uid: JSON.parse(window.sessionStorage.currentUser),
+    currentUser: JSON.parse(window.sessionStorage.currentUser).user,
   }),
 
   computed: {
+    positionLbl() {
+      if(this.currentUser.position === 'managers'){
+        return 'менеджер'
+      } else if(this.currentUser.position === 'receptionists') {
+        return 'администратор'
+      } else if(this.currentUser.position === 'restaurantManagers') {
+        return 'заведующий залом'
+      } else if(this.currentUser.position === 'maids' && this.currentUser.gender === 'female') {
+        return 'горничная'
+      } else if(this.currentUser.position === 'maids' && this.currentUser.gender === 'male') {
+        return 'горничный'
+      } else if(this.currentUser.position === 'waiters') {
+        return 'официант'
+      } else if(this.currentUser.position === 'cooks') {
+        return 'повар'
+      }
+    },
+
+    subPositionLbl() {
+      if(this.currentUser.subPosition === 'main' && this.currentUser.gender === 'male'){
+        return 'Главный'
+      } else if(this.currentUser.subPosition === 'main' && this.currentUser.gender === 'female') {
+        return 'Главная'
+      } else if(this.currentUser.subPosition === 'senior' && this.currentUser.gender === 'male') {
+        return 'Старший'
+      } else if(this.currentUser.subPosition === 'senior' && this.currentUser.gender === 'female') {
+        return 'Старшая'
+      } else if(this.currentUser.subPosition === 'junior' && this.currentUser.gender === 'male') {
+        return 'Младший'
+      } else if(this.currentUser.subPosition === 'junior' && this.currentUser.gender === 'female') {
+        return 'Младшая'
+      } else if(this.currentUser.subPosition === 'dayshift' && this.currentUser.gender === 'male') {
+        return 'Дневной'
+      } else if(this.currentUser.subPosition === 'dayshift' && this.currentUser.gender === 'female') {
+        return 'Дневная'
+      } else if(this.currentUser.subPosition === 'nightshift' && this.currentUser.gender === 'male') {
+        return 'Ночной'
+      } else if(this.currentUser.subPosition === 'nightshift' && this.currentUser.gender === 'female') {
+        return 'Ночная'
+      }
+    },
 
     parsed() {
       if(window.sessionStorage.currentUser != undefined) {
@@ -189,6 +234,9 @@ export default {
     async logout() {
       sessionStorage.removeItem('currentUser')
       sessionStorage.removeItem('myObject')
+      sessionStorage.removeItem('settingsFilling')
+      sessionStorage.removeItem('requisites')
+      sessionStorage.removeItem('employees')
       this.$router.push('/login')
       await this.$store.dispatch('logout')
     },
@@ -196,6 +244,8 @@ export default {
     async getInfo(path) {
       if(path === '/settings') {
         await this.$store.dispatch('getMyObject')
+        await this.$store.dispatch('getMyRequisites')
+        await this.$store.dispatch('getMyEmployeesCount')
       }
     }
   }      
