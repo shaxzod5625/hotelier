@@ -1,30 +1,32 @@
 <template>
   <div class="con-page">
 
-    <NewBlock
-      v-if="addNewBlock"
+    <transition name="component-fade" mode="out-in">
+      <NewBlock
+        v-if="addNewBlock"
 
-      @closeNewBlock="closeNewBlock"
-    />
+        @closeNewBlock="closeNewBlock"
+      />
 
-    <EditBlock
-      v-if="editBlockModal"
+      <EditBlock
+        v-if="editBlockModal"
 
-      @closeEditBlock="closeEditBlock"
-      
-      :type="type"
-      :blockName="blockName"
-      :floorsAmount="floorsAmount"
-    />
+        @closeEditBlock="closeEditBlock"
+        
+        :type="type"
+        :blockName="blockName"
+        :floorsAmount="floorsAmount"
+      />
 
-    <DeletingBlock
-      v-if="deleteBlockModal"
+      <DeletingBlock
+        v-if="deleteBlockModal"
 
-      @closeDeleteBlock="closeDeleteBlock"
+        @closeDeleteBlock="closeDeleteBlock"
 
-      :blockName="blockName"
-      :blockID="blockID"
-    />
+        :blockName="blockName"
+        :blockID="blockID"
+      />
+    </transition>
 
     <div>
       <el-breadcrumb separator-class="el-icon-arrow-right">

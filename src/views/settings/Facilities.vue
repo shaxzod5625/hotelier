@@ -1,55 +1,57 @@
 <template>
   <div class="con-page">
 
-    <AddingFacilities
-      v-if="addingFacility"
+    <transition name="component-fade" mode="out-in">
+      <AddingFacilities
+        v-if="addingFacility"
 
-      @closeAddingFacilityModal="closeAddingFacilityModal"
-    />
+        @closeAddingFacilityModal="closeAddingFacilityModal"
+      />
 
-    <AddingAccomodations
-      v-if="addingAccomodation"
+      <AddingAccomodations
+        v-if="addingAccomodation"
 
-      @closeAddingAccomodationModal="closeAddingAccomodationModal"
-    />
+        @closeAddingAccomodationModal="closeAddingAccomodationModal"
+      />
 
-    <CreatingFacility
-      v-if="creatingFacility"
-      @closeCreatingFacilityModal="closeCreatingFacilityModal"
-    />
+      <CreatingFacility
+        v-if="creatingFacility"
+        @closeCreatingFacilityModal="closeCreatingFacilityModal"
+      />
 
-    <CreatingAccomodation
-      v-if="creatingAccomodation"
-      @closeCreatingAccomodationModal="closeCreatingAccomodationModal"
-    />
+      <CreatingAccomodation
+        v-if="creatingAccomodation"
+        @closeCreatingAccomodationModal="closeCreatingAccomodationModal"
+      />
 
-    <EditingFacility
-      v-if="editingFacility"
-      @closeEditingFacilityModal="closeEditingFacilityModal"
+      <EditingFacility
+        v-if="editingFacility"
+        @closeEditingFacilityModal="closeEditingFacilityModal"
 
-      :service="service"
-    />
+        :service="service"
+      />
 
-    <EditingAccomodation
-      v-if="editingAccomodation"
-      @closeEditingAccomodationModal="closeEditingAccomodationModal"
+      <EditingAccomodation
+        v-if="editingAccomodation"
+        @closeEditingAccomodationModal="closeEditingAccomodationModal"
 
-      :accomodation="accomodation"
-    />
+        :accomodation="accomodation"
+      />
 
-    <DeleteFacility
-      v-if="deletingFacility"
-      @closeDeleteFacilityModal="closeDeleteFacilityModal"
+      <DeleteFacility
+        v-if="deletingFacility"
+        @closeDeleteFacilityModal="closeDeleteFacilityModal"
 
-      :service="service"
-    />
+        :service="service"
+      />
 
-    <DeleteAccomodation
-      v-if="deletingAccomodation"
-      @closeDeleteAccomodationModal="closeDeleteAccomodationModal"
+      <DeleteAccomodation
+        v-if="deletingAccomodation"
+        @closeDeleteAccomodationModal="closeDeleteAccomodationModal"
 
-      :accomodation="accomodation"
-    />
+        :accomodation="accomodation"
+      />
+    </transition>
 
     <div>
       <el-breadcrumb separator-class="el-icon-arrow-right">

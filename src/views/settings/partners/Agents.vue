@@ -1,37 +1,39 @@
 <template>
   <div class="con-page">
 
-    <NewAgentPartner
-      v-if="addPartnerModal"
+    <transition name="component-fade" mode="out-in">
+      <NewAgentPartner
+        v-if="addPartnerModal"
 
-      @closeAddPartner="closeAddPartner"
-    />
+        @closeAddPartner="closeAddPartner"
+      />
 
-    <ContractProlongation
-      v-if="prolongContractModal"
-      @closeProlongationModal="closeProlongationModal"
-    />
+      <ContractProlongation
+        v-if="prolongContractModal"
+        @closeProlongationModal="closeProlongationModal"
+      />
 
-    <EditingAgentPartner
-      v-if="editPartnerModal"
+      <EditingAgentPartner
+        v-if="editPartnerModal"
 
-      @closeEditingPartner="closeEditingPartner"
+        @closeEditingPartner="closeEditingPartner"
 
-      :mainPhoneNumber="mainPhoneNumber"
-      :additionalPhoneNumber="additionalPhoneNumber"
-      :partnerName="partnerName"
-      :country="country"
-      :fax="fax"
-      :email="email"
-    />
+        :mainPhoneNumber="mainPhoneNumber"
+        :additionalPhoneNumber="additionalPhoneNumber"
+        :partnerName="partnerName"
+        :country="country"
+        :fax="fax"
+        :email="email"
+      />
 
-    <DeletingAgentPartner
-      v-if="deletePartnerModal"
+      <DeletingAgentPartner
+        v-if="deletePartnerModal"
 
-      @closeDeletePartner="closeDeletePartner"
+        @closeDeletePartner="closeDeletePartner"
 
-      :partnerName="partnerName"
-    />
+        :partnerName="partnerName"
+      />
+    </transition>
 
     <div>
       <el-breadcrumb separator-class="el-icon-arrow-right">

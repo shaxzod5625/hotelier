@@ -31,62 +31,65 @@
       </div>
     </div>
 
-    <div
-      class="modal"
-      v-if="accesses"
-    >
-      <Accesses
-        @closeAccess="closeAccess"
 
-        :pstn="pstn"
-        :positions="positions"
-        :value="positions.value"
-        :label="positions.label"
-
-        :dashVal.sync="dashValue"
-        :frontVal.sync="frontValue"
-        :cashierVal.sync="cashierValue"
-        :folioVal.sync="folioValue"
-        :chessVal.sync="chessValue"
-        :statsVal.sync="statsValue"
-        :reportsVal.sync="reportsValue"
-        :roomboardVal.sync="roomboardValue"
-        :channelManagerVal.sync="channelManagerValue"
-        :settingsVal.sync="settingsValue"
-      />
-      <div class="modal-back"
-        @click="accesses = false"
+    <transition name="component-fade" mode="out-in">
+      <div
+        class="modal"
+        v-if="accesses"
       >
+        <Accesses
+          @closeAccess="closeAccess"
+
+          :position="'restaurantManager'"
+        />
+        <div class="modal-back"
+          @click="accesses = false"
+        >
+        </div>
       </div>
-    </div>
 
-    <NewEmployee
-      v-if="addEmployee"
-      @close="close"
-    />
-    
-    <EditingEmployee
-      v-if="edit"
-      @closeEdit="closeEdit"
-    />
 
-    <DeleteEmployee
-      v-if="deleteEmpl"
-      @closeDelete="closeDelete"
-    />
+      <NewEmployee
+        v-if="addEmployee"
+        :position="position"
+
+        @close="close"
+        @refresh="getRestaurantManagers"
+      />
+
+      <EditingEmployee
+        v-if="edit"
+        @closeEdit="closeEdit"
+        @refresh="getRestaurantManagers"
+
+        :employee="employee"
+      />
+
+      <DeleteEmployee
+        v-if="deleteEmpl"
+        @closeDelete="closeDelete"
+        @refresh="getRestaurantManagers"
+
+        :employee="employee"
+      />
+    </transition>
 
     <div class="con-page-grid5">
       <Employee-card
-        @edit="editEmployee"
-        @deleteEmployee="deleteEmployee"
+        ref="employeeCard"
+        @edit="editEmployee(employee)"
+        @deleteEmployee="deleteEmployee(employee)"
         v-for="(employee, idx) in searchEmployee"
         :key="idx"
+        v-show="employee._id != id"
 
         :imageUrl="employee.imageUrl"
         :position="employee.position"
-        :post="employee.post"
-        :nfl="employee.nfl"
-        :sex="employee.sex"
+        :subPosition="employee.subPosition"
+        :name="employee.name"
+        :lastName="employee.lastName"
+        :familyName="employee.familyName"
+        :gender="employee.gender"
       />
     </div>
   </div>
@@ -122,6 +125,9 @@ export default {
     addEmployee: false,
     edit: false,
     deleteEmpl: false,
+    employee: {},
+    position: {label: 'Заведующий залом', value: 'restaurantManager'},
+    restaurantManagers: JSON.parse(window.sessionStorage.restaurantManagers).employee,
 
 
     positions: [
@@ -146,56 +152,17 @@ export default {
       label: 'Главный зав-залом'
       }
     ],
-
-    clerks: [
-      {
-        admin: '1',
-        imageUrl: 'https://cdn2.momjunction.com/wp-content/uploads/2021/02/What-Is-A-Sigma-Male-And-Their-Common-Personality-Trait-910x1024.jpg',
-        position: 'Старший',
-        post: 'зав-залом',
-        nfl: 'Aleksandrov Aleksandr Aleksandrovich',
-        sex: 'male'
-      },
-      {
-        admin: '2',
-        imageUrl: '',
-        position: 'Младший',
-        post: 'зав-залом',
-        nfl: 'Murzakov Ilya Ashkinaziyevich',
-        sex: 'male'
-      },
-      {
-        admin: '3',
-        imageUrl: '',
-        position: 'Дневной',
-        post: 'зав-залом',
-        nfl: 'Lebedeva Valeriya Ignatiyevna',
-        sex: 'female'
-      },
-      {
-        admin: '4',
-        imageUrl: '',
-        position: 'Ночной',
-        post: 'зав-залом',
-        nfl: 'Arutunyan Alina Nikolayevna',
-        sex: 'female'
-      },
-      {
-        admin: '5',
-        imageUrl: '',
-        position: 'Главный',
-        post: 'зав-залом',
-        nfl: 'Saveleva Yekaterina Pavlovna',
-        sex: 'female'
-      },
-    ]
   }),
 
   computed: {
     searchEmployee(){
-      return this.clerks.filter(post => {
-        return post.nfl.toLowerCase().includes(this.search.toLowerCase())
+      return this.restaurantManagers.filter(post => {
+        return post.name.toLowerCase().includes(this.search.toLowerCase())
       })
+    },
+
+    id() {
+      return JSON.parse(window.sessionStorage.currentUser).user._id
     }
   },
 
@@ -216,12 +183,22 @@ export default {
       this.deleteEmpl = false
     },
 
-    editEmployee() {
+    getRestaurantManagers() {
+      this.restaurantManagers = JSON.parse(window.sessionStorage.restaurantManagers).employee
+    },
+
+    editEmployee(employee) {
+      this.employee = employee
       this.edit = true
     },
 
-    deleteEmployee() {
+    deleteEmployee(employee) {
+      this.employee = employee
       this.deleteEmpl = true
+    },
+
+    refresh() {
+      this.$forceUpdate(this.getRestaurantManagers)
     }
   }
 }

@@ -7,12 +7,12 @@
       <div class="form-2">
         <div class="w-100">
           <label for="input">Должность</label>
-          <el-select v-model="post">
+          <el-select v-model="employee.position">
             <el-option
-              v-for="(pst, idx) in posts"
+              v-for="(position, idx) in positions"
               :key="idx"
-              :label="pst.label"
-              :value="pst.value"
+              :label="position.label"
+              :value="position.value"
             >
             </el-option>
           </el-select>
@@ -20,12 +20,12 @@
 
         <div class="w-100">
           <label for="input">Позиция</label>
-          <el-select v-model="position">
+          <el-select v-model="employee.subPosition">
             <el-option
-              v-for="(pstn, idx) in positions"
+              v-for="(subPosition, idx) in subPositions"
               :key="idx"
-              :label="pstn.label"
-              :value="pstn.value"
+              :label="subPosition.label"
+              :value="subPosition.value"
             >
             </el-option>
           </el-select>
@@ -38,30 +38,30 @@
       >
         <div class="w-100">
           <label for="input">Фамилия</label>
-          <el-input placeholder="Введите фамилию" v-model="lastName">
+          <el-input placeholder="Введите фамилию" v-model="employee.lastName">
           </el-input>
         </div>
 
         <div class="w-100">
           <label for="input">Имя</label>
-          <el-input placeholder="Введите имя" v-model="name">
+          <el-input placeholder="Введите имя" v-model="employee.name">
           </el-input>
         </div>
 
         <div class="w-100">
           <label for="input">Отчество</label>
-          <el-input placeholder="Введите отчество" v-model="familyName">
+          <el-input placeholder="Введите отчество" v-model="employee.familyName">
           </el-input>
         </div>
 
         <div class="w-100">
           <label for="input">Пол</label>
-          <el-select v-model="sex">
+          <el-select v-model="employee.gender">
             <el-option
-              v-for="(sx, idx) in sexes"
+              v-for="(gender, idx) in genders"
               :key="idx"
-              :label="sx.label"
-              :value="sx.value"
+              :label="gender.label"
+              :value="gender.value"
             >
             </el-option>
           </el-select>
@@ -69,32 +69,39 @@
 
         <div class="w-100">
           <label for="input">Номер телефона</label>
-          <el-input placeholder="Введите номер телефона" v-model="phoneNumber">
-          </el-input>
+          <el-input
+            placeholder="Введите номер телефона"
+            v-model="employee.phoneNumber"
+            v-mask="'+### (##) ###-##-##'"
+          />
         </div>
 
         <div class="w-100">
           <label for="input">E-mail адрес</label>
-          <el-input placeholder="Введите e-mail адрес" v-model="email">
+          <el-input placeholder="Введите e-mail адрес" v-model="employee.email">
           </el-input>
         </div>
 
         <div class="w-100">
           <label for="input">Логин</label>
-          <el-input type="email" placeholder="Задайте логин, например (login@hotelname.uz)" v-model="login">
+          <el-input type="email" placeholder="Задайте логин, например (login@hotelname.uz)" v-model="employee.login">
           </el-input>
         </div>
 
         <div class="w-100">
           <label for="input">Пароль</label>
-          <el-input type="password" placeholder="Придумайте пароль" v-model="password">
-          </el-input>
+          <el-input
+            placeholder="Придумайте пароль"
+            v-model="password"
+          />
         </div>
 
         <div class="w-100">
           <label for="input">Подтверждение пароля</label>
-          <el-input type="password" placeholder="Введите пароль повторно" v-model="repeatPassword">
-          </el-input>
+          <el-input
+            placeholder="Введите пароль повторно"
+            v-model="passwordConfirmation"
+          />
         </div>
       </div>
 
@@ -105,16 +112,16 @@
         <div class="w-100">
           <label for="input">Знание языков</label>
           <el-select
-            v-model="langs"
+            v-model="employee.languages"
             multiple
             style="margin-left: 20px;"
             placeholder="Выберите языки"
           >
             <el-option
-              v-for="(lng, idx) in languages"
+              v-for="(language, idx) in languagesList"
               :key="idx"
-              :label="lng.label"
-              :value="lng.value">
+              :label="language.label"
+              :value="language.value">
             </el-option>
           </el-select>
         </div>
@@ -125,7 +132,10 @@
           <span>Отмена</span>
         </button>
 
-        <button class="prim-btn" type="submit">
+        <button
+          class="prim-btn"
+          @click.prevent="editEmployee"
+        >
           <span>Сохранить</span>
         </button>
       </div>
@@ -142,52 +152,83 @@ export default {
   name: 'EditingEmployee',
 
   data: () => ({
+    password: '',
+    passwordConfirmation: '',
+
+    subPositions: [
+      {label: 'Главный', value: 'main'},
+      {label: 'Старший', value: 'senior'},
+      {label: 'Младший', value: 'junior'},
+      {label: 'Дневной', value: 'dayshift'},
+      {label: 'Ночной', value: 'nightshift'}
+    ],
     
-    posts: [
-      {label: 'Менеджер', value: 'Менеджер'},
-      {label: 'Администратор', value: 'Администратор'},
-      {label: 'Заведующий залом', value: 'Заведующий залом'},
-      {label: 'Горничная', value: 'Горничная'},
-      {label: 'Официант', value: 'Официант'},
-      {label: 'Повар', value: 'Повар'}
-    ],
     positions: [
-      {label: 'Старший', value: 'asd'},
-      {label: 'Младший', value: 'asd1'},
-      {label: 'Ночной', value: 'asd2'},
-      {label: 'Дневной', value: 'asd3'},
-      {label: 'Главный', value: 'asd4'}
+      {label: 'Менеджер', value: 'managers'},
+      {label: 'Администратор', value: 'receptionists'},
+      {label: 'Заведующий залом', value: 'restaurantManagers'},
+      {label: 'Горничная', value: 'maids'},
+      {label: 'Официант', value: 'waiters'},
+      {label: 'Повар', value: 'cooks'}
     ],
-    sexes: [
-      {label: 'Мужчина', value: 'Мужчина'},
-      {label: 'Женщина', value: 'Женщина'},
+
+    genders: [
+      {label: 'Мужчина', value: 'male'},
+      {label: 'Женщина', value: 'female'},
     ],
-    languages: [
-      {label: 'Russian', value: 'Russian'},
-      {label: 'Uzbek', value: 'Uzbek'},
-      {label: 'English', value: 'English'},
+
+    languagesList: [
+      {label: 'Английский', value: 'english'},
+      {label: 'Казахский', value: 'kazakh'},
+      {label: 'Киргизский', value: 'kyrgyz'},
+      {label: 'Русский', value: 'russian'},
+      {label: 'Украинский', value: 'ukrainian'},
+      {label: 'Узбекский', value: 'uzbek'},
     ]
   }),
 
   props: {
-    lastName: String,
-    name: String,
-    familyName: String,
-    position: String,
-    post: String,
-    sex: String,
-    phoneNumber: Number,
-    email: String,
-    login: String,
-    password: String,
-    repeatPassword: String,
-    langs: Array,
+    employee: Object,
   },
 
   methods: {
     closeModal() {
-      this.$emit('closeEdit', this.editEmployee = false)
+      this.$emit('closeEdit')
     },
+
+    async editEmployee() {
+      const employee = {
+        position: this.employee.position,
+        subPosition: this.employee.subPosition,
+        lastName: this.employee.lastName,
+        name: this.employee.name,
+        familyName: this.employee.familyName,
+        gender: this.employee.gender,
+        phoneNumber: this.employee.phoneNumber,
+        email: this.employee.email,
+        login: this.employee.login,
+        password: this.password,
+        languages: this.employee.languages,
+        id: this.employee._id,
+      }
+
+      await this.$store.dispatch('editEmployee', employee)
+
+      await this.$store.dispatch('getMyEmployeesManagers')
+      await this.$store.dispatch('getMyEmployeesRestaurantManagers')
+      await this.$store.dispatch('getMyEmployeesReceptionists')
+      await this.$store.dispatch('getMyEmployeesWaiters')
+      await this.$store.dispatch('getMyEmployeesMaids')
+      await this.$store.dispatch('getMyEmployeesCooks')
+
+      this.$message({
+        message: "Изменения сохранены",
+        type: 'success'
+      })
+
+      this.$emit('closeEdit')
+      this.$emit('refresh')
+    }
   }
 }
 </script>

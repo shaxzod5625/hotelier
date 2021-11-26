@@ -1,47 +1,49 @@
 <template>
   <div class="con-page">
 
-    <InvoiceForm
-    v-if="invoiceForm"
+    <transition name="component-fade" mode="out-in">
+      <InvoiceForm
+      v-if="invoiceForm"
 
-    @closeInvoiceFormModal="closeInvoiceFormModal"
-    />
+      @closeInvoiceFormModal="closeInvoiceFormModal"
+      />
 
-    <BookingConfirmationForm
-      v-if="bookingConfForm"
+      <BookingConfirmationForm
+        v-if="bookingConfForm"
 
-      @closeBookingConfFormModal="closeBookingConfFormModal"
-    />
+        @closeBookingConfFormModal="closeBookingConfFormModal"
+      />
 
-    <BookingCancellationForm
-      v-if="bookingCancelForm"
+      <BookingCancellationForm
+        v-if="bookingCancelForm"
 
-      @closeBookingCancelFormModal="closeBookingCancelFormModal"
-    />
+        @closeBookingCancelFormModal="closeBookingCancelFormModal"
+      />
 
-    <InternalRulesForm
-      v-if="internalRulesForm"
+      <InternalRulesForm
+        v-if="internalRulesForm"
 
-      @closeInternalRulesFormModal="closeInternalRulesFormModal"
-    />
+        @closeInternalRulesFormModal="closeInternalRulesFormModal"
+      />
 
-    <CheckInRulesForm
-      v-if="checkInRulesForm"
+      <CheckInRulesForm
+        v-if="checkInRulesForm"
 
-      @closeCheckInRulesFormModal="closeCheckInRulesFormModal"
-    />
+        @closeCheckInRulesFormModal="closeCheckInRulesFormModal"
+      />
 
-    <ReportsForm
-      v-if="reportsForm"
+      <ReportsForm
+        v-if="reportsForm"
 
-      @closeReportsFormModal="closeReportsFormModal"
-    />
-    
-    <TariffsForm
-      v-if="tariffsForm"
+        @closeReportsFormModal="closeReportsFormModal"
+      />
+      
+      <TariffsForm
+        v-if="tariffsForm"
 
-      @closeTariffsFormModal="closeTariffsFormModal"
-    />
+        @closeTariffsFormModal="closeTariffsFormModal"
+      />
+    </transition>
 
     <div>
       <el-breadcrumb separator-class="el-icon-arrow-right">

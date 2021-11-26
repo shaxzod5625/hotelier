@@ -116,7 +116,7 @@
         </div>
       </div>
 
-      <h3>{{myRegisteredObject}}</h3>
+      <h3 style="display: none">{{myRegisteredObject}}</h3>
 
       <div class="input-grid-btns">
         <button class="sec-btn" @click.prevent="onCancel">
@@ -200,8 +200,11 @@ export default {
       }
 
       await this.$store.dispatch('objectReg', myObject)
+      await this.$store.dispatch('getSettingsFilling')
 
-      console.log(myObject);
+      this.$message({
+        message: "Изменения сохранены",
+        type: 'success'})
     },
 
     onCancel(){

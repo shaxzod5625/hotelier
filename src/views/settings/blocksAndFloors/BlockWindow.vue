@@ -1,29 +1,31 @@
 <template>
   <div class="con-page">
 
-    <DeleteFloor
-      v-if="deleteFloorModal"
+    <transition name="component-fade" mode="out-in">
+      <DeleteFloor
+        v-if="deleteFloorModal"
 
-      @closeDeleteFloor="closeDeleteFloor"
+        @closeDeleteFloor="closeDeleteFloor"
 
-      :floorLevel="level"
-      :floorName="floorName"
-    />
+        :floorLevel="level"
+        :floorName="floorName"
+      />
 
-    <EditFloor
-      v-if="editFloorModal"
+      <EditFloor
+        v-if="editFloorModal"
 
-      @closeEditFloor="closeEditFloor"
+        @closeEditFloor="closeEditFloor"
 
-      :floorName="floorName"
-      :floorLevel="level"
-    />
+        :floorName="floorName"
+        :floorLevel="level"
+      />
 
-    <NewFloor
-      v-if="createFloor"
+      <NewFloor
+        v-if="createFloor"
 
-      @closeNewFloor="closeNewFloor"
-    />
+        @closeNewFloor="closeNewFloor"
+      />
+    </transition>
 
     <div>
       <el-breadcrumb separator-class="el-icon-arrow-right">

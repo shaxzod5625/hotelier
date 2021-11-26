@@ -1,19 +1,21 @@
 <template>
   <div class="con-page">
 
-    <NewRoomCategory
-      @closeNewCategory="closeNewCategory"
+    <transition name="component-fade" mode="out-in">
+      <NewRoomCategory
+        @closeNewCategory="closeNewCategory"
 
-      v-if="newCategory"
-    />
+        v-if="newCategory"
+      />
 
-    <DeleteCategory
-      @closeDeleteCategory="closeDeleteCategory"
+      <DeleteCategory
+        @closeDeleteCategory="closeDeleteCategory"
 
-      v-if="deleteCategoryModal"
+        v-if="deleteCategoryModal"
 
-      :catID="categoryID"
-    />
+        :catID="categoryID"
+      />
+    </transition>
 
     <div>
       <el-breadcrumb separator-class="el-icon-arrow-right">

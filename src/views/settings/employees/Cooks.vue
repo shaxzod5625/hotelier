@@ -31,75 +31,65 @@
       </div>
     </div>
 
-    <div
-      class="modal"
-      v-if="accesses"
-    >
-      <Accesses
-        @closeAccess="closeAccess"
 
-        :pstn="pstn"
-        :positions="positions"
-        :value="positions.value"
-        :label="positions.label"
-
-        :dashVal.sync="dashValue"
-        :frontVal.sync="frontValue"
-        :cashierVal.sync="cashierValue"
-        :folioVal.sync="folioValue"
-        :chessVal.sync="chessValue"
-        :statsVal.sync="statsValue"
-        :reportsVal.sync="reportsValue"
-        :roomboardVal.sync="roomboardValue"
-        :channelManagerVal.sync="channelManagerValue"
-        :settingsVal.sync="settingsValue"
-      />
-      <div class="modal-back"
-        @click="accesses = false"
+    <transition name="component-fade" mode="out-in">
+      <div
+        class="modal"
+        v-if="accesses"
       >
+        <Accesses
+          @closeAccess="closeAccess"
+
+          :position="'cook'"
+        />
+        <div class="modal-back"
+          @click="accesses = false"
+        >
+        </div>
       </div>
-    </div>
 
-    <NewEmployee
-      v-if="addEmployee"
-      @close="close"
-    />
-    
-    <EditingEmployee
-      v-if="edit"
-      @closeEdit="closeEdit"
 
-      :lastName="lastName"
-      :name="name"
-      :familyName="familyName" 
-      :position="position"
-      :post="post"
-      :sex="sex"
-      :phoneNumber="phoneNumber"
-      :email="email"
-      :login="login"
-      :langs="langs"
-    />
+      <NewEmployee
+        v-if="addEmployee"
+        :position="position"
 
-    <DeleteEmployee
-      v-if="deleteEmpl"
-      @closeDelete="closeDelete"
-    />
+        @close="close"
+        @refresh="getCooks"
+      />
+
+      <EditingEmployee
+        v-if="edit"
+        @closeEdit="closeEdit"
+        @refresh="getCooks"
+
+        :employee="employee"
+      />
+
+      <DeleteEmployee
+        v-if="deleteEmpl"
+        @closeDelete="closeDelete"
+        @refresh="getCooks"
+
+        :employee="employee"
+      />
+    </transition>
 
     <div class="con-page-grid5">
       <Employee-card
-        @edit="editEmployee"
-        @deleteEmployee="deleteEmployee"
+        ref="employeeCard"
+        @edit="editEmployee(employee)"
+        @deleteEmployee="deleteEmployee(employee)"
         v-for="(employee, idx) in searchEmployee"
         :key="idx"
+        v-show="employee._id != id"
 
         :imageUrl="employee.imageUrl"
         :position="employee.position"
-        :post="employee.post"
+        :subPosition="employee.subPosition"
         :name="employee.name"
         :lastName="employee.lastName"
         :familyName="employee.familyName"
-        :sex="employee.sex"
+        :gender="employee.gender"
       />
     </div>
   </div>
@@ -135,6 +125,9 @@ export default {
     addEmployee: false,
     edit: false,
     deleteEmpl: false,
+    employee: {},
+    position: {label: 'Повар', value: 'cook'},
+    cooks: JSON.parse(window.sessionStorage.cooks).employee,
 
 
     positions: [
@@ -160,67 +153,17 @@ export default {
       }
     ],
 
-    employees: [
-      {
-        emplId: '001',
-        imageUrl: 'https://cdn2.momjunction.com/wp-content/uploads/2021/02/What-Is-A-Sigma-Male-And-Their-Common-Personality-Trait-910x1024.jpg',
-        position: 'Старший',
-        post: 'повар',
-        name: 'Aleksandr',
-        lastName: 'Aleksandrov',
-        familyName: 'Aleksandrovich',
-        sex: 'male'
-      },
-      {
-        emplId: '002',
-        imageUrl: '',
-        position: 'Младший',
-        post: 'повар',
-        name: 'Ilya',
-        lastName: 'Murzakov',
-        familyName: 'Ashkinaziyevich',
-        sex: 'male'
-      },
-      {
-        emplId: '003',
-        imageUrl: '',
-        position: 'Дневной',
-        post: 'повар',
-        name: 'Valeriya',
-        lastName: 'Lebedeva',
-        familyName: 'Ignatiyevna',
-        sex: 'female'
-      },
-      {
-        emplId: '004',
-        imageUrl: '',
-        position: 'Ночной',
-        post: 'повар',
-        name: 'Alina',
-        lastName: 'Arutunyan',
-        familyName: 'Nikolayevna',
-        sex: 'female'
-      },
-      {
-        emplId: '005',
-        imageUrl: '',
-        position: 'Главный',
-        post: 'повар',
-        name: 'Yekaterina',
-        lastName: 'Saveleva',
-        familyName: 'Pavlovna',
-        sex: 'female'
-      },
-    ]
   }),
 
   computed: {
     searchEmployee(){
-      return this.employees.filter(post => {
+      return this.cooks.filter(post => {
         return post.name.toLowerCase().includes(this.search.toLowerCase())
-        && post.lastName.toLowerCase().includes(this.search.toLowerCase())
-        && post.familyName.toLowerCase().includes(this.search.toLowerCase())
       })
+    },
+
+    id() {
+      return JSON.parse(window.sessionStorage.currentUser).user._id
     }
   },
 
@@ -241,12 +184,22 @@ export default {
       this.deleteEmpl = false
     },
 
-    editEmployee(emplId) {
+    getCooks() {
+      this.cooks = JSON.parse(window.sessionStorage.cooks).employee
+    },
+
+    editEmployee(employee) {
+      this.employee = employee
       this.edit = true
     },
 
-    deleteEmployee() {
+    deleteEmployee(employee) {
+      this.employee = employee
       this.deleteEmpl = true
+    },
+
+    refresh() {
+      this.$forceUpdate(this.getCooks)
     }
   }
 }
