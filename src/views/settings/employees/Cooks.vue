@@ -2,8 +2,8 @@
   <div class="con-page">
     <div>
       <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: '/settings'}" class="breadcrump">Настройки</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/settings/employees'}" class="breadcrump">Сотрудники</el-breadcrumb-item>
+        <el-breadcrumb-item @click.native="getAccesses" :to="{ path: '/settings'}" class="breadcrump">Настройки</el-breadcrumb-item>
+        <el-breadcrumb-item @click.native="getAccesses" :to="{ path: '/settings/employees'}" class="breadcrump">Сотрудники</el-breadcrumb-item>
         <el-breadcrumb-item class="breadcrump">Повара</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
@@ -33,20 +33,12 @@
 
 
     <transition name="component-fade" mode="out-in">
-      <div
-        class="modal"
+      <Accesses
         v-if="accesses"
-      >
-        <Accesses
-          @closeAccess="closeAccess"
+        @closeAccess="closeAccess"
 
-          :position="'cook'"
-        />
-        <div class="modal-back"
-          @click="accesses = false"
-        >
-        </div>
-      </div>
+        :position="'cook'"
+      />
 
 
       <NewEmployee
@@ -74,7 +66,7 @@
       />
     </transition>
 
-    <div class="con-page-grid5">
+    <div class="con-page-grid6">
       <Employee-card
         ref="employeeCard"
         @edit="editEmployee(employee)"
@@ -159,6 +151,8 @@ export default {
     searchEmployee(){
       return this.cooks.filter(post => {
         return post.name.toLowerCase().includes(this.search.toLowerCase())
+        || post.lastName.toLowerCase().includes(this.search.toLowerCase())
+        || post.familyName.toLowerCase().includes(this.search.toLowerCase())
       })
     },
 
@@ -186,6 +180,10 @@ export default {
 
     getCooks() {
       this.cooks = JSON.parse(window.sessionStorage.cooks).employee
+    },
+
+    async getAccesses() {
+      await this.$store.dispatch('getMyEmployeesCount')
     },
 
     editEmployee(employee) {

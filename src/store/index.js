@@ -670,13 +670,23 @@ export default new Vuex.Store({
           commit('SET_MY_REQUISITES', reqs)
         } else {
           let responsee = await Api().put('/api/settings/requisite', myRequisites)
-          console.log(responsee);
 
           let response = await Api().get('/api/settings/requisite')
           let reqs = response.data
 
           commit('SET_MY_REQUISITES', reqs)
         }
+      } catch {}
+    },
+
+    async editAccesses({commit}, access) {
+      const position = access.position
+
+      try {
+        let response = await Api().put(`api/settings/employee/access/${position}s`, access)
+        let responseStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', responseStatus)
       } catch {}
     },
 
