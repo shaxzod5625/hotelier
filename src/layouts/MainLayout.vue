@@ -198,8 +198,9 @@ export default {
     },
 
     parsed() {
-      if(window.sessionStorage.currentUser != undefined) {
-        const parsedVar = JSON.parse(window.sessionStorage.currentUser).isAccess.isAccess
+      if(window.sessionStorage.currentUser !== undefined && window.sessionStorage.currentUser !== null) {
+        const subPstn = JSON.parse
+        const parsedVar = JSON.parse(window.sessionStorage.currentUser).isAccess
         const parsedConst = JSON.parse(parsedVar)
 
         const dash = parsedConst.dashPermission
@@ -214,7 +215,15 @@ export default {
         const settings = parsedConst.settingsPermission
         
         const parsedLoop = [dash, front, cash, folio, chess, stats, reps, rb, cm, settings]
-        return parsedLoop
+
+        if(this.parsedVar != null) {
+          
+        } else {
+          return [{accessible: true}, {accessible: true}, {accessible: true}, {accessible: true}, {accessible: true}, {accessible: true}, {accessible: true}, {accessible: true}, {accessible: true}, {accessible: true},]
+        }
+
+      } else if(window.sessionStorage.currentUser === undefined) {
+        return [{accessible: true}, {accessible: true}, {accessible: true}, {accessible: true}, {accessible: true}, {accessible: true}, {accessible: true}, {accessible: true}, {accessible: true}, {accessible: true},]
       } else {
         this.$router.push('/login')
       }
@@ -232,11 +241,14 @@ export default {
 
   methods: {
     async logout() {
-      sessionStorage.removeItem('currentUser')
-      sessionStorage.removeItem('myObject')
-      sessionStorage.removeItem('settingsFilling')
-      sessionStorage.removeItem('requisites')
-      sessionStorage.removeItem('employees')
+      sessionStorage.clear()
+      
+      // sessionStorage.removeItem('currentUser')
+      // sessionStorage.removeItem('myObject')
+      // sessionStorage.removeItem('settingsFilling')
+      // sessionStorage.removeItem('requisites')
+      // sessionStorage.removeItem('employees')
+
       this.$router.push('/login')
       await this.$store.dispatch('logout')
     },

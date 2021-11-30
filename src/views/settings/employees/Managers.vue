@@ -2,8 +2,8 @@
   <div class="con-page">
     <div>
       <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: '/settings'}" class="breadcrump">Настройки</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/settings/employees'}" class="breadcrump">Сотрудники</el-breadcrumb-item>
+        <el-breadcrumb-item @click.native="getAccesses" :to="{ path: '/settings'}" class="breadcrump">Настройки</el-breadcrumb-item>
+        <el-breadcrumb-item @click.native="getAccesses" :to="{ path: '/settings/employees'}" class="breadcrump">Сотрудники</el-breadcrumb-item>
         <el-breadcrumb-item class="breadcrump">Менеджеры</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
@@ -33,20 +33,12 @@
 
 
     <transition name="component-fade" mode="out-in">
-      <div
-        class="modal"
+      <Accesses
         v-if="accesses"
-      >
-        <Accesses
-          @closeAccess="closeAccess"
+        @closeAccess="closeAccess"
 
-          :position="'manager'"
-        />
-        <div class="modal-back"
-          @click="accesses = false"
-        >
-        </div>
-      </div>
+        :position="'manager'"
+      />
 
 
       <NewEmployee
@@ -74,7 +66,7 @@
       />
     </transition>
     
-    <div class="con-page-grid5">
+    <div class="con-page-grid6">
       <Employee-card
         ref="employeeCard"
         @edit="editEmployee(employee)"
@@ -158,6 +150,8 @@ export default {
     searchEmployee(){
       return this.managers.filter(post => {
         return post.name.toLowerCase().includes(this.search.toLowerCase())
+        || post.lastName.toLowerCase().includes(this.search.toLowerCase())
+        || post.familyName.toLowerCase().includes(this.search.toLowerCase())
       })
     },
 
@@ -185,6 +179,10 @@ export default {
 
     getManagers() {
       this.managers = JSON.parse(window.sessionStorage.managers).employee
+    },
+
+    async getAccesses() {
+      await this.$store.dispatch('getMyEmployeesCount')
     },
 
     editEmployee(employee) {

@@ -322,12 +322,16 @@
     user-select: none;
     
     li {
+      display: flex;
+      align-items: center;
       padding-left: 22px;
       height: 48px;
       cursor: pointer;
+      transition: all 250ms;
 
       svg path {
         fill: #83858A;
+        transition: all 250ms;
       }
 
       &:hover {
@@ -339,14 +343,14 @@
       &:active {
 
         svg path {
-            fill: #2161ED;
+            fill: #0030AD;
         }
       }
     }
 
     .notifications-li {
       display: flex;
-      width: 264px;
+      width: 100%;
       flex-direction: row;
       align-items: center;
       gap: 22px;
@@ -1951,6 +1955,93 @@ table {
   }
 }
 
+.img-cards {
+  position: relative;
+  width: 100%;
+  min-width: 238px;
+
+  .card-btns {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    align-items: center;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    border-radius: 12px;
+    background: rgba(131, 133, 138, 0.64);
+    backdrop-filter: blur(8px);
+    opacity: 0;
+    transition: opacity 200ms;
+
+    .icn-btn-opcty {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 36px;
+      width: 36px;
+      border-radius: 8px;
+      border: none;
+      background: rgba(255, 255, 255, 0.36);
+      cursor: pointer;
+      transition: all 250ms;
+
+      img {
+        width: 24px;
+        height: 24px;
+      }
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.8);
+      }
+
+      &:active {
+        background: rgba(255, 255, 255, 0.12);
+      }
+    }
+  }
+  
+  &:hover {
+    .card-btns {
+      opacity: 1;
+    }
+  }
+  
+  .empl-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    span {
+      text-align: center;
+      font-family: Roboto;
+      font-weight: 500;
+      font-size: 12px;
+      line-height: 14px;
+      color: #83858A;
+      margin: 12px 0;
+    }
+
+    h3 {
+      text-align: center;
+      font-family: Roboto;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 16px;
+      color: #323438;
+      padding: 0 24px;
+      margin: 0;
+    }
+  }
+
+  img {
+    height: 234px;
+    width: 100%;
+    border-radius: 12px 12px 0 0;
+    object-fit: cover;
+  }
+}
+
 .con-page-grid5 {
   margin-top: 24px;
   width: auto;
@@ -1960,93 +2051,18 @@ table {
   row-gap: 24px;
   grid-template-columns: calc((100% - 96px) / 5) calc((100% - 96px) / 5) calc((100% - 96px) / 5) calc((100% - 96px) / 5) calc((100% - 96px) / 5);
   grid-template-rows: auto;
+}
 
-  .img-cards {
-    position: relative;
-    width: 100%;
-    min-width: 238px;
 
-    .card-btns {
-      display: flex;
-      justify-content: center;
-      gap: 24px;
-      align-items: center;
-      position: absolute;
-      height: 100%;
-      width: 100%;
-      border-radius: 12px;
-      background: rgba(131, 133, 138, 0.64);
-      backdrop-filter: blur(8px);
-      opacity: 0;
-      transition: opacity 200ms;
-
-      .icn-btn-opcty {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 36px;
-        width: 36px;
-        border-radius: 8px;
-        border: none;
-        background: rgba(255, 255, 255, 0.36);
-        cursor: pointer;
-        transition: all 250ms;
-
-        img {
-          width: 24px;
-          height: 24px;
-        }
-
-        &:hover {
-          background: rgba(255, 255, 255, 0.8);
-        }
-
-        &:active {
-          background: rgba(255, 255, 255, 0.12);
-        }
-      }
-    }
-    
-    &:hover {
-      .card-btns {
-        opacity: 1;
-      }
-    }
-    
-    .empl-info {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      
-      span {
-        text-align: center;
-        font-family: Roboto;
-        font-weight: 500;
-        font-size: 12px;
-        line-height: 14px;
-        color: #83858A;
-        margin: 12px 0;
-      }
-
-      h3 {
-        text-align: center;
-        font-family: Roboto;
-        font-weight: 500;
-        font-size: 16px;
-        line-height: 16px;
-        color: #323438;
-        padding: 0 24px;
-        margin: 0;
-      }
-    }
-
-    img {
-      height: 234px;
-      width: 100%;
-      border-radius: 12px 12px 0 0;
-      object-fit: cover;
-    }
-  }
+.con-page-grid6 {
+  margin-top: 24px;
+  width: auto;
+  display: grid;
+  grid-column: 1 /span6;
+  column-gap: 24px;
+  row-gap: 24px;
+  grid-template-columns: calc((100% - 120px) / 6) calc((100% - 120px) / 6) calc((100% - 120px) / 6) calc((100% - 120px) / 6) calc((100% - 120px) / 6) calc((100% - 120px) / 6);
+  grid-template-rows: auto;
 }
 
 .el-breadcrumb__inner.is-link {
