@@ -4,16 +4,18 @@
     <transition name="component-fade" mode="out-in">
       <NewRoomCategory
         @closeNewCategory="closeNewCategory"
+        @refresh="refresh"
 
         v-if="newCategory"
       />
 
       <DeleteCategory
         @closeDeleteCategory="closeDeleteCategory"
+        @refresh="refresh"
 
         v-if="deleteCategoryModal"
 
-        :catID="categoryID"
+        :category="categoryName"
       />
     </transition>
 
@@ -52,11 +54,11 @@
           <div class="td-list">
             <div class="list-divider"></div>
             <div class="list-content">
-              <router-link class="category-link" :to="{name: 'Category Window', params: {id: roomCats.catID}}">
+              <router-link class="category-link" :to="{name: 'Category Window', params: {id: roomCats.category}}">
                 <td
                   class="category-name"
                 >
-                  {{roomCats.catName}}
+                  {{catName(roomCats.category)}}
                 </td>
               </router-link>
               <td>{{roomCats.rooms.length}}</td>
@@ -64,7 +66,7 @@
                 {{categoryBeds(idx)}}
                 <div class="list-icon-box">
                   <router-link
-                    :to="{name: 'Category Window', params: {id: roomCats.catID}}"
+                    :to="{name: 'Category Window', params: {id: roomCats.category}}"
                     style="align-items: center; display: flex;"
                   >
                     <img
@@ -73,7 +75,7 @@
                     >
                   </router-link>
                   <img
-                    @click="deleteCategory(roomCats.catID)"
+                    @click="deleteCategory(roomCats.category)"
                     class="icon-box"
                     src="@/assets/icons/Delete.svg" alt=""
                   >
@@ -91,6 +93,7 @@
 import _ from 'lodash'
 import NewRoomCategory from './roomfund/NewRoomCategory.vue'
 import DeleteCategory from './roomfund/DeleteCategory.vue'
+import { computed } from 'vue-demi'
 
 
 export default {
@@ -101,21 +104,21 @@ export default {
   },
 
   data: () => ({
+    categoryName: '',
     categoryID: '',
     newCategory: false,
     editCategory: false,
     deleteCategoryModal: false,
+
+    roomFund: JSON.parse(window.sessionStorage.allRoomCats).categories,
   }),
 
   computed: {
-    roomFund() {
-      return this.$store.state.roomFund
-    },
-
     allBeds() {
+      const catsAmount = this.roomFund.length
       const loopResult = []
 
-      for (let i=0; i<4; i++) {
+      for (let i=0; i<catsAmount; i++) {
         let roomLoop = this.roomFund[i].rooms
         loopResult.push(roomLoop.length)
       }
@@ -124,9 +127,13 @@ export default {
   },
 
   methods: {
-    deleteCategory(catID) {
+    getRoomFund() {
+      this.roomFund =  JSON.parse(window.sessionStorage.allRoomCats).categories
+    },
+
+    deleteCategory(category) {
+      this.categoryName = category
       this.deleteCategoryModal = true
-      this.categoryID = catID
     },
 
     closeNewCategory() {
@@ -137,13 +144,30 @@ export default {
       this.deleteCategoryModal = false
     },
 
+    catName(category) {
+      if(category === 'apartment') {return 'Апартаменты'}
+      else if(category === 'bungalow') {return 'Бунгало'}
+      else if(category === 'deluxe') {return 'Делюкс'}
+      else if(category === 'honeymoonRoom') {return 'Для молодоженов'}
+      else if(category === 'suite') {return 'Люкс'}
+      else if(category === 'duplex') {return 'Дюплекс'}
+      else if(category === 'cabana') {return 'Коттедж'}
+      else if(category === 'juniorSuite') {return 'Полулюкс'}
+      else if(category === 'residence') {return 'Резиденция'}
+      else if(category === 'familyRoom') {return 'Семейная комната'}
+      else if(category === 'standart') {return 'Стандарт'}
+      else if(category === 'studio') {return 'Студия'}
+      else if(category === 'chalet') {return 'Шале'}
+      else if(category === 'economyClass') {return 'Эконом-класс'}
+    },
+
     categoryBeds(idx) {
       let index = idx
       let amount = this.roomFund[index].rooms.length
       const loopResult = []
 
       for (let i=0; i<amount; i++) {
-        let bedLoop = this.roomFund[index].rooms[i]
+        let bedLoop = JSON.parse(this.roomFund[index].rooms[i])
         loopResult.push((bedLoop.mainBeds + bedLoop.additionalBeds))
       }
       return Object.values(loopResult).reduce((a, b) => a + b)
@@ -152,6 +176,14 @@ export default {
     closeEdit() {
       this.editCategory = false
     },
+
+    async refresh() {
+      try{
+        await this.$store.dispatch('getRoomsCount')
+      } catch {}
+
+      this.$forceUpdate(this.getRoomFund())
+    }
   }
 }
 </script>

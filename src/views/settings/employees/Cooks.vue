@@ -196,7 +196,11 @@ export default {
       this.deleteEmpl = true
     },
 
-    refresh() {
+    async refresh() {
+      try {
+        await this.$store.dispatch('getMyEmployeesCooks')
+      } catch {}
+      
       this.$forceUpdate(this.getCooks)
     }
   }

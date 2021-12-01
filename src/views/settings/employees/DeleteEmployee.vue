@@ -66,13 +66,12 @@ export default {
         await this.$store.dispatch('getMyEmployeesWaiters')
       }
 
+      this.$emit('refresh')
+      this.$emit('closeDelete')
       this.$message({
         message: "Профиль сотрудника удален",
         type: 'success'
       })
-
-      this.$emit('refresh')
-      this.$emit('closeDelete')
     }
   }
 }

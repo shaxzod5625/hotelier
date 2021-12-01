@@ -4,31 +4,30 @@
     <transition name="component-fade" mode="out-in">
       <CreateNewRoom
         @closeCreateRoom="closeCreateRoom"
+        @refresh="refresh"
 
         v-if="createRoom"
+
+        :currentCategory="currentCategory"
       />
 
       <DeleteRoom
         @closeDeleteRoom="closeDeleteRoom"
+        @refresh="refresh"
 
         v-if="deleteRoomModal"
 
-        :roomNumber="roomNumber"
-        :categoryID="categoryID"
+        :deletingRoomInfo="this.deletingRoomInfo"
       />
 
       <EditRoom
         v-if="editRoomModal"
+        @refresh="refresh"
 
         @closeEditRoom="closeEditRoom"
 
-        :roomNumber="editRoomNumber"
-        :bedType="editBedType"
-        :mainBeds="editMainBeds"
-        :additionalBeds="editAdditionalBeds"
-        :bathroom="editBathroom"
-        :roomArea="editRoomArea"
-        :forSmokers="editForSmokers"
+        :editingRoomInfo="this.editingRoomInfo"
+        :currentNumber="this.currentNumber"
       />
     </transition>
 
@@ -36,7 +35,7 @@
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/settings'}" class="breadcrump">Настройки</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: '/settings/room-fund'}" class="breadcrump">Номерной фонд</el-breadcrumb-item>
-        <el-breadcrumb-item class="breadcrump">{{currentCategory.catName}}</el-breadcrumb-item>
+        <el-breadcrumb-item class="breadcrump">{{catName}}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
 
@@ -64,7 +63,7 @@
         </tr>
         <tr
           class="content-list"
-          v-for="(rooms, idx) in currentCategory.rooms"
+          v-for="(room, idx) in currentCategory.rooms"
           :key="idx"
         >
           <div class="td-list">
@@ -72,22 +71,22 @@
             <div class="list-content">
               <td
                 class="room-list-element"
-                @click="editRoom(rooms)"
+                @click="editRoom(JSON.parse(room))"
               >
-                № {{rooms.roomNumber}}
+                № {{JSON.parse(room).roomNumber}}
               </td>
-              <td>{{rooms.mainBeds}} + {{rooms.additionalBeds}}</td>
+              <td>{{JSON.parse(room).mainBeds}} + {{JSON.parse(room).additionalBeds}}</td>
               <td class="list-last-el">
-                <h3 v-if="rooms.forSmokers">Да</h3>
+                <h3 v-if="JSON.parse(room).forSmokers">Да</h3>
                 <h3 v-else>Нет</h3>
                 <div class="list-icon-box">
                   <img
                     class="icon-box" 
                     src="@/assets/icons/Edit.svg" alt=""
-                    @click="editRoom(rooms)"
+                    @click="editRoom(JSON.parse(room))"
                   >
                   <img
-                    @click="deleteChosenRoom(rooms.roomNumber)"
+                    @click="deleteRoom(JSON.parse(room).roomNumber)"
                     class="icon-box" 
                     src="@/assets/icons/Delete.svg" alt=""
                   >
@@ -116,6 +115,12 @@ export default {
     deleteRoomModal: false,
     editRoomModal: false,
 
+    deletingRoomInfo: '',
+    editingRoomInfo: '',
+    currentNumber: '',
+
+    roomFund: JSON.parse(window.sessionStorage.allRoomCats).categories,
+
     editRoomNumber: '',
     editBedType: '',
     editMainBeds: '',
@@ -134,33 +139,54 @@ export default {
 
   computed: {
     currentCategory() {
-      return this.$store.state.roomFund.find(cat => cat.catID == this.$route.params.id)
-    }
+      return this.roomFund.find(cat => cat.category == this.$route.params.id)
+    },
+
+    catName() {
+      if(this.currentCategory.category === 'apartment') {return 'Апартаменты'}
+      else if(this.currentCategory.category === 'bungalow') {return 'Бунгало'}
+      else if(this.currentCategory.category === 'deluxe') {return 'Делюкс'}
+      else if(this.currentCategory.category === 'honeymoonRoom') {return 'Для молодоженов'}
+      else if(this.currentCategory.category === 'suite') {return 'Люкс'}
+      else if(this.currentCategory.category === 'duplex') {return 'Дюплекс'}
+      else if(this.currentCategory.category === 'cabana') {return 'Коттедж'}
+      else if(this.currentCategory.category === 'juniorSuite') {return 'Полулюкс'}
+      else if(this.currentCategory.category === 'residence') {return 'Резиденция'}
+      else if(this.currentCategory.category === 'familyRoom') {return 'Семейная комната'}
+      else if(this.currentCategory.category === 'standart') {return 'Стандарт'}
+      else if(this.currentCategory.category === 'studio') {return 'Студия'}
+      else if(this.currentCategory.category === 'chalet') {return 'Шале'}
+      else if(this.currentCategory.category === 'economyClass') {return 'Эконом-класс'}
+    },
   },
 
   methods: {
+    getRoomFund() {
+      this.roomFund = JSON.parse(window.sessionStorage.allRoomCats).categories
+    },
+
     creatingNewRoom() {
       this.createRoom = true
     },
 
-    editRoom(rooms) {
-      this.editRoomNumber = rooms.roomNumber
-      this.editBedType = rooms.bedType
-      this.editMainBeds = rooms.mainBeds
-      this.editAdditionalBeds = rooms.additionalBeds
-      this.editBathroom = rooms.bathroom
-      this.editRoomArea = rooms.roomArea
-      this.editForSmokers = rooms.forSmokers
+    editRoom(room) {
+      this.editingRoomInfo = {
+        category: this.currentCategory.category,
+        room: room
+      }
+
+      this.currentNumber = room.roomNumber
 
       this.editRoomModal = true
     },
 
-    deleteChosenRoom(roomNumber) {
-      this.deleteRoomModal = true
+    deleteRoom(roomNumber) {
+      this.deletingRoomInfo = {
+        category: this.currentCategory.category,
+        roomNumber: roomNumber
+      }
 
-      const categoryID = this.$route.params.id
-      this.categoryID = categoryID
-      this.roomNumber = roomNumber
+      this.deleteRoomModal = true
     },
 
     closeDeleteRoom() {
@@ -173,6 +199,15 @@ export default {
 
     closeEditRoom() {
       this.editRoomModal = false
+    },
+
+    async refresh() {
+      try{
+        await this.$store.dispatch('getRoomsCount')
+      } catch {}
+      
+      this.$forceUpdate(this.currentCategory)
+      this.$forceUpdate(this.getRoomFund())
     }
   }
 }

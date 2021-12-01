@@ -191,7 +191,11 @@ export default {
       this.deleteEmpl = true
     },
 
-    refresh() {
+    async refresh() {
+      try {
+        await this.$store.dispatch('getMyEmployeesReceptionists')
+      } catch {}
+      
       this.$forceUpdate(this.getReceptionists)
     }
   }
