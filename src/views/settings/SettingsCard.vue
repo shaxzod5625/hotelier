@@ -6,7 +6,7 @@
       :key="idx"
       tag="div"
       :to="id.path"
-      @click.native="getAllEmployees(id.name)"
+      @click.native="getSettingsInfo(id.name)"
     >
       <div class="set-card-titleblock">
         <svg  width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" v-html="id.svg" ></svg>
@@ -164,7 +164,7 @@ export default {
   },
 
   methods: {
-    async getAllEmployees(name) {
+    async getSettingsInfo(name) {
       if(name === 'employees') {
         await this.$store.dispatch('getMyEmployeesManagers')
         await this.$store.dispatch('getMyEmployeesRestaurantManagers')
@@ -172,8 +172,11 @@ export default {
         await this.$store.dispatch('getMyEmployeesCooks')
         await this.$store.dispatch('getMyEmployeesMaids')
         await this.$store.dispatch('getMyEmployeesWaiters')
+      } else if(name === 'roomFund') {
+        await this.$store.dispatch('getRoomsCount')
       }
     },
+
   }
 }
 </script>

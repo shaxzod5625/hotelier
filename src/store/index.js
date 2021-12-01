@@ -418,6 +418,11 @@ export default new Vuex.Store({
       window.sessionStorage.employees = JSON.stringify(emps)
     },
 
+    SET_ROOMS_COUNT(state, allCategories) {
+      state.allRoomCats = allCategories
+      window.sessionStorage.allRoomCats = JSON.stringify(allCategories)
+    },
+
 
 // Setting up Employees
 
@@ -456,6 +461,7 @@ export default new Vuex.Store({
 
     SET_RESPONSE_STATUS(state, responseStatus) {
       state.status = responseStatus
+      window.sessionStorage.status = JSON.stringify(responseStatus)
     },
 
 
@@ -517,22 +523,6 @@ export default new Vuex.Store({
       state.roomFund = roomFund
     },
 
-    ADD_NEW_ROOM(state, newRoomInfo) {
-      const newRoom = newRoomInfo[0]
-
-      const ID = newRoomInfo[1]
-      const rf = state.roomFund
-      const rooms = rf.find(cat => cat.catID == ID)
-      let addingNewRoom = rooms.rooms.concat(newRoom)
-      const editedCat = [
-        {catID: ID,
-          catName: rooms.catName,
-          rooms: addingNewRoom
-      }]
-
-      let newRoomFund =  state.roomFund.map(obj => editedCat.find(o => o.catID == obj.catID) || obj);
-      state.roomFund = newRoomFund
-    },
   },
 
 
@@ -690,6 +680,20 @@ export default new Vuex.Store({
       } catch {}
     },
 
+    async newRoomCategory({commit}, newCategory) {
+
+      try {
+        let response = await Api().post('/api/settings/rooms/news', newCategory)
+        let responseStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', responseStatus)
+      } catch {}
+    },
+
+
+
+// Getters
+
     async getMyObject({commit}) {
       try {
         let response = await Api().get('/api/settings/object-registration')
@@ -714,6 +718,15 @@ export default new Vuex.Store({
         let myEmployees = response.data
 
         commit('SET_MY_EMPLOYEES', myEmployees)
+      } catch {}
+    },
+
+    async getRoomsCount({commit}) {
+      try {
+        let response = await Api().get('/api/settings/rooms')
+        let allCategories = response.data
+
+        commit('SET_ROOMS_COUNT', allCategories)
       } catch {}
     },
 
@@ -771,6 +784,12 @@ export default new Vuex.Store({
       } catch {}
     },
 
+/////////////////////////////////////
+
+
+
+// Employees
+
     async newEmployee({commit}, employee) {
       const position = employee.position
 
@@ -826,13 +845,43 @@ export default new Vuex.Store({
       }
     },
 
-    async createNewCategory({commit}, newCategory) {
-      commit('ADD_NEW_CATEGORY', newCategory)
+    async createNewRoom({commit}, creatingRoomInfo) {
+      const category = creatingRoomInfo.category
+      const newRoom = creatingRoomInfo.room
+
+      let response = await Api().post(`/api/settings/rooms/${category}/new`, newRoom)
+      let responseStatus = response.data
+
+      commit('SET_RESPONSE_STATUS', responseStatus)
     },
 
-    async createNewRoom({commit}, newRoomInfo) {
-      commit('ADD_NEW_ROOM', newRoomInfo)
+    async deleteRoomCategory({commit}, category) {
+      let response = await Api().delete(`/api/settings/rooms/${category}`)
+      let responseStatus = response.data
+
+      commit('SET_RESPONSE_STATUS', responseStatus)
     },
+
+    async deleteRoom({commit}, deletingRoomInfo) {
+      const category = deletingRoomInfo.category
+      const roomNumber = deletingRoomInfo.roomNumber
+
+      let response = await Api().delete(`/api/settings/rooms/${category}/${roomNumber}`)
+      let responseStatus = response.data
+
+      commit('SET_RESPONSE_STATUS', responseStatus)
+    },
+
+    async editRoom({commit}, editingroomInfo) {
+      const category = editingroomInfo.category
+      const roomNumber = editingroomInfo.currentNumber
+      const room = editingroomInfo.room
+
+      let response = await Api().put(`/api/settings/rooms/${category}/${roomNumber}`, room)
+      let responseStatus = response.data
+
+      commit('SET_RESPONSE_STATUS', responseStatus)
+    }
   },
   modules: {
   }

@@ -10,23 +10,28 @@
           <el-input
             v-model="roomNumber"
             placeholder="Введите номер комнаты"
-            :class="{invalid: (roomNumberChecking)}"
-          >
-          </el-input>
+            :class="{invalid: (($v.roomNumber.$dirty && !$v.roomNumber.required) || (roomNumberChecking))}"
+          />
+          <span v-if="$v.roomNumber.$dirty && !$v.roomNumber.required" class="validation-error">Пожалуйста, введите номер комнаты</span>
           <span v-if="roomNumberChecking" class="validation-error">Комната с таким номером существует. Введите другой номер, пожалуйста</span>
         </div>
 
         <div class="w-100">
           <label for="input">Тип кровати</label>
-          <el-select v-model="bedType" placeholder="Выберите тип кровати">
+          <el-select
+            v-model="bedType"
+            placeholder="Выберите тип кровати"
+            :class="{invalid: ($v.bedType.$dirty && !$v.bedType.required)}"
+          >
             <el-option
-              v-for="(bedType, idx) in bedTypes"
+              v-for="(type, idx) in bedTypes"
               :key="idx"
-              :label="bedType.label"
-              :value="bedType.value"
+              :label="type.label"
+              :value="type.value"
             >
             </el-option>
           </el-select>
+          <span v-if="$v.bedType.$dirty && !$v.bedType.required" class="validation-error">Пожалуйста, выберите тип кровати</span>
         </div>
 
         <div class="w-100">
@@ -35,8 +40,9 @@
             v-model="mainBeds"
             placeholder="Введите количество основных коек"
             v-mask="'#'"
-          >
-          </el-input>
+            :class="{invalid: ($v.mainBeds.$dirty && !$v.mainBeds.required)}"
+          />
+          <span v-if="$v.mainBeds.$dirty && !$v.mainBeds.required" class="validation-error">Пожалуйста, введите количество основных коек</span>
         </div>
       </div>
 
@@ -47,13 +53,18 @@
             v-model="additionalBeds"
             placeholder="Введите количесво дополнительных коек"
             v-mask="'#'"
-          >
-          </el-input>
+            :class="{invalid: ($v.additionalBeds.$dirty && !$v.additionalBeds.required)}"
+          />
+          <span v-if="$v.additionalBeds.$dirty && !$v.additionalBeds.required" class="validation-error">Пожалуйста, введите количесво дополнительных коек</span>
         </div>
 
         <div class="w-100">
           <label for="input">Санузел</label>
-          <el-select v-model="bathroom" placeholder="Выберите тип санузла">
+          <el-select
+            v-model="bathroom"
+            placeholder="Выберите тип санузла"
+            :class="{invalid: ($v.bathroom.$dirty && !$v.bathroom.required)}"
+          >
             <el-option
               v-for="(bthrm, idx) in bathroomTypes"
               :key="idx"
@@ -62,6 +73,7 @@
             >
             </el-option>
           </el-select>
+          <span v-if="$v.bathroom.$dirty && !$v.bathroom.required" class="validation-error">Пожалуйста, выберите тип санузла</span>
         </div>
 
         <div class="w-100">
@@ -70,8 +82,9 @@
             v-model="roomArea"
             placeholder="Введите площадь комнаты в м²"
             v-mask="'## м²'"
-          >
-          </el-input>
+            :class="{invalid: ($v.roomArea.$dirty && !$v.roomArea.required)}"
+          />
+          <span v-if="$v.roomArea.$dirty && !$v.roomArea.required" class="validation-error">Пожалуйста, введите площадь комнаты</span>
         </div>
 
         <div class="w-100">
@@ -79,6 +92,7 @@
           <el-select
             v-model="forSmokers"
             default-first-option
+            :class="{invalid: ($v.forSmokers.$dirty && !$v.forSmokers.required)}"
           >
             <el-option
               v-for="(smkng, idx) in smokingType"
@@ -88,8 +102,10 @@
             >
             </el-option>
           </el-select>
+          <span v-if="$v.forSmokers.$dirty && !$v.forSmokers.required" class="validation-error">Пожалуйста, выберите тип разрешения</span>
         </div>
       </div>
+
 
       <div class="input-grid-btns">
         <button
@@ -118,6 +134,8 @@
 </template>
 
 <script>
+import {required} from 'vuelidate/lib/validators'
+
 export default {
   name: 'CreateNewRoom',
 
@@ -132,38 +150,97 @@ export default {
     roomArea: '',
     forSmokers: false,
 
-    bedTypes: [{label: 'Standart Single', value: 'Standart Single'}, {label: 'Standart Double', value: 'Standart Double'}, {label: 'Standart Triple', value: 'Standart Triple'}],
-    bathroomTypes: [{label: 'United', value: 'United'}, {label: 'Separated', value: 'Separated'}, {label: 'Joint', value: 'Joint'}],
-    smokingType: [{label: 'Комната не для курящих', value: false}, {label: 'Комната для курящих', value: true}],
+    bedTypes: [
+      {label: 'Одноместная', value: 'single'},
+      {label: 'Двухместная', value: 'double'},
+      {label: 'Трёхместная', value: 'triple'},
+      {label: 'Четырёхместная', value: 'quad'},
+      {label: 'Королевская (Queen)', value: 'queenSize'},
+      {label: 'Королевская (King)', value: 'kingSize'},
+      {label: 'Двойная одноместная', value: 'twin'},
+      {label: 'Двойная двухместная', value: 'doubleDouble'}
+    ],
+
+    bathroomTypes: [
+      {label: 'Соединенный', value: 'united'},
+      {label: 'Отдельный', value: 'separated'},
+      {label: 'Совместный', value: 'joint'}
+    ],
+
+    smokingType: [
+      {label: 'Комната не для курящих', value: false},
+      {label: 'Комната для курящих', value: true}
+    ],
   }),
+
+  validations: {
+    roomNumber: {required},
+    bedType: {required},
+    mainBeds: {required},
+    additionalBeds: {required},
+    bathroom: {required},
+    roomArea: {required},
+    forSmokers: {required},
+  },
+
+  props: {
+    currentCategory: Object
+  },
 
   methods: {
     closeModal() {
       this.$emit('closeCreateRoom')
     },
 
-    createNewRoom() {
-      const thisCategory = this.$store.state.roomFund.find(cat => cat.catID == this.$route.params.id).rooms
-      const rooms = thisCategory.map(a => a.roomNumber);
+    async createNewRoom() {
+      
+      if (this.$v.$invalid) {
+        this.$v.$touch()
+        return
+      }
+
+      const currentRooms = this.currentCategory.rooms
+      const roomsAmount = currentRooms.length
+      const allRoomNumbers = []
+
+      for(let i=0; i<roomsAmount; i++) {
+        let roomNums = JSON.parse(currentRooms[i]).roomNumber
+        allRoomNumbers.push((String(roomNums)))
+      }
       const checkRoomNumber = this.roomNumber
 
-      const newRoom = [
-        {roomNumber: this.roomNumber,
-        mainBeds: this.mainBeds,
-        additionalBeds: this.additionalBeds,
+      const newRoom = {
+        roomNumber: this.roomNumber.toString(),
+        mainBeds: Number(this.mainBeds),
+        additionalBeds: Number(this.additionalBeds),
         bathroom: this.bathroom,
         bedType: this.bedType,
         forSmokers: this.forSmokers,
-        roomArea: this.roomArea,}
-      ]
+        roomArea: this.roomArea
+      }
 
-      if(rooms.includes(checkRoomNumber)) {
+      const creatingRoomInfo = {
+        room: newRoom,
+        category: this.currentCategory.category,
+      }
+
+      if(allRoomNumbers.includes(checkRoomNumber)) {
         this.roomNumberChecking = true
-        return 
+
+        return
       } else {
-        const ID = this.$route.params.id
-        this.$store.dispatch('createNewRoom', [newRoom, ID])
+
+        try {
+          console.log(creatingRoomInfo);
+          await this.$store.dispatch('createNewRoom', creatingRoomInfo)
+        } catch {}
+
+        this.$emit('refresh')
         this.$emit('closeCreateRoom')
+        this.$message({
+          message: "Новый номер добавлен",
+          type: 'success'
+        })
       }
     }
   }

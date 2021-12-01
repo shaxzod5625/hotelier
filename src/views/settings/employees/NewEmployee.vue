@@ -15,15 +15,21 @@
 
         <div class="w-100">
           <label for="input">Позиция</label>
-          <el-select v-model="subPosition" placeholder="Выберите позицию">
+          <el-select
+            v-model="subPosition"
+            placeholder="Выберите позицию"
+            default-first-option
+            :class="{invalid: ($v.subPosition.$dirty && !$v.subPosition.required)}"
+          >
             <el-option
-              v-for="(subPosition, idx) in subPositions"
+              v-for="(type, idx) in subPositions"
               :key="idx"
-              :label="subPosition.label"
-              :value="subPosition.value"
+              :label="type.label"
+              :value="type.value"
             >
             </el-option>
           </el-select>
+          <span v-if="$v.subPosition.$dirty && !$v.subPosition.required" class="validation-error">Пожалуйста, выберите позицию</span>
         </div>
       </div>
 
@@ -33,33 +39,50 @@
       >
         <div class="w-100">
           <label for="input">Фамилия</label>
-          <el-input placeholder="Введите фамилию" v-model="lastName">
-          </el-input>
+          <el-input
+            placeholder="Введите фамилию"
+            v-model="lastName"
+            :class="{invalid: ($v.lastName.$dirty && !$v.lastName.required)}"
+          />
+          <span v-if="$v.lastName.$dirty && !$v.lastName.required" class="validation-error">Пожалуйста, введите фамилию</span>
         </div>
 
         <div class="w-100">
           <label for="input">Имя</label>
-          <el-input placeholder="Введите имя" v-model="name">
-          </el-input>
+          <el-input
+            placeholder="Введите имя"
+            v-model="name"
+            :class="{invalid: ($v.name.$dirty && !$v.name.required)}"
+          />
+          <span v-if="$v.name.$dirty && !$v.name.required" class="validation-error">Пожалуйста, введите имя</span>
         </div>
 
         <div class="w-100">
           <label for="input">Отчество</label>
-          <el-input placeholder="Введите отчество" v-model="familyName">
-          </el-input>
+          <el-input
+            placeholder="Введите отчество"
+            v-model="familyName"
+            :class="{invalid: ($v.familyName.$dirty && !$v.familyName.required)}"
+          />
+          <span v-if="$v.familyName.$dirty && !$v.familyName.required" class="validation-error">Пожалуйста, введите отчество</span>
         </div>
 
         <div class="w-100">
           <label for="input">Пол</label>
-          <el-select v-model="gender" placeholder="Выберите пол">
+          <el-select
+            v-model="gender"
+            placeholder="Выберите пол"
+            :class="{invalid: ($v.gender.$dirty && !$v.gender.required)}"
+          >
             <el-option
-              v-for="(gender, idx) in genders"
+              v-for="(type, idx) in genders"
               :key="idx"
-              :label="gender.label"
-              :value="gender.value"
+              :label="type.label"
+              :value="type.value"
             >
             </el-option>
           </el-select>
+          <span v-if="$v.gender.$dirty && !$v.gender.required" class="validation-error">Пожалуйста, выберите пол</span>
         </div>
 
         <div class="w-100">
@@ -68,7 +91,10 @@
             placeholder="Введите номер телефона"
             v-model="phoneNumber"
             v-mask="'+### (##) ###-##-##'"
+            :class="{invalid: ($v.phoneNumber.$dirty && !$v.phoneNumber.required) || ($v.phoneNumber.$dirty && !$v.phoneNumber.minLength)}"
           />
+          <span v-if="$v.phoneNumber.$dirty && !$v.phoneNumber.required" class="validation-error">Пожалуйста, введите номер телефона</span>
+          <span v-else-if="$v.phoneNumber.$dirty && !$v.phoneNumber.minLength" class="validation-error">Пожалуйста, введите правильный формат номера телефона</span>
         </div>
 
         <div class="w-100">
@@ -76,25 +102,43 @@
           <el-input
             placeholder="Введите e-mail адрес"
             v-model="email"
+            :class="{invalid: ($v.email.$dirty && !$v.email.required) || ($v.email.$dirty && !$v.email.email) || emailExists}"
           />
+          <span v-if="$v.email.$dirty && !$v.email.required" class="validation-error">Пожалуйста, введите e-mail адрес</span>
+          <span v-else-if="$v.email.$dirty && !$v.email.email" class="validation-error">Пожалуйста, введите правильный формат e-mail адреса</span>
+          <span v-if="emailExists" class="validation-error">Профиль с таким e-mail адресом уже существует</span>
         </div>
 
         <div class="w-100">
           <label for="input">Логин</label>
-          <el-input :placeholder="placeholder" v-model="login">
-          </el-input>
+          <el-input
+            :placeholder="placeholder"
+            v-model="login"
+            :class="{invalid: ($v.login.$dirty && !$v.login.required)}"
+          />
+          <span v-if="$v.login.$dirty && !$v.login.required" class="validation-error">Пожалуйста, введите логин</span>
         </div>
 
         <div class="w-100">
           <label for="input">Пароль</label>
-          <el-input placeholder="Придумайте пароль" v-model="password">
-          </el-input>
+          <el-input
+            placeholder="Придумайте пароль"
+            v-model="password"
+            :class="{invalid: ($v.password.$dirty && !$v.password.required) || ($v.password.$dirty && !$v.password.minLength)}"
+          />
+          <span v-if="$v.password.$dirty && !$v.password.required" class="validation-error">Пожалуйста, придумайте пароль</span>
+          <span v-else-if="$v.password.$dirty && !$v.password.minLength" class="validation-error">Пароль должен состоять из {{$v.password.$params.minLength.min}} символов минимум</span>
         </div>
 
         <div class="w-100">
           <label for="input">Подтверждение пароля</label>
-          <el-input placeholder="Введите пароль повторно" v-model="passwordConfirmation">
-          </el-input>
+          <el-input
+            placeholder="Введите пароль повторно"
+            v-model="passwordConfirmation"
+            :class="{invalid: ($v.passwordConfirmation.$dirty && !$v.passwordConfirmation.required) || !checkPasswordSimilarity}"
+          />
+          <span v-if="$v.passwordConfirmation.$dirty && !$v.passwordConfirmation.required" class="validation-error">Пожалуйста, введите пароль повторно</span>
+          <span v-else-if="!checkPasswordSimilarity" class="validation-error">Пароли не совпадают. Проверьте пожалуйста, пароль</span>
         </div>
       </div>
 
@@ -109,6 +153,7 @@
             multiple
             style="margin-left: 20px;"
             placeholder="Выберите языки"
+            :class="{invalid: ($v.languages.$dirty && !$v.languages.required)}"
           >
             <el-option
               v-for="(language, idx) in languagesList"
@@ -117,6 +162,7 @@
               :value="language.value">
             </el-option>
           </el-select>
+          <span v-if="$v.languages.$dirty && !$v.languages.required" class="validation-error">Пожалуйста, выберите языки</span>
         </div>
       </div>
 
@@ -143,13 +189,17 @@
 </template>
 
 <script>
+import {required, minLength, email} from 'vuelidate/lib/validators'
+
 export default {
   name: 'NewEmployee',
 
   data:() => ({
     hotelName: '',
 
-    subPosition: '',
+    emailExists: false,
+
+    subPosition: 'main',
     lastName: '',
     name: '',
     familyName: '',
@@ -183,6 +233,20 @@ export default {
     ]
   }),
 
+  validations: {
+    subPosition: {required},
+    lastName: {required},
+    name: {required},
+    familyName: {required},
+    gender: {required},
+    phoneNumber: {required, minLength: minLength(19)},
+    email: {required, email},
+    login: {required},
+    password: {required, minLength: minLength(8)},
+    passwordConfirmation: {required},
+    languages: {required},
+  },
+
   props: {
     position: Object
   },
@@ -194,6 +258,14 @@ export default {
 
     placeholder() {
       return `Задайте логин, например (login@${this.hotelName})`
+    },
+
+    checkPasswordSimilarity() {
+      if(this.password === this.passwordConfirmation) {
+        return true
+      } else {
+        return false
+      }
     }
   },
 
@@ -203,6 +275,12 @@ export default {
     },
 
     async newEmployee() {
+
+      if (this.$v.$invalid) {
+        this.$v.$touch()
+        return
+      }
+
       const employee = {
         position: this.position,
         subPosition: this.subPosition,
@@ -217,7 +295,9 @@ export default {
         languages: this.languages,
       }
 
-      await this.$store.dispatch('newEmployee', employee)
+      try {
+        await this.$store.dispatch('newEmployee', employee)
+      } catch {}
 
       if(this.position.value === 'manager') {
         await this.$store.dispatch('getMyEmployeesManagers')
@@ -233,13 +313,12 @@ export default {
         await this.$store.dispatch('getMyEmployeesWaiters')
       }
 
+      this.$emit('refresh')
+      this.$emit('close')
       this.$message({
         message: "Новый сотрудник добавлен",
         type: 'success'
       })
-
-      this.$emit('refresh')
-      this.$emit('close')
     },
 
   }
