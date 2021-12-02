@@ -31,7 +31,7 @@
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/settings'}" class="breadcrump">Настройки</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: '/settings/blocks'}" class="breadcrump">Корпусы и этажи</el-breadcrumb-item>
-        <el-breadcrumb-item class="breadcrump">{{currentBlock.blockName}}</el-breadcrumb-item>
+        <el-breadcrumb-item class="breadcrump">{{currentBlock.name}}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
 
@@ -54,7 +54,7 @@
         </tr>
         <tr
           class="content-list"
-          v-for="(floors, idx) in currentBlock.floors"
+          v-for="(floor, idx) in currentBlock.floors"
           :key="idx"
         >
           <div class="td-list">
@@ -62,20 +62,20 @@
             <div class="list-content">
               <td
                 class="room-list-element tbl-col-2"
-                @click="editChosenFloor(floors)"
+                @click="editChosenFloor(JSON.parse(floor))"
               >
-                {{floors.floorName}}
+                {{JSON.parse(floor).name}}
               </td>
               <td class="list-last-el tbl-col-2">
-                <h3>{{floors.rooms.length}}</h3>
+                <h3>{{JSON.parse(floor).amountOfRoom}}</h3>
                 <div class="list-icon-box">
                   <img
-                    @click="editChosenFloor(floors)"
+                    @click="editChosenFloor(JSON.parse(floor))"
                     class="icon-box" 
                     src="@/assets/icons/Edit.svg" alt=""
                   >
                   <img
-                    @click="deleteChosenFloor(floors)"
+                    @click="deleteChosenFloor(JSON.parse(floor))"
                     class="icon-box" 
                     src="@/assets/icons/Delete.svg" alt=""
                   >
@@ -107,14 +107,16 @@ export default {
     deleteFloorModal: false,
     editFloorModal: false,
 
+    allBlocks: JSON.parse(window.sessionStorage.allBlocks).blocks,
+
     level: '',
     floorName: '',
   }),
 
   computed: {
     currentBlock() {
-      return this.$store.state.blocks.find(block => block.blockID == this.$route.params.id)
-    }
+      return this.allBlocks.find(block => block.name == this.$route.params.id)
+    },
   },
 
   methods: {
@@ -122,9 +124,9 @@ export default {
       this.createRoom = true
     },
 
-    editChosenFloor(floors) {
-      this.level = floors.level
-      this.floorName = floors.floorName
+    editChosenFloor(floor) {
+      this.level = floor.numberFloor
+      this.floorName = floor.name
 
       this.editFloorModal = true
     },

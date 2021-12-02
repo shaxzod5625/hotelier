@@ -13,7 +13,10 @@
           <span>Отмена</span>
         </button>
 
-        <button class="prim-btn">
+        <button
+          class="prim-btn"
+          @click.prevent="deleteBlock"
+        >
           <span>Удалить</span>
         </button>
       </div>
@@ -31,7 +34,7 @@ export default {
 
   props: {
     blockName: String,
-    blockID: Number
+    blockID: String
   },
 
   computed: {
@@ -44,6 +47,32 @@ export default {
   methods: {
     closeModal() {
       this.$emit('closeDeleteBlock')
+    },
+
+    async deleteBlock() {
+      const block = {
+        _id: this.blockID,
+        name: this.blockName
+      }
+
+      try {
+        await this.$store.dispatch('deleteBlock', block)
+      } catch {}
+
+      try {
+        await this.$store.dispatch('getBlocksInfo')
+      } catch(err) {
+        if(err === undefined || err === null || err === '') {
+          console.log(err);
+        }
+      }
+
+      this.$emit('refresh')
+      this.$emit('closeDeleteBlock')
+      this.$message({
+        message: "Корпус удалён",
+        type: "success"
+      })
     }
   }
 }

@@ -423,6 +423,11 @@ export default new Vuex.Store({
       window.sessionStorage.allRoomCats = JSON.stringify(allCategories)
     },
 
+    SET_BLOCKS(state, allBlocks) {
+      state.allBlocks = allBlocks
+      window.sessionStorage.allBlocks = JSON.stringify(allBlocks)
+    },
+
 
 // Setting up Employees
 
@@ -730,6 +735,15 @@ export default new Vuex.Store({
       } catch {}
     },
 
+    async getBlocksInfo({commit}) {
+      try {
+        let response = await Api().get('/api/settings/blocks')
+        let allBlocks = response.data
+
+        commit('SET_BLOCKS', allBlocks)
+      } catch {}
+    },
+
     async getMyEmployeesManagers({commit}) {
       try {
         let response = await Api().get('/api/settings/employee/managers')
@@ -881,6 +895,37 @@ export default new Vuex.Store({
       let responseStatus = response.data
 
       commit('SET_RESPONSE_STATUS', responseStatus)
+    },
+
+    async newBlock({commit}, block) {
+      try {
+        let response = Api().post('/api/settings/blocks/new', block)
+        let responseStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', responseStatus)
+      } catch {}
+    },
+
+    async editBlock({commit}, block) {
+      const id = block._id
+
+      try {
+        let response = await Api().put(`/api/settings/blocks/${id}`, block)
+        let responseStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', responseStatus)
+      } catch {}
+    },
+
+    async deleteBlock({commit}, block) {
+      const id = block._id
+
+      try {
+        let response = await Api().delete(`/api/settings/blocks/${id}`)
+        let responseStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', responseStatus)
+      } catch {}
     }
   },
   modules: {

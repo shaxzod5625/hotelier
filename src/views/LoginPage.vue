@@ -60,13 +60,14 @@
         </div>
 
         <div class="modal-btns">
-          <button class="ghost-btn">
+          <button
+            class="ghost-btn"
+          >
             <span>Забыли пароль?</span>
           </button>
 
           <button
             class="prim-btn"
-            type="submit"
             @click.prevent="loginUser"
           >
             <span>Войти</span>
@@ -95,9 +96,14 @@ export default {
   data: () => ({
     loginInfo: {
       login: '',
-      password: ''
+      password: '',
+      link: 'http://mnogo.uz'
     }
   }),
+
+  computed: {
+    
+  },
 
   methods: {
     async loginUser() {
@@ -127,6 +133,11 @@ export default {
         } else {}
       };
     },
+
+    // forgotPassword() {
+    //   let route = this.$router.resolve('http://mnogo.uz');
+    //   window.open(route.href, '_blank');
+    // }
   }
 }
 </script> 

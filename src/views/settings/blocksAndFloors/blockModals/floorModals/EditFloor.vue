@@ -8,25 +8,29 @@
         <div class="w-100">
           <label for="input">Название этажа</label>
           <el-input
-            v-model="floorName"
+            v-model="floorsName"
             placeholder="Введите название этажа"
-          >
-          </el-input>
+            :class="{invalid: ($v.floorsName.$dirty && !$v.floorsName.required)}"
+          />
+          <span v-if="$v.floorsName.$dirty && $v.floorsName.required" class="validation-error">Пожалуйста, введите название этажа</span>
         </div>
 
         <div class="w-100">
           <label for="input">Этажность</label>
           <el-input
-            v-model="floorLevel"
+            v-model="floorsLevel"
             v-mask="'##'"
             placeholder="Введите номер этажа"
-          >
-          </el-input>
+            :class="{invalid: ($v.floorsLevel.$dirty && !$v.floorsLevel.required)}"
+          />
+          <span v-if="$v.floorsLevel.$dirty && $v.floorsLevel.required" class="validation-error">Пожалуйста, введите номер этажа</span>
         </div>
 
         <div class="w-100">
           <label for="input">Категория номеров</label>
-          <el-select v-model="roomCategory">
+          <el-select
+            v-model="roomCategory"
+          >
             <el-option
               v-for="(category, idx) in roomCategories"
               :key="idx"
@@ -46,6 +50,8 @@
           <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
         </el-checkbox-group>
       </div>
+
+      <h4 style="display: none">{{setInfo}}</h4>
 
       <div class="input-grid-btns">
         <button
@@ -72,6 +78,8 @@
 </template>
 
 <script>
+import {required} from 'vuelidate/lib/validators'
+
 const cityOptions = ['Shanghai', 'Beijing', 'Guangzhou', 'Shenzhen', 'ShitCity', 'ChinaSucks', 'HongKongSuper']
 
 export default {
@@ -79,6 +87,8 @@ export default {
 
   data:() => ({
     roomCategory: 'standart',
+    floorsName: '',
+    floorsLevel: '',
 
     checkAll: false,
     checkedCities: ['Shanghai', 'Beijing'],
@@ -92,9 +102,21 @@ export default {
     ]
   }),
 
+  validations: {
+    floorsName: {required},
+    floorsLevel: {required},
+  },
+
   props: {
     floorName: String,
     floorLevel: Number,
+  },
+
+  computed: {
+    setInfo() {
+      this.floorsName = this.floorName
+      this.floorsLevel = this.floorLevel
+    }
   },
 
   methods: {
