@@ -174,6 +174,8 @@ export default {
         await this.$store.dispatch('getMyEmployeesWaiters')
       } else if(name === 'roomFund') {
         await this.$store.dispatch('getRoomsCount')
+      } else if(name === 'blocks') {
+        await this.$store.dispatch('getBlocksInfo')
       }
     },
 

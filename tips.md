@@ -7,3 +7,6 @@ somArray.find(neededObject => neededObject.neededObjectID == ID)   -   to find a
 :class="{invalid: (($v.employee.position.$dirty && !$v.employee.position.required) || (roomNumberChecking))}"     -   vuelidate class changer
 
 <span v-if="$v.employee.position.$dirty && !$v.employee.position.required" class="validation-error">Пожалуйста, введите номер комнаты</span>    -   vuelidate invalid span
+
+
+sessionStorage.removeItem('employees')    -    removes specificly one item in storage

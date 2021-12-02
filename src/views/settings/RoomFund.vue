@@ -93,8 +93,6 @@
 import _ from 'lodash'
 import NewRoomCategory from './roomfund/NewRoomCategory.vue'
 import DeleteCategory from './roomfund/DeleteCategory.vue'
-import { computed } from 'vue-demi'
-
 
 export default {
   name: 'RoomFund',
@@ -115,20 +113,28 @@ export default {
 
   computed: {
     allBeds() {
-      const catsAmount = this.roomFund.length
-      const loopResult = []
+      if(JSON.parse(window.sessionStorage.allRoomCats).categories !== undefined
+      && JSON.parse(window.sessionStorage.allRoomCats).categories !== null
+      && JSON.parse(window.sessionStorage.allRoomCats).categories !== []) {
 
-      for (let i=0; i<catsAmount; i++) {
-        let roomLoop = this.roomFund[i].rooms
-        loopResult.push(roomLoop.length)
-      }
-      return Object.values(loopResult).reduce((a, b) => a + b)
+        const catsAmount = this.roomFund.length
+        const loopResult = []
+
+        for (let i=0; i<catsAmount; i++) {
+          let roomLoop = this.roomFund[i].rooms
+          loopResult.push(roomLoop.length)
+        }
+
+        if(this.roomFund.length === 0 || this.roomFund === null || this.roomFund === []) {
+          return 0
+        } else {return Object.values(loopResult).reduce((a, b) => a + b)}
+      } 
     },
   },
 
   methods: {
     getRoomFund() {
-      this.roomFund =  JSON.parse(window.sessionStorage.allRoomCats).categories
+      this.roomFund = JSON.parse(window.sessionStorage.allRoomCats).categories
     },
 
     deleteCategory(category) {

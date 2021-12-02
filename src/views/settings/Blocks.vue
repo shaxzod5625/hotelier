@@ -6,22 +6,26 @@
         v-if="addNewBlock"
 
         @closeNewBlock="closeNewBlock"
+        @refresh="refresh"
       />
 
       <EditBlock
         v-if="editBlockModal"
 
         @closeEditBlock="closeEditBlock"
+        @refresh="refresh"
         
         :type="type"
         :blockName="blockName"
         :floorsAmount="floorsAmount"
+        :blockID="blockID"
       />
 
       <DeletingBlock
         v-if="deleteBlockModal"
 
         @closeDeleteBlock="closeDeleteBlock"
+        @refresh="refresh"
 
         :blockName="blockName"
         :blockID="blockID"
@@ -30,8 +34,8 @@
 
     <div>
       <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: '/settings'}" class="breadcrump">Настройки</el-breadcrumb-item>
-        <el-breadcrumb-item class="breadcrump">Номерной фонд</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/settings' }" class="breadcrump">Настройки</el-breadcrumb-item>
+        <el-breadcrumb-item class="breadcrump">Корпусы и этажи</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
 
@@ -60,20 +64,20 @@
           <div class="td-list">
             <div class="list-divider"></div>
             <div class="list-content">
-              <router-link class="category-link" :to="{name: 'Block Window', params: {id: block.blockID}}">
+              <router-link class="category-link" :to="{name: 'Block Window', params: {id: block.name}}">
                 <td
                   class="category-name"
                 >
-                  {{block.blockName}}
+                  {{block.name}}
                 </td>
               </router-link>
               <td>{{block.floors.length}}</td>
-              <td>{{block.type}}</td>
+              <td>{{blockType(block.typeOfBlock)}}</td>
               <td class="list-last-el">
-                46
+                {{roomsAmount(block.floors)}}
                 <div class="list-icon-box">
                   <router-link
-                    :to="{name: 'Block Window', params: {id: block.blockID}}"
+                    :to="{name: 'Block Window', params: {id: block.name}}"
                     style="align-items: center; display: flex;"
                   >
                     <img
@@ -120,6 +124,8 @@ export default {
     editBlockModal: false,
     deleteBlockModal: false,
 
+    blocks: JSON.parse(window.sessionStorage.allBlocks).blocks,
+
     type: '',
     blockName: '',
     blockID: '',
@@ -127,28 +133,65 @@ export default {
   }),
   
   computed: {
-    blocks() {
-      return this.$store.state.blocks
-    }
+    setNewBlocks() {
+      this.blocks = JSON.parse(window.sessionStorage.allBlocks).blocks
+    },
   },
 
   methods: {
+    async getNewBlocks() {
+
+      try {
+        await this.$store.dispatch('getBlocksInfo')
+      } catch(err) {
+        if(err === undefined || err === null || err === '') {
+          console.log(err);
+        }
+      }
+
+      this.blocks = JSON.parse(window.sessionStorage.allBlocks).blocks
+      this.$forceUpdate(this.setNewBlocks)
+    },
+
+    roomsAmount(floors) {
+      const allFloors = floors
+      const floorsCount = allFloors.length
+      const amount = []
+
+      for (let i=0; i<floorsCount; i++) {
+        let rooms = JSON.parse(allFloors[i]).amountOfRoom
+
+        amount.push(rooms)
+      }
+
+      return amount.reduce((a, b) => a + b)
+    },
+
+    blockType(type) {
+      if(type === 'main') {
+        return 'Основной'
+      } else if(type === 'additional') {
+        return 'Дополнительный'
+      }
+    },
+
     editBlock(block) {
-      this.type = block.type
-      this.blockName = block.blockName
-      this. floorsAmount = block.floors.length
+      this.type = block.typeOfBlock
+      this.blockName = block.name
+      this.floorsAmount = block.floors.length
+      this.blockID = block._id
 
       this.editBlockModal = true
     },
 
     deleteBlock(block) {
-      this.blockName = block.blockName
-      this.blockID = block.blockID
+      this.blockName = block.name
+      this.blockID = block._id
 
       this.deleteBlockModal = true
     },
 
-    closeNewBlock() {
+    async closeNewBlock() {
       this.addNewBlock = false
     },
 
@@ -158,6 +201,10 @@ export default {
 
     closeDeleteBlock() {
       this.deleteBlockModal = false
+    },
+
+    async refresh() {
+      this.$forceUpdate(this.getNewBlocks())
     }
   }
 }
