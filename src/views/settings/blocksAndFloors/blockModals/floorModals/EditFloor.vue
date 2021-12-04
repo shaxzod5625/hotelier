@@ -878,26 +878,34 @@ export default {
         rooms: this.checkedRooms
       }
 
+      try {
+        await this.$store.dispatch('editFloor', floor)
+      } catch {}
+
+      try {
+        await this.$store.dispatch('getBlocksInfo')
+      } catch(err) {
+        if(err === undefined || err === null || err === '') {
+          console.log(err);
+        }
+      }
+
+      try {
+        await this.$store.dispatch('getRoomsCount')
+      } catch(err) {
+        if(err === undefined || err === null || err === '') {
+          console.log(err);
+        }
+      }
+
       console.log(floor);
 
-      // try {
-      //   await this.$store.dispatch('editFloor', floor)
-      // } catch {}
-
-      // try {
-      //   await this.$store.dispatch('getBlocksInfo')
-      // } catch(err) {
-      //   if(err === undefined || err === null || err === '') {
-      //     console.log(err);
-      //   }
-      // }
-
-      // this.$emit('refresh')
-      // this.$emit('closeEditFloor')
-      // this.$message({
-      //   message: 'Cool! Floor is edited',
-      //   type: 'success'
-      // })
+      this.$emit('refresh')
+      this.$emit('closeEditFloor')
+      this.$message({
+        message: 'Cool! Floor is edited',
+        type: 'success'
+      })
     }
   }
 }
