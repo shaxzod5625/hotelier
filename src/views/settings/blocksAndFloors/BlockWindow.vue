@@ -6,24 +6,31 @@
         v-if="deleteFloorModal"
 
         @closeDeleteFloor="closeDeleteFloor"
+        @refresh="refresh"
 
         :floorLevel="level"
         :floorName="floorName"
+        :blockID="currentBlock._id"
       />
 
       <EditFloor
         v-if="editFloorModal"
 
         @closeEditFloor="closeEditFloor"
+        @refresh="refresh"
 
         :floorName="floorName"
         :floorLevel="level"
+        :blockID="currentBlock._id"
       />
 
       <NewFloor
         v-if="createFloor"
 
         @closeNewFloor="closeNewFloor"
+        @refresh="refresh"
+
+        :blockID="currentBlock._id"
       />
     </transition>
 
@@ -36,6 +43,7 @@
     </div>
 
     <div class="tabbar" style="flex-direction: row-reverse">
+
       <div class="btns">
         <button
           @click="createFloor = true"
@@ -49,8 +57,9 @@
     <div class="list-card">
       <table class="list-table">
         <tr>
-          <th class="tbl-col-2">Этаж</th>
-          <th class="tbl-col-2">Количество номеров</th>
+          <th>Этаж</th>
+          <th>Этажность</th>
+          <th>Количество номеров</th>
         </tr>
         <tr
           class="content-list"
@@ -61,12 +70,15 @@
             <div class="list-divider"></div>
             <div class="list-content">
               <td
-                class="room-list-element tbl-col-2"
+                class="room-list-element"
                 @click="editChosenFloor(JSON.parse(floor))"
               >
                 {{JSON.parse(floor).name}}
               </td>
-              <td class="list-last-el tbl-col-2">
+              <td>
+                {{JSON.parse(floor).numberFloor}}
+              </td>
+              <td class="list-last-el">
                 <h3>{{JSON.parse(floor).amountOfRoom}}</h3>
                 <div class="list-icon-box">
                   <img
@@ -120,6 +132,10 @@ export default {
   },
 
   methods: {
+    getAllBlocks() {
+      this.allBlocks = JSON.parse(window.sessionStorage.allBlocks).blocks
+    },
+
     creatingNewFloor() {
       this.createRoom = true
     },
@@ -132,8 +148,8 @@ export default {
     },
 
     deleteChosenFloor(floors) {
-      this.level = floors.level
-      this.floorName = floors.floorName
+      this.level = floors.numberFloor
+      this.floorName = floors.name
 
       this.deleteFloorModal = true
     },
@@ -149,6 +165,10 @@ export default {
     closeNewFloor() {
       this.createFloor = false
     },
+
+    async refresh() {
+      this.$forceUpdate(this.getAllBlocks())
+    }
   }
 }
 </script>

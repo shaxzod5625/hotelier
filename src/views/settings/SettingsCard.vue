@@ -176,6 +176,7 @@ export default {
         await this.$store.dispatch('getRoomsCount')
       } else if(name === 'blocks') {
         await this.$store.dispatch('getBlocksInfo')
+        await this.$store.dispatch('getRoomsCount')
       }
     },
 

@@ -926,8 +926,33 @@ export default new Vuex.Store({
 
         commit('SET_RESPONSE_STATUS', responseStatus)
       } catch {}
+    },
+
+    async editFloor({commit}, floor) {
+      const id = floor.blockID
+      const floorLevel = floor.level
+
+      try {
+        let response = await Api().put(`/api/settings/blocks/${id}/${floorLevel}`, floor)
+        let responseStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', responseStatus)
+      } catch {}
+    },
+
+    async deleteFloor({commit}, floor) {
+      const id = floor.blockID
+      const floorLevel = floor.level
+
+      try {
+        let response = await Api().delete(`/api/settings/blocks/${id}/${floorLevel}`)
+        let responseStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', responseStatus)
+      } catch {}
     }
   },
+
   modules: {
   }
 })
