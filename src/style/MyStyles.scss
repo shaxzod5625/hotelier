@@ -1417,11 +1417,27 @@ table {
 .el-checkbox-group {
   width: 100%;
   display: grid;
-  grid-column: 1 /span4;
+  grid-column: 1 /span5;
   column-gap: 24px;
   row-gap: 24px;
-  grid-template-columns: calc((100% - 72px) / 4) calc((100% - 72px) / 4) calc((100% - 72px) / 4) calc((100% - 72px) / 4);
+  grid-template-columns: calc((100% - 96px) / 5) calc((100% - 96px) / 5) calc((100% - 96px) / 5) calc((100% - 96px) / 5) calc((100% - 96px) / 5);
   grid-template-rows: auto;
+
+  span {
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 14px;
+    color: #323438;
+  }
+
+  h4 {
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 14px;
+    color: #323438;
+  }
 }
 
 .is-indeterminate {

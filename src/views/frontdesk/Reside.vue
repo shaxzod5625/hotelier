@@ -277,10 +277,18 @@ export default {
     },
 
     filterReside(){
-      return this.searchReside.filter(post => {
+      let sorted = (this.searchReside.filter(post => {
         return post.roomcat.toLowerCase().includes(this.Category.toLowerCase())
         && post.citizenship.toLowerCase().includes(this.Citizenship.toLowerCase())
         && post.paymentstatus.toLowerCase().includes(this.Paymentstatus.toLowerCase())
+      }))
+
+      return sorted.sort(function(a, b){
+        let x = a.nfl.toLowerCase();
+        let y = b.nfl.toLowerCase();
+        if (x < y) {return -1;}
+        if (x > y) {return 1;}
+        return 0;
       })
     },
 

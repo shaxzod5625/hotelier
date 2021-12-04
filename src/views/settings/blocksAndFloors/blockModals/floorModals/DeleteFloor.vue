@@ -13,7 +13,10 @@
           <span>Отмена</span>
         </button>
 
-        <button class="prim-btn">
+        <button
+          class="prim-btn"
+          @click.prevent="deleteFloor"
+        >
           <span>Удалить</span>
         </button>
       </div>
@@ -31,7 +34,8 @@ export default {
 
   props: {
     floorName: String,
-    floorLevel: Number
+    floorLevel: Number,
+    blockID: String
   },
 
   computed: {
@@ -44,6 +48,33 @@ export default {
   methods: {
     closeModal() {
       this.$emit('closeDeleteFloor')
+    },
+
+    deleteFloor() {
+      const floor = {
+        blockID: this.blockID,
+        name: this.floorName,
+        level: this.floorLevel
+      }
+      console.log(floor);
+      // try {
+      //   await this.$store.dispatch('deleteFloor', floor)
+      // } catch {}
+
+      // try {
+      //   await this.$store.dispatch('getBlocksInfo')
+      // } catch(err) {
+      //   if(err === undefined || err === null || err === '') {
+      //     console.log(err);
+      //   }
+      // }
+
+      // this.$emit('refresh')
+      // this.$emit('closeEditFloor')
+      // this.$message({
+      //   message: 'Cool! Floor is deleted',
+      //   type: 'success'
+      // })
     }
   }
 }
