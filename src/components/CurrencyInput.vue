@@ -22,6 +22,9 @@ export default {
     options: Object
   },
 
+  methods: {
+  },
+
   setup (props) {
     const { formattedValue, inputRef } = useCurrencyInput(props.options)
 

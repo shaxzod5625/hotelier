@@ -8,34 +8,36 @@
         <label for="input">Тип нумерации</label>
         <el-select
           v-model="numerationType"
-
           placeholder="Выберите тип нумерации"
+          :class="{invalid: ($v.numerationType.$dirty && !$v.numerationType.required)}"
         >
           <el-option
-            v-for="(numerationType, idx) in numerationTypes"
+            v-for="(type, idx) in numerationTypes"
             :key="idx"
-            :value="numerationType.value"
-            :label="numerationType.label"
+            :value="type.value"
+            :label="type.label"
           >
           </el-option>
         </el-select>
+        <span v-if="$v.numerationType.$dirty && !$v.numerationType.required" class="validation-error">Пожалуйста, выберите тип нумерации</span>
       </div>
 
       <div class="pad-24">
         <label for="input">Обнуление счётчика</label>
         <el-select
           v-model="counterResetType"
-
           placeholder="Выберите тип обнуления счётчика"
+          :class="{invalid: ($v.counterResetType.$dirty && !$v.counterResetType.required)}"
         >
           <el-option
-            v-for="(counterResetType, idx) in counterResetTypes"
+            v-for="(type, idx) in counterResetTypes"
             :key="idx"
-            :value="counterResetType.value"
-            :label="counterResetType.label"
+            :value="type.value"
+            :label="type.label"
           >
           </el-option>
         </el-select>
+        <span v-if="$v.counterResetType.$dirty && !$v.counterResetType.required" class="validation-error">Пожалуйста, выберите тип обнуления счётчика</span>
       </div>
 
       <div class="pad-24">
@@ -64,6 +66,7 @@
 
         <button
           class="prim-btn"
+          @click="bookingCancellationFormSettingsEdit"
         >
           Сохранить
         </button>
@@ -78,6 +81,8 @@
 </template>
 
 <script>
+import {required} from 'vuelidate/lib/validators'
+
 export default {
   name: 'BookingCancellationForm',
 
@@ -102,9 +107,41 @@ export default {
     ]
   }),
 
+  validations: {
+    numerationType: {required},
+    counterResetType: {required}
+  },
+
   methods: {
     closeModal() {
       this.$emit('closeBookingCancelFormModal')
+    },
+
+    async bookingCancellationFormSettingsEdit() {
+      if(this.$v.$invalid) {
+        this.$v.$touch()
+        return
+      }
+
+      const bookingCancellationFormSettings = {
+        numerationType: this.numerationType,
+        counterResetType: this.counterResetType,
+        showRequisites: this.showRequisites,
+        showNFL: this.showNFL
+      }
+
+      console.log(bookingCancellationFormSettings);
+
+      // try {
+      //   await this.$store.dispatch('bookingCancellationFormSettingsEdit')
+      // } catch {}
+
+      // this.$emit('refresh')
+      // this.$emit('closeBookingCancelFormModal')
+      this.$message({
+        message: 'Изменения в настройках формы аннуляции брони сохранены',
+        type: 'success'
+      })
     }
   }
 }

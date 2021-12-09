@@ -50,31 +50,39 @@ export default {
       this.$emit('closeDeleteFloor')
     },
 
-    deleteFloor() {
+    async deleteFloor() {
       const floor = {
         blockID: this.blockID,
         name: this.floorName,
         level: this.floorLevel
       }
-      console.log(floor);
-      // try {
-      //   await this.$store.dispatch('deleteFloor', floor)
-      // } catch {}
 
-      // try {
-      //   await this.$store.dispatch('getBlocksInfo')
-      // } catch(err) {
-      //   if(err === undefined || err === null || err === '') {
-      //     console.log(err);
-      //   }
-      // }
+      try {
+        await this.$store.dispatch('deleteFloor', floor)
+      } catch {}
 
-      // this.$emit('refresh')
-      // this.$emit('closeEditFloor')
-      // this.$message({
-      //   message: 'Cool! Floor is deleted',
-      //   type: 'success'
-      // })
+      try {
+        await this.$store.dispatch('getBlocksInfo')
+      } catch(err) {
+        if(err === undefined || err === null || err === '') {
+          console.log(err);
+        }
+      }
+
+      try {
+        await this.$store.dispatch('getRoomsCount')
+      } catch(err) {
+        if(err === undefined || err === null || err === '') {
+          console.log(err);
+        }
+      }
+
+      this.$emit('refresh')
+      this.$emit('closeDeleteFloor')
+      this.$message({
+        message: 'Этаж удалён',
+        type: 'success'
+      })
     }
   }
 }

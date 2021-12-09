@@ -60,6 +60,7 @@
 
         <button
           class="prim-btn"
+          @click="reportsFormSettingsEdit"
         >
           Сохранить
         </button>
@@ -93,6 +94,27 @@ export default {
   methods: {
     closeModal() {
       this.$emit('closeReportsFormModal')
+    },
+
+    async reportsFormSettingsEdit() {
+      const reportsFormSettings = {
+        selectedOrientation: this.selectedOrientation,
+        showGraphics: this.showGraphics,
+        showPrintDate: this.showPrintDate,
+      }
+
+      console.log(reportsFormSettings);
+
+      // try {
+      //   await this.$store.dispatch('reportsFormSettingsEdit', reportsFormSettings)
+      // } catch {}
+
+      // this.$emit('refresh')
+      // this.$emit('closeReportsFormModal')
+      this.$message({
+        message: 'Изменения в настройках формы отчетов сохранены',
+        type: 'success'
+      })
     }
   }
 }

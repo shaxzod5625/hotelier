@@ -8,7 +8,9 @@
       </el-breadcrumb>
     </div>
 
-    <div class="simple-content">
+    <div
+      class="simple-content"
+    >
       <router-link
         class="card-div"
         tag="div"
@@ -16,12 +18,12 @@
       >
         <div class="card-div-head">
           <div class="num-text">
-            <h1>32</h1>
+            <h1>{{tourAgencies.length}}</h1>
             <h4>Всего партнеров</h4>
           </div>
           <div class="vert-divider"/>
           <div class="num-text">
-            <h1>18</h1>
+            <h1>{{setActiveTourAgencies.length}}</h1>
             <h4>Активные</h4>
           </div>
         </div>
@@ -37,12 +39,12 @@
       >
         <div class="card-div-head">
           <div class="num-text">
-            <h1>32</h1>
+            <h1>{{companies.length}}</h1>
             <h4>Всего партнеров</h4>
           </div>
           <div class="vert-divider"/>
           <div class="num-text">
-            <h1>18</h1>
+            <h1>{{setActiveCompanies.length}}</h1>
             <h4>Активные</h4>
           </div>
         </div>
@@ -58,12 +60,12 @@
       >
         <div class="card-div-head">
           <div class="num-text">
-            <h1>32</h1>
+            <h1>{{agents.length}}</h1>
             <h4>Всего партнеров</h4>
           </div>
           <div class="vert-divider"/>
           <div class="num-text">
-            <h1>18</h1>
+            <h1>{{setActiveAgents.length}}</h1>
             <h4>Активные</h4>
           </div>
         </div>
@@ -79,6 +81,84 @@
 <script>
 export default {
   name: 'Partners',
+
+  data:() => ({
+    agents: JSON.parse(window.sessionStorage.partners).agents,
+    companies: JSON.parse(window.sessionStorage.partners).companyPartners,
+    tourAgencies: JSON.parse(window.sessionStorage.partners).travelPartners
+  }),
+
+  computed: {
+    setActiveTourAgencies() {
+      const actives = []
+      const amount = this.tourAgencies.length
+      const current = new Date()
+      
+
+      for(let i=0; i<amount; i++) {
+        if(new Date(JSON.stringify(this.tourAgencies[i].contract[0].startedDate)[1]+JSON.stringify(this.tourAgencies[i].contract[0].startedDate)[2]+
+        JSON.stringify(this.tourAgencies[i].contract[0].startedDate)[3]+JSON.stringify(this.tourAgencies[i].contract[0].startedDate)[4]+'/'+
+        JSON.stringify(this.tourAgencies[i].contract[0].startedDate)[6]+JSON.stringify(this.tourAgencies[i].contract[0].startedDate)[7]+'/'+
+        JSON.stringify(this.tourAgencies[i].contract[0].startedDate)[9]+JSON.stringify(this.tourAgencies[i].contract[0].startedDate)[10]) < current
+        && current < 
+        new Date(JSON.stringify(this.tourAgencies[i].contract[0].finishedDate)[1]+JSON.stringify(this.tourAgencies[i].contract[0].finishedDate)[2]+
+        JSON.stringify(this.tourAgencies[i].contract[0].finishedDate)[3]+JSON.stringify(this.tourAgencies[i].contract[0].finishedDate)[4]+'/'+
+        JSON.stringify(this.tourAgencies[i].contract[0].finishedDate)[6]+JSON.stringify(this.tourAgencies[i].contract[0].finishedDate)[7]+'/'+
+        JSON.stringify(this.tourAgencies[i].contract[0].finishedDate)[9]+JSON.stringify(this.tourAgencies[i].contract[0].finishedDate)[10])) {
+          actives.push('active')
+        } else actives.push('notAcitve')
+      }
+      return actives.filter(obj => obj === 'active')
+    },
+
+    setActiveCompanies() {
+      const actives = []
+      const amount = this.companies.length
+      const current = new Date()
+      
+
+      for(let i=0; i<amount; i++) {
+        if(new Date(JSON.stringify(this.companies[i].contract[0].startedDate)[1]+JSON.stringify(this.companies[i].contract[0].startedDate)[2]+
+        JSON.stringify(this.companies[i].contract[0].startedDate)[3]+JSON.stringify(this.companies[i].contract[0].startedDate)[4]+'/'+
+        JSON.stringify(this.companies[i].contract[0].startedDate)[6]+JSON.stringify(this.companies[i].contract[0].startedDate)[7]+'/'+
+        JSON.stringify(this.companies[i].contract[0].startedDate)[9]+JSON.stringify(this.companies[i].contract[0].startedDate)[10]) < current
+        && current < 
+        new Date(JSON.stringify(this.companies[i].contract[0].finishedDate)[1]+JSON.stringify(this.companies[i].contract[0].finishedDate)[2]+
+        JSON.stringify(this.companies[i].contract[0].finishedDate)[3]+JSON.stringify(this.companies[i].contract[0].finishedDate)[4]+'/'+
+        JSON.stringify(this.companies[i].contract[0].finishedDate)[6]+JSON.stringify(this.companies[i].contract[0].finishedDate)[7]+'/'+
+        JSON.stringify(this.companies[i].contract[0].finishedDate)[9]+JSON.stringify(this.companies[i].contract[0].finishedDate)[10])) {
+          actives.push('active')
+        } else actives.push('notAcitve')
+      }
+      return actives.filter(obj => obj === 'active')
+    },
+
+    setActiveAgents() {
+      const actives = []
+      const amount = this.agents.length
+      const current = new Date()
+      
+
+      for(let i=0; i<amount; i++) {
+        if(new Date(JSON.stringify(this.agents[i].contract[0].startedDate)[1]+JSON.stringify(this.agents[i].contract[0].startedDate)[2]+
+        JSON.stringify(this.agents[i].contract[0].startedDate)[3]+JSON.stringify(this.agents[i].contract[0].startedDate)[4]+'/'+
+        JSON.stringify(this.agents[i].contract[0].startedDate)[6]+JSON.stringify(this.agents[i].contract[0].startedDate)[7]+'/'+
+        JSON.stringify(this.agents[i].contract[0].startedDate)[9]+JSON.stringify(this.agents[i].contract[0].startedDate)[10]) < current
+        && current < 
+        new Date(JSON.stringify(this.agents[i].contract[0].finishedDate)[1]+JSON.stringify(this.agents[i].contract[0].finishedDate)[2]+
+        JSON.stringify(this.agents[i].contract[0].finishedDate)[3]+JSON.stringify(this.agents[i].contract[0].finishedDate)[4]+'/'+
+        JSON.stringify(this.agents[i].contract[0].finishedDate)[6]+JSON.stringify(this.agents[i].contract[0].finishedDate)[7]+'/'+
+        JSON.stringify(this.agents[i].contract[0].finishedDate)[9]+JSON.stringify(this.agents[i].contract[0].finishedDate)[10])) {
+          actives.push('active')
+        } else actives.push('notAcitve')
+      }
+      return actives.filter(obj => obj === 'active')
+    },
+  },
+
+  methods: {
+    
+  }
 }
 </script>
 

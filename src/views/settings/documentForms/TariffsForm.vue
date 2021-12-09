@@ -53,6 +53,7 @@
 
         <button
           class="prim-btn"
+          @click="tariffsFormSettingsEdit"
         >
           Сохранить
         </button>
@@ -85,6 +86,26 @@ export default {
   methods: {
     closeModal() {
       this.$emit('closeTariffsFormModal')
+    },
+
+    tariffsFormSettingsEdit() {
+      const tariffsFormSettings = {
+        selectedOrientation: this.selectedOrientation,
+        showTariffsTerm: this.showTariffsTerm,
+      }
+
+      console.log(tariffsFormSettings);
+
+      // try {
+      //   await this.$store.dispatch('tariffsFormSettingsEdit', tariffsFormSettings)
+      // } catch {}
+
+      // this.$emit('refresh')
+      // this.$emit('closeTariffsFormModal')
+      this.$message({
+        message: 'Изменения в настройках формы тарифов сохранены',
+        type: 'success'
+      })
     }
   }
 }

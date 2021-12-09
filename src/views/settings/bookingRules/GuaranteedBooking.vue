@@ -8,6 +8,7 @@
         class="form-3"
         v-for="(rule, idx) in rules"
         :key="idx"
+        :set="v = $v.rules.$each[idx]"
       >
         <div class="w-100">
           <label for="input">Период бесплатной отмены</label>
@@ -15,8 +16,9 @@
             v-model="rule.freeCancellationPeriod"
             placeholder="Введите количество суток"
             v-mask="'#'"
-          >
-          </el-input>
+            :class="{invalid: (v.freeCancellationPeriod.$dirty && !v.freeCancellationPeriod.required)}"
+          />
+          <span v-if="v.freeCancellationPeriod.$dirty && !v.freeCancellationPeriod.required" class="validation-error">Пожалуйста, введите количество суток</span>
         </div>
 
         <div class="w-100">
@@ -40,12 +42,12 @@
           class="w-100"
         >
           <label for="input">Процент</label>
-          <el-input
+          <money
+            class="money-input"
             v-model="rule.penaltyProcent"
+            v-bind="percent"
             placeholder="Введите процент от суммы проживания"
-            v-mask="'## %'"
-          >
-          </el-input>
+          />
         </div>
 
         <div
@@ -53,9 +55,10 @@
           v-else
         >
           <label for="input">Сумма</label>
-          <currency-input 
-            v-model="rule.fixedSoum" 
-            :options="{ currency: 'UZS' }"
+          <money
+            class="money-input"
+            v-model="rule.fixedSoum"
+            v-bind="money"
           />
         </div>
 
@@ -85,12 +88,30 @@
 
       <div class="divider"/>
 
-      <div class="checkbox-group-div">
-        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange"><h3 class="checkbox-label">Типы гарантии</h3></el-checkbox>
-        <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
-          <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
-        </el-checkbox-group>
+      <div class="form-1">
+        <div class="w-100">
+          <label for="input">Типы гарантии</label>
+          <el-select
+            v-model="checkedGuaranteeTypes"
+            multiple
+            collapse-tags
+            placeholder="Выберите типы гарантии бронирования"
+            :class="{invalid: ($v.checkedGuaranteeTypes.$dirty && !$v.checkedGuaranteeTypes.required)}"
+          >
+            <el-option
+              v-for="(type, idx) in guaranteeTypes"
+              :key="idx"
+              :label="type.label"
+              :value="type.value"
+            />
+          </el-select>
+          <span v-if="$v.checkedGuaranteeTypes.$dirty && !$v.checkedGuaranteeTypes.required" class="validation-error">Пожалуйста, выберите типы гарантии бронирования</span>
+        </div>
       </div>
+
+<!-- ///////// Hidden computed /////////////// -->
+      <h4 style="display: none">{{setBookingRulesInfo}}</h4>
+<!-- ///////////////////////////////////////// -->
 
       <div class="input-grid-btns">
         <button
@@ -102,6 +123,7 @@
 
         <button
           class="prim-btn"
+          @click="newBookingRules"
         >
           Сохранить
         </button>
@@ -117,25 +139,22 @@
 </template>
 
 <script>
-import CurrencyInput from '../../../components/CurrencyInput.vue'
-
-const cityOptions = ['Shanghai', 'Beijing', 'Guangzhou', 'Shenzhen', 'ShitCity', 'ChinaSucks', 'HongKongSuper']
+import {required} from 'vuelidate/lib/validators'
 
 export default {
   name: 'GuaranteedBooking',
 
-  components: {
-    CurrencyInput
-  },
-
   data:() => ({
-    rules: [{
-      freeCancellationPeriod: '',
-      fixedSoum: '',
-      penaltyProcent: '',
-      penaltyType: 'fixedAmount',},
+    guaranteedBokingRules: JSON.parse(window.sessionStorage.rules).guarantedBooking,
+
+    rules: [
+      {
+        freeCancellationPeriod: '',
+        fixedSoum: '0',
+        penaltyProcent: '0',
+        penaltyType: 'fixedAmount',
+      }
     ],
-      
 
     penaltyTypes: [
       {label: 'Фиксированная сумма', value: 'fixedAmount'},
@@ -144,21 +163,109 @@ export default {
 
 
     checkAll: false,
-    checkedCities: ['Shanghai', 'Beijing'],
-    cities: cityOptions,
-    isIndeterminate: true,
+    checkedGuaranteeTypes: [],
+    guaranteeTypes: [
+      {label: 'Visa', value: 'visa'},
+      {label: 'MasterCard', value: 'masterCard'},
+      {label: 'Maestro', value: 'maestro'},
+      {label: 'UnionPay', value: 'unionPay'},
+      {label: 'Карты МИР', value: 'mir'},
+      {label: 'UzCard', value: 'uzCard'},
+      {label: 'HUMO', value: 'humo'},
+      {label: 'Корпоративный договор', value: 'corporativeContract'},
+      {label: 'Гарантийное письмо', value: 'guaranteeLetter'},
+      {label: 'Гарантия агента или компании', value: 'companyAgentGuarantee'}
+    ],
+    isIndeterminate: false,
+
+    money: {
+      decimal: '',
+      thousands: ' ',
+      prefix: '',
+      suffix: ' UZS',
+      precision: 0,
+      masked: true
+    },
+    percent: {
+      decimal: '',
+      thousands: '',
+      prefix: '',
+      suffix: ' %',
+      precision: 0,
+      masked: true
+    }
   }),
+
+  validations: {
+    checkedGuaranteeTypes: {required},
+    rules: {
+      $each:{
+        freeCancellationPeriod: {required},
+        fixedSoum: {required},
+        penaltyProcent: {required},
+        penaltyType: {required}
+      }
+    }
+  },
+
+  computed: {
+    setBookingRulesInfo() {
+      this.rules = JSON.parse(window.sessionStorage.rules).guarantedBooking.period
+      this.checkedGuaranteeTypes = JSON.parse(window.sessionStorage.rules).guarantedBooking.typeOfGuarante
+    },
+  },
 
   methods: {
     closeModal() {
       this.$emit('closeGuaranteedBooking')
     },
 
+    handleCheckAllChange(value) {
+      this.checkedGuaranteeTypes = value ? this.guaranteeTypesList : [];
+      this.isIndeterminate = false;
+      console.log(value);
+    },
+
+    handleCheckedCitiesChange(value) {
+      let checkedCount = value.length;
+      this.checkAll = checkedCount === this.guaranteeTypes.length;
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.guaranteeTypes.length;
+      console.log(checkedCount);
+      console.log(this.guaranteeTypes.length);
+    },
+
+    async newBookingRules() {
+      if(this.$v.$invalid) {
+        this.$v.$touch()
+        return
+      }
+
+      const rules = {
+        period: this.rules,
+        typeOfGuarante: this.checkedGuaranteeTypes
+      }
+
+      try {
+        await this.$store.dispatch('newBookingRules', rules)
+      } catch {}
+
+      try {
+        await this.$store.dispatch('getBookingRulesInfo')
+      } catch {}
+
+      this.$emit('refresh')
+      this.$emit('closeGuaranteedBooking')
+      this.$message({
+        message: 'Правила гарантированной бронирования добавлены',
+        type: 'success'
+      })
+    },
+
     addRule () {
       this.rules.push({
         freeCancellationPeriod: '',
-        fixedSoum: '',
-        penaltyProcent: '',
+        fixedSoum: '0',
+        penaltyProcent: '0',
         penaltyType: 'fixedAmount',
       })
     },
@@ -166,17 +273,6 @@ export default {
     removeRule (index) {
       this.rules.splice(index, 1)
     },
-
-    handleCheckAllChange(val) {
-      this.checkedCities = val ? cityOptions : [];
-      this.isIndeterminate = false;
-    },
-
-    handleCheckedCitiesChange(value) {
-      let checkedCount = value.length;
-      this.checkAll === checkedCount === this.cities.length;
-      this.isIndeterminate === checkedCount > 0 && checkedCount < this.cities.length;
-    }
   }
 }
 </script>

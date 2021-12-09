@@ -8,34 +8,42 @@
         <div class="w-100">
           <label for="input">Краткое название партнера</label>
           <el-input
-            v-model="partnerName"
+            v-model="name"
             placeholder="Введите краткое название партнера"
-          >
-          </el-input>
+            :class="{invalid: ($v.name.$dirty && !$v.name.required)}"
+          />
+          <span v-if="$v.name.$dirty && !$v.name.required" class="validation-error">Пожалуйста, введите краткое название партнера</span>
         </div>
 
         <div class="w-100">
           <label for="input">Юридическое название партнера</label>
           <el-input
-            v-model="partnerLegalName"
+            v-model="legalName"
             placeholder="Введите юридическое название партнера"
-          >
-          </el-input>
+            :class="{invalid: ($v.legalName.$dirty && !$v.legalName.required)}"
+          />
+          <span v-if="$v.legalName.$dirty && !$v.legalName.required" class="validation-error">Пожалуйста, введите юридическое название партнера</span>
         </div>
       </div>
 
       <div class="form-3" style="margin-bottom: 0;">
         <div class="w-100">
           <label for="input">Страна</label>
-          <el-select v-model="country" filterable placeholder="Выберите страну партнера">
+          <el-select
+            v-model="country"
+            filterable
+            placeholder="Выберите страну партнера"
+            :class="{invalid: ($v.country.$dirty && !$v.country.required)}"
+          >
             <el-option
-              v-for="(country, idx) in countries"
+              v-for="(cntry, idx) in countries"
               :key="idx"
-              :label="country.label"
-              :value="country.value"
+              :label="cntry.label"
+              :value="cntry.value"
             >
             </el-option>
           </el-select>
+          <span v-if="$v.country.$dirty && !$v.country.required" class="validation-error">Пожалуйста, выберите страну партнера</span>
         </div>
 
         <div class="w-100">
@@ -44,8 +52,14 @@
             v-model="mainPhoneNumber"
             v-mask="'+998 (##) ###-##-##'"
             placeholder="Введите номер телефона"
+            :class="{invalid: ($v.mainPhoneNumber.$dirty && !$v.mainPhoneNumber.required) || ($v.mainPhoneNumber.$dirty && !$v.mainPhoneNumber.minLength)}"
+          />
+          <span
+            v-if="($v.mainPhoneNumber.$dirty && !$v.mainPhoneNumber.required) || ($v.mainPhoneNumber.$dirty && !$v.mainPhoneNumber.minLength)"
+            class="validation-error"
           >
-          </el-input>
+            Пожалуйста, введите номер телефона
+          </span>
         </div>
 
         <div class="w-100">
@@ -75,10 +89,20 @@
           <el-input
             v-model="email"
             placeholder="Введите e-mail партнера"
+            :class="{invalid: ($v.email.$dirty && !$v.email.required) || ($v.email.$dirty && !$v.email.email)}"
+          />
+          <span
+            v-if="($v.email.$dirty && !$v.email.required) || ($v.email.$dirty && !$v.email.email)"
+            class="validation-error"
           >
-          </el-input>
+            Пожалуйста, введите e-mail партнера
+          </span>
         </div>
       </div>
+
+<!-- //////////////Hidden computed////////////// -->
+      <h4 style="display: none">{{setInfo}}</h4>
+<!-- /////////////////////////////////////////// -->
 
       <div class="input-grid-btns">
         <button
@@ -90,6 +114,7 @@
 
         <button
           class="prim-btn"
+          @click="editPartner"
         >
           Сохранить
         </button>
@@ -104,41 +129,95 @@
 </template>
 
 <script>
+import {required, email, minLength} from 'vuelidate/lib/validators'
+
 export default {
   name: 'EditingPartner',
 
   data:() => ({
-
-    countries: [
-      {value: 'Uzbekistan', label: 'Узбекистан'},
-      {value: 'Tajikistan', label: 'Таджикистан'},
-      {value: 'Kazakhstan', label: 'Казахстан'},
-      {value: 'Russian Federation', label: 'Российская Федерация'},
-      {value: 'Japan', label: 'Япония'},
-      {value: 'Great Britain', label: 'Великобритания'},
-      {value: 'USA', label: 'США'},
-      {value: 'Ukraine', label: 'Украина'},
-      {value: 'Georgia', label: 'Грузия'},
-      {value: 'Azerbaijan', label: 'Азербайджан'},
-      {value: 'Australia', label: 'Австралия'},
-      {value: 'Indonesia', label: 'Индонезия'},
-      {value: 'Turkmenistan', label: 'Туркменистан'},
-    ]
+    name: '',
+    legalName: '',
+    country: '',
+    mainPhoneNumber: '',
+    additionalPhoneNumber: '',
+    fax: '',
+    email: ''
   }),
 
   props: {
-    mainPhoneNumber: String,
-    additionalPhoneNumber: String,
-    partnerName: String,
-    partnerLegalName: String,
-    country: String,
-    fax: String,
-    email: String,
+    partner: Object,
+    type: String
+  },
+
+  validations: {
+    name: {required},
+    legalName: {required},
+    country: {required},
+    mainPhoneNumber: {required, minLength: minLength(19)},
+    email: {required, email}
+  },
+
+  computed: {
+    countries() {
+      const countryList = this.$store.state.countries
+
+      return countryList.sort(function(a, b){
+        let x = a.label.toLowerCase();
+        let y = b.label.toLowerCase();
+        if (x < y) {return -1;}
+        if (x > y) {return 1;}
+        return 0;
+      })
+    },
+
+    setInfo() {
+      this.name = this.partner.shortName,
+      this.legalName = this.partner.legalName,
+      this.country = this.partner.country,
+      this.mainPhoneNumber = this.partner.phoneNumber,
+      this.additionalPhoneNumber = this.partner.extraNumber,
+      this.fax = this.partner.fax,
+      this.email = this.partner.email
+    }
   },
 
   methods: {
     closeModal() {
       this.$emit('closeEditingPartner')
+    },
+    
+    async editPartner() {
+      if(this.$v.$invalid) {
+        this.$v.$touch()
+        return
+      }
+
+      const chosenPartner = {
+        type: this.type,
+        id: this.partner._id,
+        shortName: this.name,
+        legalName: this.legalName,
+        country: this.country,
+        phoneNumber: this.mainPhoneNumber,
+        extraNumber: this.additionalPhoneNumber,
+        fax: this.fax,
+        email: this.email,
+      }
+
+      try{
+        await this.$store.dispatch('editPartner', chosenPartner)
+      } catch {}
+
+      try {
+        await this.$store.dispatch('getPartnersInfo')
+      } catch {}
+
+      this.$emit('refresh')
+      this.$emit('closeEditingPartner')
+      this.$message({
+        message: 'Изменная информация партнера сохранена',
+        type: 'success'
+      })
     }
   }
 }

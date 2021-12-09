@@ -6,32 +6,39 @@
         v-if="addPartnerModal"
 
         @closeAddPartner="closeAddPartner"
+        @refresh="refresh"
+        
+        :type="'agents'"
       />
 
       <ContractProlongation
         v-if="prolongContractModal"
+
         @closeProlongationModal="closeProlongationModal"
+        @refresh="refresh"
+
+        :type="'agents'"
+        :id="chosenPartner._id"
       />
 
       <EditingAgentPartner
         v-if="editPartnerModal"
 
         @closeEditingPartner="closeEditingPartner"
+        @refresh="refresh"
 
-        :mainPhoneNumber="mainPhoneNumber"
-        :additionalPhoneNumber="additionalPhoneNumber"
-        :partnerName="partnerName"
-        :country="country"
-        :fax="fax"
-        :email="email"
+        :partner="chosenPartner"
+        :type="'agents'"
       />
 
       <DeletingAgentPartner
         v-if="deletePartnerModal"
 
         @closeDeletePartner="closeDeletePartner"
+        @refresh="refresh"
 
-        :partnerName="partnerName"
+        :partner="chosenPartner"
+        :type="'agents'"
       />
     </transition>
 
@@ -72,13 +79,13 @@
                   class="category-name-2"
                   @click="editPartner(partner)"
                 >
-                  {{partner.name.lastName}} {{partner.name.name}} {{partner.name.familyName}}
+                  {{partner.lastName}} {{partner.firstName}} {{partner.surName}}
                 </td>
-              <td>{{partner.contract}}</td>
-              <td>{{partner.contractTerm.startDate}} - {{partner.contractTerm.stopDate}}</td>
+              <td>{{partner.contract[0].contractNumber}}</td>
+              <td>{{setDateFormat(partner.contract[0].startedDate)}} - {{setDateFormat(partner.contract[0].finishedDate)}}</td>
               <td class="list-last-el">
                 <h3
-                  v-if="partner.activity"
+                  v-if="setActivity(partner.contract[0]) === true"
                   class="true"
                 >
                   ДА
@@ -91,7 +98,7 @@
                 </h3>
                 <div class="list-icon-box">
                   <img
-                    @click="prolongContractModal = true"
+                    @click="newContract(partner)"
                     class="icon-box"
                     src="@/assets/icons/Prolongation.svg" alt=""
                   >
@@ -134,32 +141,54 @@ export default {
     editPartnerModal: false,
     deletePartnerModal: false,
 
+    chosenPartner: '',
 
-    partners: [
-      {partnerType: 'agent', name: {name: 'Toxir', lastName: 'Toxirov', familyName: 'Toxirovich'}, country: 'Узбекистан', mainPhoneNumber: '+998 (90) 987-65-43', additionalPhoneNumber: '+998 (90) 987-65-43', fax: '+998 (90) 987-65-43', email: 'dolores@biz.uz', contract: '№17 - 09/2021', contractTerm: {startDate: '01/01/2021', stopDate: '31/12/2021'}, activity: true},
-      {partnerType: 'agent', name: {name: 'Toxir', lastName: 'Toxirov', familyName: 'Toxirovich'}, country: 'Казахстан', mainPhoneNumber: '+998 (90) 987-65-43', additionalPhoneNumber: '+998 (90) 987-65-43', fax: '+998 (90) 987-65-43', email: 'advantour@biz.uz', contract: '№17 - 09/2021', contractTerm: {startDate: '01/01/2021', stopDate: '31/12/2021'}, activity: true},
-      {partnerType: 'agent', name: {name: 'Toxir', lastName: 'Toxirov', familyName: 'Toxirovich'}, country: 'Узбекистан', mainPhoneNumber: '+998 (90) 987-65-43', additionalPhoneNumber: '+998 (90) 987-65-43', fax: '+998 (90) 987-65-43', email: 'bcd@biz.uz', contract: '№18 - 09/2021', contractTerm: {startDate: '01/01/2021', stopDate: '31/12/2021'}, activity: false},
-      {partnerType: 'agent', name: {name: 'Toxir', lastName: 'Toxirov', familyName: 'Toxirovich'}, country: 'Российская Федерация', mainPhoneNumber: '+998 (90) 987-65-43', additionalPhoneNumber: '+998 (90) 987-65-43', fax: '+998 (90) 987-65-43', email: 'travelornament@biz.uz', contract: '№19 - 09/2021', contractTerm: {startDate: '01/01/2021', stopDate: '31/12/2021'}, activity: true},
-      {partnerType: 'agent', name: {name: 'Toxir', lastName: 'Toxirov', familyName: 'Toxirovich'}, country: 'Узбекистан', mainPhoneNumber: '+998 (90) 987-65-43', additionalPhoneNumber: '+998 (90) 987-65-43', fax: '+998 (90) 987-65-43', email: 'novotours@biz.uz', contract: '№20 - 09/2021', contractTerm: {startDate: '01/01/2021', stopDate: '31/12/2021'}, activity: false},
-    ]
+    partners: JSON.parse(window.sessionStorage.partners).agents
   }),
 
   methods: {
+    setActivity(chosenDate) {
+      const parsedStart = JSON.stringify(chosenDate.startedDate)
+      const parsedStop = JSON.stringify(chosenDate.finishedDate)
+      const start = parsedStart[1]+parsedStart[2]+parsedStart[3]+parsedStart[4]+'/'+parsedStart[6]+parsedStart[7]+'/'+parsedStart[9]+parsedStart[10]
+      const stop = parsedStop[1]+parsedStop[2]+parsedStop[3]+parsedStop[4]+'/'+parsedStop[6]+parsedStop[7]+'/'+parsedStop[9]+parsedStop[10]
+      const current = new Date()
+      const startDate = new Date(start)
+      const stopDate = new Date(stop)
+
+      if(startDate < current && current < stopDate) {
+        return true
+      } else {
+        return false
+      }
+    },
+
+    setDateFormat(date) {
+      const localdate = new Date(date)
+      const formatted = `${('0'+localdate.getDate()).slice(-2)}/${(('0'+localdate.getMonth())+2).slice(-2)}/${localdate.getFullYear()}`
+      return formatted
+    },
+
+    getPartners() {
+      this.partners = JSON.parse(window.sessionStorage.partners).agents
+    },
+
     editPartner(partner) {
-      this.mainPhoneNumber = partner.mainPhoneNumber
-      this.additionalPhoneNumber = partner.additionalPhoneNumber
-      this.partnerName = partner.name
-      this.country = partner.country
-      this.fax = partner.fax
-      this.email = partner.email
+      this.chosenPartner = partner
 
       this.editPartnerModal = true
     },
 
     deletePartner(partner) {
-      this.partnerName = partner.name
+      this.chosenPartner = partner
 
       this.deletePartnerModal = true
+    },
+
+    newContract(partner) {
+      this.chosenPartner = partner
+
+      this.prolongContractModal = true
     },
 
     closeAddPartner() {
@@ -176,6 +205,10 @@ export default {
 
     closeDeletePartner() {
       this.deletePartnerModal = false
+    },
+
+    refresh() {
+      this.$forceUpdate(this.getPartners())
     }
   },
 }

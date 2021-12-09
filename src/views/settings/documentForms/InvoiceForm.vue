@@ -37,34 +37,36 @@
           <label for="input">Тип нумерации</label>
           <el-select
             v-model="numerationType"
-
             placeholder="Выберите тип нумерации"
+            :class="{invalid: ($v.numerationType.$dirty && !$v.numerationType.required)}"
           >
             <el-option
-              v-for="(numerationType, idx) in numerationTypes"
+              v-for="(type, idx) in numerationTypes"
               :key="idx"
-              :value="numerationType.value"
-              :label="numerationType.label"
+              :value="type.value"
+              :label="type.label"
             >
             </el-option>
           </el-select>
+          <span v-if="$v.numerationType.$dirty && !$v.numerationType.required" class="validation-error">Пожалуйста, выберите тип нумерации</span>
         </div>
 
         <div class="w-100">
           <label for="input">Обнуление счётчика</label>
           <el-select
             v-model="counterResetType"
-
             placeholder="Выберите тип обнуления счётчика"
+            :class="{invalid: ($v.counterResetType.$dirty && !$v.counterResetType.required)}"
           >
             <el-option
-              v-for="(counterResetType, idx) in counterResetTypes"
+              v-for="(type, idx) in counterResetTypes"
               :key="idx"
-              :value="counterResetType.value"
-              :label="counterResetType.label"
+              :value="type.value"
+              :label="type.label"
             >
             </el-option>
           </el-select>
+          <span v-if="$v.counterResetType.$dirty && !$v.counterResetType.required" class="validation-error">Пожалуйста, выберите тип обнуления счётчика</span>
         </div>
 
         <div class="w-100">
@@ -94,6 +96,7 @@
 
         <button
           class="prim-btn"
+          @click="invoiceFormSettingsEdit"
         >
           Сохранить
         </button>
@@ -109,7 +112,7 @@
 
 <script>
 import RadioButton from '@/components/RadioButton.vue'
-
+import {required} from 'vuelidate/lib/validators'
 
 export default {
   name: 'InvoiceForm',
@@ -125,6 +128,7 @@ export default {
     showRequisites: true,
     showDollarRate: false,
 
+    invoiceFormSettings: '',
 
     numerationTypes: [
       {label: 'С датой (8-значная)', value: 'date-8'},
@@ -141,9 +145,51 @@ export default {
     ]
   }),
 
+  validations: {
+    numerationType: {required},
+    counterResetType: {required}
+  },
+
+  computed: {
+    setInfo() {
+      this.numerationType = this.invoiceFormSettings.numerationType,
+      this.counterResetType = this.invoiceFormSettings.counterResetType,
+      this.selectedOrientation = this.invoiceFormSettings.selectedOrientation,
+      this.showRequisites = this.invoiceFormSettings.showRequisites,
+      this.showDollarRate = this.invoiceFormSettings.showDollarRate
+    }
+  },
+
   methods: {
     closeModal() {
       this.$emit('closeInvoiceFormModal')
+    },
+
+    async invoiceFormSettingsEdit() {
+      if(this.$v.$invalid) {
+        this.$v.$touch()
+        return
+      }
+
+      const invoiceFormSettings = {
+        numerationType: this.numerationType,
+        counterResetType: this.counterResetType,
+        selectedOrientation: this.selectedOrientation,
+        showRequisites: this.showRequisites,
+        showDollarRate: this.showDollarRate,
+      }
+      console.log(invoiceFormSettings);
+
+      // try {
+      //   await this.$store.dispatch('invoiceFormSettingsEdit', invoiceFormSettings)
+      // } catch {}
+
+      // this.$emit('refresh')
+      // this.$emit('closeInvoiceFormModal')
+      this.$message({
+        message: 'Изменения в настройках формы инвойса сохранены',
+        type: 'success'
+      })
     }
   }
 }

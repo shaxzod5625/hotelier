@@ -8,43 +8,50 @@
         <div class="w-100">
           <label for="input">Имя</label>
           <el-input
-            v-model="partnerName"
+            v-model="name"
             placeholder="Введите имя партнера"
-          >
-          </el-input>
+            :class="{invalid: ($v.name.$dirty && !$v.name.required)}"
+          />
+          <span v-if="$v.name.$dirty && !$v.name.required" class="validation-error">Пожалуйста, введите имя партнера</span>
         </div>
 
         <div class="w-100">
           <label for="input">Фамилия</label>
           <el-input
-            v-model="partnerLastName"
+            v-model="lastName"
             placeholder="Введите фамилию партнера"
-          >
-          </el-input>
+            :class="{invalid: ($v.lastName.$dirty && !$v.lastName.required)}"
+          />
+          <span v-if="$v.lastName.$dirty && !$v.lastName.required" class="validation-error">Пожалуйста, введите фамилию партнера</span>
         </div>
 
         <div class="w-100">
           <label for="input">Отчество</label>
           <el-input
-            v-model="partnerFamilyName"
+            v-model="familyName"
             placeholder="Введите отчество партнера"
-          >
-          </el-input>
+          />
         </div>
       </div>
 
       <div class="form-3" style="margin-bottom: 0;">
         <div class="w-100">
           <label for="input">Страна</label>
-          <el-select v-model="country" filterable placeholder="Выберите страну партнера">
+          <el-select
+            v-model="country"
+            filterable
+            placeholder="Выберите страну партнера"
+            :class="{invalid: ($v.country.$dirty && !$v.country.required)}"
+          >
             <el-option
-              v-for="(country, idx) in countries"
+              v-for="(cntry, idx) in countries"
               :key="idx"
-              :label="country.label"
-              :value="country.value"
+              :label="cntry.label"
+              :value="cntry.value"
             >
             </el-option>
           </el-select>
+          <span v-if="$v.country.$dirty && !$v.country.required" class="validation-error">Пожалуйста, выберите страну партнера</span>
         </div>
 
         <div class="w-100">
@@ -53,8 +60,14 @@
             v-model="mainPhoneNumber"
             v-mask="'+998 (##) ###-##-##'"
             placeholder="Введите номер телефона"
+            :class="{invalid: ($v.mainPhoneNumber.$dirty && !$v.mainPhoneNumber.required) || ($v.mainPhoneNumber.$dirty && !$v.mainPhoneNumber.minLength)}"
+          />
+          <span
+            v-if="($v.mainPhoneNumber.$dirty && !$v.mainPhoneNumber.required) || ($v.mainPhoneNumber.$dirty && !$v.mainPhoneNumber.minLength)"
+            class="validation-error"
           >
-          </el-input>
+            Пожалуйста, введите номер телефона
+          </span>
         </div>
 
         <div class="w-100">
@@ -63,8 +76,7 @@
             v-model="additionalPhoneNumber"
             v-mask="'+998 (##) ###-##-##'"
             placeholder="Введите дополнительный номер телефона"
-          >
-          </el-input>
+          />
         </div>
       </div>
 
@@ -75,8 +87,7 @@
             v-model="fax"
             v-mask="'+998 (##) ###-##-##'"
             placeholder="Введите номер факса партнера"
-          >
-          </el-input>
+          />
         </div>
 
         <div class="w-100">
@@ -84,8 +95,14 @@
           <el-input
             v-model="email"
             placeholder="Введите e-mail партнера"
+            :class="{invalid: ($v.email.$dirty && !$v.email.required) || ($v.email.$dirty && !$v.email.email)}"
+          />
+          <span
+            v-if="($v.email.$dirty && !$v.email.required) || ($v.email.$dirty && !$v.email.email)"
+            class="validation-error"
           >
-          </el-input>
+            Пожалуйста, введите e-mail партнера
+          </span>
         </div>
       </div>
 
@@ -95,8 +112,7 @@
           <el-input
             v-model="contractNumber"
             placeholder="Введите номер договора"
-          >
-          </el-input>
+          />
         </div>
 
         <div class="w-100">
@@ -107,8 +123,8 @@
             type="date"
             placeholder="Введите дату заключения договора"
             format="dd/MM/yyyy"
-          >
-          </el-date-picker>
+            v-mask="'##/##/####'"
+          />
         </div>
 
         <div class="w-100">
@@ -119,8 +135,8 @@
             type="date"
             placeholder="Введите дату окончания срока договора"
             format="dd/MM/yyyy"
-          >
-          </el-date-picker>
+            v-mask="'##/##/####'"
+          />
         </div>
       </div>
 
@@ -134,6 +150,7 @@
 
         <button
           class="prim-btn"
+          @click="newPartner"
         >
           Добавить
         </button>
@@ -148,12 +165,15 @@
 </template>
 
 <script>
+import {required, email, minLength} from 'vuelidate/lib/validators'
+
 export default {
   name: 'NewAgentPartner',
 
   data:() => ({
-    partnerName: '',
-    partnerLegalName: '',
+    name: '',
+    lastName: '',
+    familyName: '',
     country: '',
     mainPhoneNumber: '',
     additionalPhoneNumber: '',
@@ -162,27 +182,80 @@ export default {
     contractNumber: '',
     contractStartDate: '',
     contractStopDate: '',
-
-    countries: [
-      {value: 'Uzbekistan', label: 'Узбекистан'},
-      {value: 'Tajikistan', label: 'Таджикистан'},
-      {value: 'Kazakhstan', label: 'Казахстан'},
-      {value: 'Russian Federation', label: 'Российская Федерация'},
-      {value: 'Japan', label: 'Япония'},
-      {value: 'Great Britain', label: 'Великобритания'},
-      {value: 'USA', label: 'США'},
-      {value: 'Ukraine', label: 'Украина'},
-      {value: 'Georgia', label: 'Грузия'},
-      {value: 'Azerbaijan', label: 'Азербайджан'},
-      {value: 'Australia', label: 'Австралия'},
-      {value: 'Indonesia', label: 'Индонезия'},
-      {value: 'Turkmenistan', label: 'Туркменистан'},
-    ]
   }),
+
+  props: {
+    type: String
+  },
+
+  validations: {
+    name: {required},
+    lastName: {required},
+    country: {required},
+    mainPhoneNumber: {required, minLength: minLength(19)},
+    email: {required}
+  },
+
+  computed: {
+    countries() {
+      const countryList = this.$store.state.countries
+
+      return countryList.sort(function(a, b){
+        let x = a.label.toLowerCase();
+        let y = b.label.toLowerCase();
+        if (x < y) {return -1;}
+        if (x > y) {return 1;}
+        return 0;
+      })
+    },
+  },
 
   methods: {
     closeModal() {
       this.$emit('closeAddPartner')
+    },
+
+    async newPartner() {
+      if(this.$v.$invalid) {
+        this.$v.$touch()
+        return
+      }
+
+      const start = new Date(this.contractStartDate)
+      const stop = new Date(this.contractStopDate)
+
+      const partner = {
+        type: this.type,
+        lastName: this.lastName,
+        firstName: this.name,
+        surName: this.familyName,
+        country: this.country,
+        phoneNumber: this.mainPhoneNumber,
+        extraNumber: this.additionalPhoneNumber,
+        fax: this.fax,
+        email: this.email,
+        contractNumber: this.contractNumber,
+        startedDate: start,
+        finishedDate: stop
+      }
+
+      try {
+        await this.$store.dispatch('newPartner', partner)
+      } catch(err) {
+        if(err !== undefined)
+        console.log('Oops error');
+      }
+
+      try {
+        await this.$store.dispatch('getPartnersInfo')
+      } catch {}
+
+      this.$emit('refresh')
+      this.$emit('closeAddPartner')
+      this.$message({
+        message: 'Новый партнер добавлен',
+        type: 'success'
+      })
     }
   }
 }

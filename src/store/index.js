@@ -10,38 +10,203 @@ export default new Vuex.Store({
     chartOptions: [],
     logoutInfo: [],
 
-
-    blocks: [{
-      blockID: 1,
-      blockName: 'Основной',
-      type: 'Основной',
-      floors: [
-        {
-          level: 1,
-          floorName: 'Этаж “Лобби”',
-          rooms: ['101', '102', '103', '104', '105', '106']
-        },
-        {
-          level: 2,
-          floorName: 'Служебный этаж',
-          rooms: ['201', '202', '203', '204', '205', '206']
-        },
-        {
-          level: 3,
-          floorName: '3й этаж',
-          rooms: ['301', '302', '303', '304', '305', '306']
-        },
-        {
-          level: 4,
-          floorName: '4й этаж',
-          rooms: ['401', '402', '403', '444', '405']
-        },
-        {
-          level: 5,
-          floorName: '5й этаж',
-          rooms: ['501', '502', '503', '504', '505', '506']
-        },]
-    }],
+    countries: [
+      {value: 'afghanistan', label: 'Афганистан'},
+      {value: 'albania', label: 'Албания'},
+      {value: 'algeria', label: 'Алжир'},
+      {value: 'andorra', label: 'Андорра'},
+      {value: 'angola', label: 'Ангола'},
+      {value: 'antiguaAndBarbuda', label: 'Антигуа и Барбуда'},
+      {value: 'argentina', label: 'Аргентина'},
+      {value: 'armenia', label: 'Армения'},
+      {value: 'australia', label: 'Австралия'},
+      {value: 'austria', label: 'Австрия'},
+      {value: 'azerbaijan', label: 'Азербайджан'},
+      {value: 'bahamas', label: 'Багамы'},
+      {value: 'bahrain', label: 'Бахрейн'},
+      {value: 'bangladesh', label: 'Бангладеш'},
+      {value: 'barbados', label: 'Барбадос'},
+      {value: 'belarus', label: 'Беларусь'},
+      {value: 'belgium', label: 'Бельгия'},
+      {value: 'belize', label: 'Белиз'},
+      {value: 'benin', label: 'Бенин'},
+      {value: 'bhutan', label: 'Бутан'},
+      {value: 'bolivia', label: 'Боливия'},
+      {value: 'bosniaAndHerzegovina', label: 'Босния и Герцеговина'},
+      {value: 'botswana', label: 'Ботсвана'},
+      {value: 'brazil', label: 'Бразилия'},
+      {value: 'brunei', label: 'Бруней'},
+      {value: 'bulgaria', label: 'Болгария'},
+      {value: 'burkinaFaso', label: 'Буркина-Фасо'},
+      {value: 'burundi', label: 'Бурунди'},
+      {value: 'coteDIvoire', label: 'Кот-д`Ивуар'},
+      {value: 'caboVerde', label: 'Кабо-Верде'},
+      {value: 'cambodia', label: 'Камбоджа'},
+      {value: 'cameroon', label: 'Камерун'},
+      {value: 'canada', label: 'Канада'},
+      {value: 'centralAfricanRepublic', label: 'Центрально-Африканская Республика'},
+      {value: 'chad', label: 'Чад'},
+      {value: 'chile', label: 'Чили'},
+      {value: 'china', label: 'Китай'},
+      {value: 'colombia', label: 'Колумбия'},
+      {value: 'comoros', label: 'Коморские острова'},
+      {value: 'congoBrazzaville)', label: 'Конго (Конго-Браззавиль)'},
+      {value: 'costaRica', label: 'Коста-Рика'},
+      {value: 'croatia', label: 'Хорватия'},
+      {value: 'cuba', label: 'Куба'},
+      {value: 'cyprus', label: 'Кипр'},
+      {value: 'czechRepublic', label: 'Чехия'},
+      {value: 'democraticRepublicOfTheCongo', label: 'Демократическая Республика Конго'},
+      {value: 'denmark', label: 'Дания'},
+      {value: 'djibouti', label: 'Джибути'},
+      {value: 'dominica', label: 'Доминика'},
+      {value: 'dominicanRepublic', label: 'Доминиканская Республика'},
+      {value: 'ecuador', label: 'Эквадор'},
+      {value: 'egypt', label: 'Египет'},
+      {value: 'elSalvador', label: 'Сальвадор'},
+      {value: 'equatorialGuinea', label: 'Экваториальная Гвинея'},
+      {value: 'eritrea', label: 'Эритрея'},
+      {value: 'estonia', label: 'Эстония'},
+      {value: 'eswatini', label: 'Эсватини'},
+      {value: 'ethiopia', label: 'Эфиопия'},
+      {value: 'fiji', label: 'Фиджи'},
+      {value: 'finland', label: 'Финляндия'},
+      {value: 'france', label: 'Франция'},
+      {value: 'gabon', label: 'Габон'},
+      {value: 'gambia', label: 'Гамбия'},
+      {value: 'georgia', label: 'Грузия'},
+      {value: 'germany', label: 'Германия'},
+      {value: 'ghana', label: 'Гана'},
+      {value: 'greece', label: 'Греция'},
+      {value: 'grenada', label: 'Гренада'},
+      {value: 'guatemala', label: 'Гватемала'},
+      {value: 'guinea', label: 'Гвинея'},
+      {value: 'guineaBissau', label: 'Гвинея-Бисау'},
+      {value: 'guyana', label: 'Гайана'},
+      {value: 'haiti', label: 'Гаити'},
+      {value: 'holySee', label: 'Святой Престол'},
+      {value: 'honduras', label: 'Гондурас'},
+      {value: 'hungary', label: 'Венгрия'},
+      {value: 'iceland', label: 'Исландия'},
+      {value: 'india', label: 'Индия'},
+      {value: 'indonesia', label: 'Индонезия'},
+      {value: 'iran', label: 'Иран'},
+      {value: 'iraq', label: 'Ирак'},
+      {value: 'ireland', label: 'Ирландия'},
+      {value: 'israel', label: 'Израиль'},
+      {value: 'italy', label: 'Италия'},
+      {value: 'jamaica', label: 'Ямайка'},
+      {value: 'japan', label: 'Япония'},
+      {value: 'jordan', label: 'Иордания'},
+      {value: 'kazakhstan', label: 'Казахстан'},
+      {value: 'kenya', label: 'Кения'},
+      {value: 'kiribati', label: 'Кирибати'},
+      {value: 'kuwait', label: 'Кувейт'},
+      {value: 'kyrgyzstan', label: 'Кыргызстан'},
+      {value: 'laos', label: 'Лаос'},
+      {value: 'latvia', label: 'Латвия'},
+      {value: 'lebanon', label: 'Ливан'},
+      {value: 'lesotho', label: 'Лесото'},
+      {value: 'liberia', label: 'Либерия'},
+      {value: 'libya', label: 'Ливия'},
+      {value: 'liechtenstein', label: 'Лихтенштейн'},
+      {value: 'lithuania', label: 'Литва'},
+      {value: 'luxembourg', label: 'Люксембург'},
+      {value: 'madagascar', label: 'Мадагаскар'},
+      {value: 'malawi', label: 'Малави'},
+      {value: 'malaysia', label: 'Малайзия'},
+      {value: 'maldives', label: 'Мальдивы'},
+      {value: 'mali', label: 'Мали'},
+      {value: 'malta', label: 'Мальта'},
+      {value: 'marshallIslands', label: 'Маршалловы острова'},
+      {value: 'mauritania', label: 'Мавритания'},
+      {value: 'mauritius', label: 'Маврикий'},
+      {value: 'mexico', label: 'Мексика'},
+      {value: 'micronesia', label: 'Микронезия'},
+      {value: 'moldova', label: 'Молдова'},
+      {value: 'monaco', label: 'Монако'},
+      {value: 'mongolia', label: 'Монголия'},
+      {value: 'montenegro', label: 'Черногория'},
+      {value: 'morocco', label: 'Марокко'},
+      {value: 'mozambique', label: 'Мозамбик'},
+      {value: 'myanmar', label: 'Мьянма (ранее Бирма)'},
+      {value: 'Namibia', label: 'Намибия'},
+      {value: 'nauru', label: 'Науру'},
+      {value: 'nepal', label: 'Непал'},
+      {value: 'netherlands', label: 'Нидерланды'},
+      {value: 'newZealand', label: 'Новая Зеландия'},
+      {value: 'nicaragua', label: 'Никарагуа'},
+      {value: 'niger', label: 'Нигер'},
+      {value: 'nigeria', label: 'Нигерия'},
+      {value: 'northKorea', label: 'Северная Корея'},
+      {value: 'northMacedonia', label: 'Северная Македония'},
+      {value: 'norway', label: 'Норвегия'},
+      {value: 'oman', label: 'Оман'},
+      {value: 'pakistan', label: 'Пакистан'},
+      {value: 'palau', label: 'Палау'},
+      {value: 'palestineState', label: 'Государство Палестина'},
+      {value: 'panama', label: 'Панама'},
+      {value: 'papuaNewGuinea', label: 'Папуа - Новая Гвинея'},
+      {value: 'paraguay', label: 'Парагвай'},
+      {value: 'peru', label: 'Перу'},
+      {value: 'philippines', label: 'Филиппины'},
+      {value: 'poland', label: 'Польша'},
+      {value: 'portugal', label: 'Португалия'},
+      {value: 'qatar', label: 'Катар'},
+      {value: 'romania', label: 'Румыния'},
+      {value: 'russia', label: 'Российская Федерация'},
+      {value: 'rwanda', label: 'Руанда'},
+      {value: 'saintKittsAndNevis', label: 'Сент-Китс и Невис'},
+      {value: 'saintLucia', label: 'Санкт-Люсия'},
+      {value: 'saintVincentAndTheGrenadines', label: 'Святой Винсент и Гренадины'},
+      {value: 'samoa', label: 'Самоа'},
+      {value: 'sanMarino', label: 'Сан-Марино'},
+      {value: 'saoTomeAndPrincipe', label: 'Сан-Томе и Принсипи'},
+      {value: 'saudiArabia', label: 'Саудовская Аравия'},
+      {value: 'senegal', label: 'Сенегал'},
+      {value: 'serbia', label: 'Сербия'},
+      {value: 'seychelles', label: 'Сейшельские острова'},
+      {value: 'sierraLeone', label: 'Сьерра-Леоне'},
+      {value: 'singapore', label: 'Сингапур'},
+      {value: 'slovakia', label: 'Словакия'},
+      {value: 'slovenia', label: 'Словения'},
+      {value: 'solomonIslands', label: 'Соломоновы острова'},
+      {value: 'somalia', label: 'Сомали'},
+      {value: 'southAfrica', label: 'Южная Африка'},
+      {value: 'southKorea', label: 'Южная Корея'},
+      {value: 'southSudan', label: 'Южный Судан'},
+      {value: 'spain', label: 'Испания'},
+      {value: 'sriLanka', label: 'Шри-Ланка'},
+      {value: 'sudan', label: 'Судан'},
+      {value: 'suriname', label: 'Суринам'},
+      {value: 'sweden', label: 'Швеция'},
+      {value: 'switzerland', label: 'Швейцария'},
+      {value: 'syria', label: 'Сирия'},
+      {value: 'tajikistan', label: 'Таджикистан'},
+      {value: 'tanzania', label: 'Танзания'},
+      {value: 'thailand', label: 'Таиланд'},
+      {value: 'timorLeste', label: 'Тимор-Лешти'},
+      {value: 'togo', label: 'Того'},
+      {value: 'tonga', label: 'Тонга'},
+      {value: 'trinidadAndTobago', label: 'Тринидад и Тобаго'},
+      {value: 'tunisia', label: 'Тунис'},
+      {value: 'turkey', label: 'Турция'},
+      {value: 'turkmenistan', label: 'Туркменистан'},
+      {value: 'tuvalu', label: 'Тувалу'},
+      {value: 'uganda', label: 'Уганда'},
+      {value: 'ukraine', label: 'Украина'},
+      {value: 'unitedArabEmirates', label: 'Объединенные Арабские Эмираты'},
+      {value: 'unitedKingdom', label: 'Объединенное Королевство'},
+      {value: 'unitedStatesOfAmerica', label: 'Соединенные Штаты Америки'},
+      {value: 'uruguay', label: 'Уругвай'},
+      {value: 'uzbekistan', label: 'Узбекистан'},
+      {value: 'vanuatu', label: 'Вануату'},
+      {value: 'venezuela', label: 'Венесуэла'},
+      {value: 'vietnam', label: 'Вьетнам'},
+      {value: 'yemen', label: 'Йемен'},
+      {value: 'zambia', label: 'Замбия'},
+      {value: 'zimbabwe', label: 'Зимбабве'}
+    ],
 
     activeTariffs: [
       {name: 'Основной', type: 'main', discount: {availability: false, discountType: undefined, discountAmount: undefined}, startTerm: '01/01/2021', stopTerm: '31/12/2021', activity: 'pending'},
@@ -132,46 +297,6 @@ export default new Vuex.Store({
         {roomNumber: '122', mainBeds: 2, additionalBeds: 1, bathroom: 'Joint', bedType: 'Standart Triple', forSmokers: false, roomArea: 48},
         {roomNumber: '123', mainBeds: 2, additionalBeds: 0, bathroom: 'Separated', bedType: 'Standart Double', forSmokers: true, roomArea: 48},
       ]},
-    ],
-
-    dashPermission: [
-      {value: '1', label: 'HTML'}, {value: '2', label: 'CSS'}, {value: '3', label: 'JavaScript'}
-    ],
-
-    frontPermission: [
-      {value: 'HTML', label: 'HTML'}, {value: 'CSS', label: 'CSS'}, {value: 'JavaScript', label: 'JavaScript'}
-    ],
-
-    cashierPermission: [
-      {value: 'HTML', label: 'HTML'}, {value: 'CSS', label: 'CSS'}, {value: 'JavaScript', label: 'JavaScript'}
-    ],
-
-    folioPermission: [
-      {value: 'HTML', label: 'HTML'}, {value: 'CSS', label: 'CSS'}, {value: 'JavaScript', label: 'JavaScript'}
-    ],
-
-    chessPermission: [
-      {value: 'HTML', label: 'HTML'}, {value: 'CSS', label: 'CSS'}, {value: 'JavaScript', label: 'JavaScript'}
-    ],
-
-    statsPermission: [
-      {value: 'HTML', label: 'HTML'}, {value: 'CSS', label: 'CSS'}, {value: 'JavaScript', label: 'JavaScript'}
-    ],
-
-    reportsPermission: [
-      {value: 'HTML', label: 'HTML'}, {value: 'CSS', label: 'CSS'}, {value: 'JavaScript', label: 'JavaScript'}
-    ],
-
-    roomboardPermission: [
-      {value: 'HTML', label: 'HTML'}, {value: 'CSS', label: 'CSS'}, {value: 'JavaScript', label: 'JavaScript'}
-    ],
-
-    channelManagerPermission: [
-      {value: 'HTML', label: 'HTML'}, {value: 'CSS', label: 'CSS'}, {value: 'JavaScript', label: 'JavaScript'}
-    ],
-
-    settingsPermission: [
-      {value: 'HTML', label: 'HTML'}, {value: 'CSS', label: 'CSS'}, {value: 'JavaScript', label: 'JavaScript'}
     ],
 
     reside: [
@@ -460,13 +585,17 @@ export default new Vuex.Store({
       state.waiters = myWaiters
       window.sessionStorage.waiters = JSON.stringify(myWaiters)
     },
-
 //////////
 
 
     SET_RESPONSE_STATUS(state, responseStatus) {
       state.status = responseStatus
       window.sessionStorage.status = JSON.stringify(responseStatus)
+    },
+
+    SET_RESPONSE_STATUS2(state, responseStatus2) {
+      state.status2 = responseStatus2
+      window.sessionStorage.status2 = JSON.stringify(responseStatus2)
     },
 
 
@@ -502,9 +631,32 @@ export default new Vuex.Store({
       state.cookAccesses = accesses
       window.sessionStorage.cookAccesses = JSON.stringify(accesses)
     },
-
 ///////////////////////////////////////
 
+//////////////// Setting up partners ////////////
+
+    SET_MY_PARTNERS(state, partners) {
+      state.partners = partners
+      window.sessionStorage.partners = JSON.stringify(partners)
+    },
+//////////////////////////////////////
+
+//////////////// Booking Rules /////////////////
+
+    SET_BOOKING_RULES(state, rules) {
+      state.rules = rules
+      window.sessionStorage.rules = JSON.stringify(rules)
+    },
+////////////////////////////////////////////////
+
+
+////////////// Document forms settings ////////
+
+    SET_MY_DOC_FORMS_SETTINGS(state, documentFormsSettings) {
+      state.documentFormsSettings = documentFormsSettings
+      window.sessionStorage.documentFormsSettings = JSON.stringify(documentFormsSettings)
+    },
+//////////////////////////////////////////////
 
 
 
@@ -928,6 +1080,18 @@ export default new Vuex.Store({
       } catch {}
     },
 
+    async newFloor({commit}, floor) {
+      const id = floor.blockID
+      const floorLevel = floor.level
+
+      try {
+        let response = await Api().post(`/api/settings/blocks/${id}/new`, floor)
+        let responseStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', responseStatus)
+      } catch {}
+    },
+
     async editFloor({commit}, floor) {
       const id = floor.blockID
       const floorLevel = floor.level
@@ -950,7 +1114,202 @@ export default new Vuex.Store({
 
         commit('SET_RESPONSE_STATUS', responseStatus)
       } catch {}
-    }
+    },
+
+//////////////////////////////////////////////////
+
+/////////////////// Partners //////////////
+    async getPartnersInfo({commit}) {
+      try {
+        let response = await Api().get('/api/settings/partner')
+        let partners = response.data
+
+        commit('SET_MY_PARTNERS', partners)
+      } catch {}
+    },
+
+    async newPartner({commit}, partner) {
+      const type = partner.type
+      try {
+        let response = await Api().post(`/api/settings/partner/${type}/new`, partner)
+        let responseStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', responseStatus)
+      } catch {}
+    },
+
+    async editPartner({commit}, chosenPartner) {
+      const partnerType = chosenPartner.type
+      const partnerId = chosenPartner.id
+
+      try {
+        let response = await Api().put(`/api/settings/partner/${partnerType}/${partnerId}`, chosenPartner)
+        let responseStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', responseStatus)
+      } catch {}
+    },
+
+    async deletePartner({commit}, chosenPartner) {
+      const type = chosenPartner.type
+      const id = chosenPartner.id
+
+      try {
+        let response = await Api().delete(`/api/settings/partner/${type}/${id}`)
+        let responseStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', responseStatus)
+      } catch {}
+    },
+
+    async newContract({commit}, contract) {
+      const type = contract.type
+      const id = contract.id
+
+      try {
+        let response = await Api().post(`/api/settings/partner/${type}/${id}`, contract)
+        let responseStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', responseStatus)
+      } catch {}
+    },
+////////////////////////////////////////////
+
+//////////// Booking Rules /////////////////
+
+    async getBookingRulesInfo({commit}) {
+      try {
+        let response = await Api().get('/api/settings/rules')
+        let rules = response.data
+
+        commit('SET_BOOKING_RULES', rules)
+      } catch {}
+    },
+
+    async newBookingRules({commit}, rules) {
+      if(
+        JSON.parse(window.sessionStorage.rules).guarantedBooking.period === []
+        || JSON.parse(window.sessionStorage.rules).guarantedBooking.period === undefined
+        || JSON.parse(window.sessionStorage.rules).guarantedBooking.period === null
+      ) {
+        try {
+          let response = await Api().post('/api/settings/rules/guaranted', rules)
+          let responseStatus = response.data
+
+          commit('SET_RESPONSE_STATUS', responseStatus)
+        } catch {}
+      } else {
+        try {
+          let response = await Api().put('/api/settings/rules/guaranted', rules)
+          let responseStatus = response.data
+
+          commit('SET_RESPONSE_STATUS', responseStatus)
+        } catch {}
+      }
+    },
+
+    async newNotGuaranteedBookingRules({commit}, rules) {
+      if(
+        JSON.parse(window.sessionStorage.rules).unguarantedBooking.day === ''
+        || JSON.parse(window.sessionStorage.rules).unguarantedBooking.day === undefined
+        || JSON.parse(window.sessionStorage.rules).unguarantedBooking.day === null
+      ) {
+        try {
+          let response = await Api().post('/api/settings/rules/unguaranted', rules)
+          let responseStatus = response.data
+
+          commit('SET_RESPONSE_STATUS', responseStatus)
+        } catch {}
+      } else {
+        try {
+          let response = await Api().put('/api/settings/rules/unguaranted', rules)
+          let responseStatus = response.data
+
+          commit('SET_RESPONSE_STATUS', responseStatus)
+        } catch {}
+      }
+    },
+///////////////////////////////////////////////////
+
+////////////// Document forms settings ////////////
+
+    async getDocFormsInfo({commit}) {
+      try {
+        let response = await Api().get('/api/settings/documents')
+        let documentFormsSettings = response.data
+
+        commit('SET_MY_DOC_FORMS_SETTINGS', documentFormsSettings)
+      } catch {}
+    },
+
+    async docFormsGeneralSettings({commit}, docFormsSettings) {
+      try {
+        let formData = new FormData()
+        formData.append('file', docFormsSettings.myLogo)
+        formData.append('text', JSON.stringify(docFormsSettings))
+        
+        let response = await Api().put('/api/settings/documents/general', formData)
+        let responseStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', responseStatus)
+      } catch {}
+    },
+
+    async invoiceFormSettingsEdit({commit}, invoiceFormSettings) {
+      try {
+        let response = await Api().put('/api/settings/documents/invoiceForm', invoiceFormSettings)
+        let responseStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', responseStatus)
+      } catch {}
+    },
+
+    async boolingConfirmationFormSettingsEdit({commit}, boolingConfirmationFormSettings) {
+      try {
+        let response = await Api().put('/api/settings/documents/bookingConfirmationForm', boolingConfirmationFormSettings)
+        let responseStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', responseStatus)
+      } catch {}
+    },
+
+    async internalRulesFormSettingsEdit({commit}, internalRulesFormSettings) {
+      try {
+        let response = await Api().put('/api/settings/documents/internalRulesForm', internalRulesFormSettings)
+        let responseStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', responseStatus)
+      } catch {}
+    },
+
+    async checkInRulesFormSettingsEdit({commit}, checkInRulesFormSettings) {
+      try {
+        let response = await Api().put('/api/settings/documents/checkInRulesForm', checkInRulesFormSettings)
+        let responseStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', responseStatus)
+      } catch {}
+    },
+
+    async reportsFormSettingsEdit({commit}, reportsFormSettings) {
+      try {
+        let response = await Api().put('/api/settings/documents/reportsForm', reportsFormSettings)
+        let responseStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', responseStatus)
+      } catch {}
+    },
+
+    async tariffsFormSettingsEdit({commit}, tariffsFormSettings) {
+      try {
+        let response = await Api().put('/api/settings/documents/tariffsForm', tariffsFormSettings)
+        let responseStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', responseStatus)
+      } catch {}
+    },
+
+
   },
 
   modules: {

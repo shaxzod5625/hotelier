@@ -3,7 +3,7 @@
     <div class="form-filter">
       <h3>Удаление партнера</h3>
       <div class="divider"></div>
-      <h3 class="title-strong">{{partnerName.lastName}} {{partnerName.name}} {{partnerName.familyName}}</h3>
+      <h3 class="title-strong">{{partner.lastName}} {{partner.firstName}} {{partner.surName}}</h3>
       <h3 class="danger-msg">Вы собираетесь удалить данного партнера безвозвратно. Удалить партнера?</h3>
       <div class="modal-btns">
         <button
@@ -13,7 +13,10 @@
           <span>Отмена</span>
         </button>
 
-        <button class="prim-btn">
+        <button
+          class="prim-btn"
+          @click="deletePartner"
+        >
           <span>Удалить</span>
         </button>
       </div>
@@ -30,8 +33,8 @@ export default {
   name: 'DeletingAgentPartner',
 
   props: {
-    partnerName: Object,
-    partnerID: Number
+    partner: Object,
+    type: Number
   },
 
   computed: {
@@ -44,6 +47,28 @@ export default {
   methods: {
     closeModal() {
       this.$emit('closeDeletePartner')
+    },
+
+    async deletePartner() {
+      const chosenPartner = {
+        type: this.type,
+        id: this.partner._id
+      }
+      
+      try {
+        await this.$store.dispatch('deletePartner', chosenPartner)
+      } catch {}
+
+      try {
+        await this.$store.dispatch('getPartnersInfo')
+      } catch {}
+
+      this.$emit('refresh')
+      this.$emit('closeDeletePartner')
+      this.$message({
+        message: 'Партнер удален',
+        type: 'success'
+      })
     }
   }
 }
