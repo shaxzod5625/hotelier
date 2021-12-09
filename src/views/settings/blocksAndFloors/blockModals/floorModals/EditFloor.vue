@@ -903,7 +903,7 @@ export default {
       this.$emit('refresh')
       this.$emit('closeEditFloor')
       this.$message({
-        message: 'Cool! Floor is edited',
+        message: 'Изменения в информации этажа сохранены',
         type: 'success'
       })
     }

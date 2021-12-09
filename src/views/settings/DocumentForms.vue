@@ -5,43 +5,50 @@
       <InvoiceForm
       v-if="invoiceForm"
 
-      @closeInvoiceFormModal="closeInvoiceFormModal"
+        @closeInvoiceFormModal="closeInvoiceFormModal"
+        @refresh="refresh"
       />
 
       <BookingConfirmationForm
         v-if="bookingConfForm"
 
         @closeBookingConfFormModal="closeBookingConfFormModal"
+        @refresh="refresh"
       />
 
       <BookingCancellationForm
         v-if="bookingCancelForm"
 
         @closeBookingCancelFormModal="closeBookingCancelFormModal"
+        @refresh="refresh"
       />
 
       <InternalRulesForm
         v-if="internalRulesForm"
 
         @closeInternalRulesFormModal="closeInternalRulesFormModal"
+        @refresh="refresh"
       />
 
       <CheckInRulesForm
         v-if="checkInRulesForm"
 
         @closeCheckInRulesFormModal="closeCheckInRulesFormModal"
+        @refresh="refresh"
       />
 
       <ReportsForm
         v-if="reportsForm"
 
         @closeReportsFormModal="closeReportsFormModal"
+        @refresh="refresh"
       />
       
       <TariffsForm
         v-if="tariffsForm"
 
         @closeTariffsFormModal="closeTariffsFormModal"
+        @refresh="refresh"
       />
     </transition>
 
@@ -264,11 +271,19 @@ export default {
     internalRulesForm: false,
     invoiceForm: false,
     reportsForm: false,
-    tariffsForm: false,
-
+    tariffsForm: false
   }),
 
+  computed: {
+  },
+
   methods: {
+    async getDocFormsInfo() {
+      try {
+        await this.$store.dispatch('getDocFormsInfo')
+      } catch {}
+    },
+
     closeBookingConfFormModal() {
       this.bookingConfForm = false
     },
@@ -295,6 +310,10 @@ export default {
 
     closeTariffsFormModal() {
       this.tariffsForm = false
+    },
+
+    refresh() {
+      this.$forceUpdate(this.getDocFormsInfo)
     }
   }
 }

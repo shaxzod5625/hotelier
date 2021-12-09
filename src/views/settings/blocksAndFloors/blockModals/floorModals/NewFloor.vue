@@ -348,7 +348,8 @@ export default {
   },
 
   props: {
-    blockID: String
+    blockID: String,
+    amountOfFloors: Number
   },
 
   computed: {
@@ -780,30 +781,41 @@ export default {
       }
 
       const floor = {
+        level: this.floorLevel,
         blockID: this.blockID,
-        name: this.floorName
+        name: this.floorName,
+        rooms: this.checkedRooms,
+        numberFloor: this.amountOfFloors+1
       }
 
       console.log(floor);
 
-      // try {
-      //   await this.$store.dispatch('newFloor', floor)
-      // } catch {}
+      try {
+        await this.$store.dispatch('newFloor', floor)
+      } catch {}
 
-      // try {
-      //   await this.$store.dispatch('getBlocksInfo')
-      // } catch(err) {
-      //   if(err === undefined || err === null || err === '') {
-      //     console.log(err);
-      //   }
-      // }
+      try {
+        await this.$store.dispatch('getBlocksInfo')
+      } catch(err) {
+        if(err === undefined || err === null || err === '') {
+          console.log(err);
+        }
+      }
 
-      // this.$emit('refresh')
-      // this.$emit('closeEditFloor')
-      // this.$message({
-      //   message: 'Cool! Floor is added',
-      //   type: 'success'
-      // })
+      try {
+        await this.$store.dispatch('getRoomsCount')
+      } catch(err) {
+        if(err === undefined || err === null || err === '') {
+          console.log(err);
+        }
+      }
+
+      this.$emit('refresh')
+      this.$emit('closeNewFloor')
+      this.$message({
+        message: 'Новый этаж добавлен',
+        type: 'success'
+      })
     }
   }
 }

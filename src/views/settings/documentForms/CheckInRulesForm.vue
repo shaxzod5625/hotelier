@@ -30,6 +30,7 @@
         class="form-1"
         v-for="(ruleInputs, idx) in rules"
         :key="idx"
+        :set="v = $v.rules.$each[idx]"
       >
         <div
           class="w-100"
@@ -39,9 +40,10 @@
           <el-input
             v-model="ruleInputs.ruleUzb"
             type="textarea"
-            placeholder="Введите правило проживания на узбекском"
-          >
-          </el-input>
+            placeholder="Введите правило заезда на узбекском"
+            :class="{invalid: (v.ruleUzb.$dirty && !v.ruleUzb.required)}"
+          />
+          <span v-if="v.ruleUzb.$dirty && !v.ruleUzb.required" class="validation-error">Пожалуйста, введите правило заезда на узбекском</span>
         </div>
 
         <div
@@ -52,9 +54,10 @@
           <el-input
             v-model="ruleInputs.ruleRus"
             type="textarea"
-            placeholder="Введите правило проживания на русском"
-          >
-          </el-input>
+            placeholder="Введите правило заезда на русском"
+            :class="{invalid: (v.ruleRus.$dirty && !v.ruleRus.required)}"
+          />
+          <span v-if="v.ruleRus.$dirty && !v.ruleRus.required" class="validation-error">Пожалуйста, введите правило заезда на русском</span>
         </div>
 
         <div
@@ -65,9 +68,10 @@
           <el-input
             v-model="ruleInputs.ruleEng"
             type="textarea"
-            placeholder="Введите правило проживания на английском"
-          >
-          </el-input>
+            placeholder="Введите правило заезда на английском"
+            :class="{invalid: (v.ruleEng.$dirty && !v.ruleEng.required)}"
+          />
+          <span v-if="v.ruleEng.$dirty && !v.ruleEng.required" class="validation-error">Пожалуйста, введите правило заезда на английском</span>
         </div>
 
         <div class="input-grid-btns">
@@ -91,6 +95,12 @@
         </div>
       </div>
 
+<!-- //////////// Hidden computed //////////// -->
+      <h4 style="display: none">{{uzbRequired}}</h4>
+      <h4 style="display: none">{{rusRequired}}</h4>
+      <h4 style="display: none">{{engRequired}}</h4>
+<!-- ///////////////////////////////////////// -->
+
       <div class="input-grid-btns">
         <button
           class="sec-btn"
@@ -101,6 +111,7 @@
 
         <button
           class="prim-btn"
+          @click="checkInRulesFormSettingsEdit"
         >
           Сохранить
         </button>
@@ -115,6 +126,8 @@
 </template>
 
 <script>
+import {required} from 'vuelidate/lib/validators'
+
 export default {
   name: 'CheckInRulesForm',
 
@@ -133,6 +146,45 @@ export default {
     ]
   }),
 
+  validations() {
+    return {
+      formLangs: {required},
+      rules: {
+        $each: {
+          ruleUzb: this.uzbRequired,
+          ruleRus: this.rusRequired,
+          ruleEng: this.engRequired
+        }
+      }
+    }
+  },
+
+  computed: {
+    uzbRequired() {
+      if(this.formLangs.includes('uzb')) {
+        return {required}
+      } else {
+        return ''
+      }
+    },
+
+    rusRequired() {
+      if(this.formLangs.includes('rus')) {
+        return {required}
+      } else {
+        return ''
+      }
+    },
+
+    engRequired() {
+      if(this.formLangs.includes('eng')) {
+        return {required}
+      } else {
+        return ''
+      }
+    },
+  },
+
   methods: {
     closeModal() {
       this.$emit('closeCheckInRulesFormModal')
@@ -149,6 +201,31 @@ export default {
     removeRules (idx) {
       this.rules.splice(idx, 1)
     },
+
+    async checkInRulesFormSettingsEdit() {
+      if(this.$v.$invalid) {
+        this.$v.$touch()
+        return
+      }
+
+      const checkInRulesFormSettings = {
+        formLangs: this.formLangs,
+        rules: this.rules
+      }
+
+      console.log(checkInRulesFormSettings);
+
+      // try {
+      //   await this.$store.dispatch('checkInRulesFormSettingsEdit', checkInRulesFormSettings)
+      // } catch {}
+
+      // this.$emit('refresh')
+      // this.$emit('closeCheckInRulesFormModal')
+      this.$message({
+        message: 'Изменения в настройках формы правил заезда сохранены',
+        type: 'success'
+      })
+    }
   }
 }
 </script>

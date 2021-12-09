@@ -177,6 +177,12 @@ export default {
       } else if(name === 'blocks') {
         await this.$store.dispatch('getBlocksInfo')
         await this.$store.dispatch('getRoomsCount')
+      } else if(name === 'partners') {
+        await this.$store.dispatch('getPartnersInfo')
+      } else if(name === 'bookingRules') {
+        await this.$store.dispatch('getBookingRulesInfo')
+      } else if(name === 'documents') {
+        await this.$store.dispatch('getDocFormsInfo')
       }
     },
 

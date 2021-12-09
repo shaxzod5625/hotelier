@@ -31,6 +31,7 @@
         @refresh="refresh"
 
         :blockID="currentBlock._id"
+        :amountOfFloors="currentBlock.floors.length"
       />
     </transition>
 

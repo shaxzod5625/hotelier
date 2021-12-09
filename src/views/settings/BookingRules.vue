@@ -6,12 +6,14 @@
         v-if="guaranteedBookingModal"
 
         @closeGuaranteedBooking="closeGuaranteedBooking"
+        @refresh="refresh"
       />
 
       <NotGuaranteedBooking
         v-if="notguaranteedBookingModal"
 
         @closeNotGuaranteedBooking="closeNotGuaranteedBooking"
+        @refresh="refresh"
       />
     </transition>
 
@@ -46,9 +48,27 @@
             <div class="rule">
               <h4>Время бесплатной отмены:</h4>
             </div>
-            <div class="rule-prop">
-              <h4>rule property</h4>
+
+            <div
+              class="rule-prop"
+              v-if="
+                bookingRules.guarantedBooking.period === []
+                || bookingRules.guarantedBooking.period === undefined
+                || bookingRules.guarantedBooking.period === null
+              "
+            >
+              <h4>Пусто</h4>
             </div>
+
+            <div
+              class="rule-prop"
+              v-else
+            >
+              <h4>
+                {{bookingRules.guarantedBooking.period[0].freeCancellationPeriod}}
+              </h4>
+            </div>
+
           </div>
         </div>
 
@@ -57,9 +77,26 @@
             <div class="rule">
               <h4>Штраф за позднюю отмену:</h4>
             </div>
-            <div class="rule-prop">
-              <h4>rule property</h4>
+
+            <div
+              class="rule-prop"
+              v-if="
+                bookingRules.guarantedBooking.period === []
+                || bookingRules.guarantedBooking.period === undefined
+                || bookingRules.guarantedBooking.period === null
+              "
+            >
+              <h4>Пусто</h4>
             </div>
+
+            <div
+              class="rule-prop"
+              v-else
+            >
+              <h4 v-if="bookingRules.guarantedBooking.period[0].penaltyType === 'fixedAmount'">{{bookingRules.guarantedBooking.period[0].fixedSoum}}</h4>
+              <h4 v-else>{{bookingRules.guarantedBooking.period[0].penaltyProcent}}</h4>
+            </div>
+
           </div>
         </div>
 
@@ -68,9 +105,34 @@
             <div class="rule">
               <h4>Типы гарантии:</h4>
             </div>
-            <div class="rule-prop">
-              <h4>rule property</h4>
+
+            <div
+              class="rule-prop"
+              v-if="
+                bookingRules.guarantedBooking.period === []
+                || bookingRules.guarantedBooking.period === undefined
+                || bookingRules.guarantedBooking.period === null
+              "
+            >
+              <h4>Пусто</h4>
             </div>
+
+            <div
+              class="rule-prop"
+              v-else
+            >
+              <h4 v-if="bookingRules.guarantedBooking.typeOfGuarante.length > 2">
+                {{checkedGuaranteeTypes(bookingRules.guarantedBooking.typeOfGuarante[0])}},
+                {{checkedGuaranteeTypes(bookingRules.guarantedBooking.typeOfGuarante[1])}},
+                (+{{bookingRules.guarantedBooking.typeOfGuarante.length - 2}})
+              </h4>
+              <h4 v-if="bookingRules.guarantedBooking.typeOfGuarante.length === 2">
+                {{checkedGuaranteeTypes(bookingRules.guarantedBooking.typeOfGuarante[0])}},
+                {{checkedGuaranteeTypes(bookingRules.guarantedBooking.typeOfGuarante[1])}}
+              </h4>
+              <h4 v-if="bookingRules.guarantedBooking.typeOfGuarante.length < 2">{{checkedGuaranteeTypes(bookingRules.guarantedBooking.typeOfGuarante[0])}}</h4>
+            </div>
+
           </div>
         </div>
       </div>
@@ -96,9 +158,25 @@
             <div class="rule">
               <h4>Время уведомления:</h4>
             </div>
-            <div class="rule-prop">
-              <h4>rule property</h4>
+
+            <div
+              class="rule-prop"
+              v-if="
+                bookingRules.unguarantedBooking.period === ''
+                || bookingRules.unguarantedBooking.period === undefined
+                || bookingRules.unguarantedBooking.period === null
+              "
+            >
+              <h4>Пусто</h4>
             </div>
+
+            <div
+              class="rule-prop"
+              v-else
+            >
+              <h4>{{bookingRules.unguarantedBooking.period}}</h4>
+            </div>
+
           </div>
         </div>
 
@@ -107,9 +185,27 @@
             <div class="rule">
               <h4>Период уведомления перед заездом:</h4>
             </div>
-            <div class="rule-prop">
-              <h4>rule property</h4>
+
+            <div
+              class="rule-prop"
+              v-if="
+                bookingRules.unguarantedBooking.displayTime === ''
+                || bookingRules.unguarantedBooking.displayTime === undefined
+                || bookingRules.unguarantedBooking.displayTime === null
+              "
+            >
+              <h4>Пусто</h4>
             </div>
+
+            <div
+              class="rule-prop"
+              v-else
+            >
+              <h4>{{bookingRules.unguarantedBooking.displayTime}}</h4>
+            </div>
+
+            
+
           </div>
         </div>
       </div>
@@ -131,15 +227,42 @@ export default {
   data:() => ({
     guaranteedBookingModal: false,
     notguaranteedBookingModal: false,
+
+    bookingRules: JSON.parse(window.sessionStorage.rules)
   }),
 
+  computed: {
+    
+  },
+
   methods: {
+    checkedGuaranteeTypes(type) {
+      if(type === 'visa'){return 'Visa'}
+      if(type === 'masterCard'){return 'MasterCard'}
+      if(type === 'maestro'){return 'Maestro'}
+      if(type === 'unionPay'){return 'UnionPay'}
+      if(type === 'mir'){return 'Карты МИР'}
+      if(type === 'uzCard'){return 'UzCard'}
+      if(type === 'humo'){return 'HUMO'}
+      if(type === 'corporativeContract'){return 'Корпоративный договор'}
+      if(type === 'guaranteeLetter'){return 'Гарантийное письмо'}
+      if(type === 'companyAgentGuarantee'){return 'Гарантия агента или компании'}
+    },
+    
+    getBookingRules() {
+      this.bookingRules = JSON.parse(window.sessionStorage.rules)
+    },
+
     closeGuaranteedBooking() {
       this.guaranteedBookingModal = false
     },
 
     closeNotGuaranteedBooking() {
       this.notguaranteedBookingModal = false
+    },
+
+    refresh() {
+      this.$forceUpdate(this.getBookingRules())
     }
   }
 }

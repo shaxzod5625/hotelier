@@ -13,8 +13,8 @@
       <h4>Применить настройки к следующим документам:</h4>
 
       <div class="checkbox-group-div">
-        <el-checkbox-group v-model="checkedForms" @change="checkedDocForms">
-          <el-checkbox v-for="form in forms" :label="form" :key="form">{{form}}</el-checkbox>
+        <el-checkbox-group v-model="checkedForms">
+          <el-checkbox v-for="form in forms" :label="form.value" :key="form.value">{{form.label}}</el-checkbox>
         </el-checkbox-group>
       </div>
 
@@ -63,15 +63,27 @@
       <h4>Логотип компании</h4>
 
       <div class="file-input">
-        <input class="shown-input">
-        <input class="hidden-input" type="file" name="" id="">
-        <h4 class="shown-input-placeholder">Загрузить фото</h4>
+        <img class="logo" v-if="myLogo !== null" :src="logoLink" alt="">
+        <input v-else class="shown-input">
+        <input
+          class="hidden-input"
+          type="file"
+          name=""
+          id=""
+          @change="handleFileUpload"
+          accept=" .png, .gif, .jpeg, .jpg, .svg"
+        >
+        <h4 v-if="JSON.parse(docForms).myLogo === null" class="shown-input-placeholder">Загрузить фото</h4>
 
         <div class="warning-text">
           <img src="@/assets/icons/Warning-red-sm.svg" alt="">
           <h3>Максимальный размер файла 5 МБ. Поддерживаются форматы SVG, PNG и JPEG.</h3>
         </div>
       </div>
+
+<!-- ///////// Hidden computed ///////////// -->
+      <h4 style="display: none">{{setInfo}}</h4>
+<!-- /////////////////////////////////////// -->
 
       <div class="input-grid-btns">
         <router-link
@@ -84,6 +96,7 @@
 
         <button
           class="prim-btn"
+          @click="docFormsGeneralSettings"
         >
           Сохранить
         </button>
@@ -95,28 +108,74 @@
 
 <script>
 
-
-const docForms = ['Инвойс', 'Подтверждение брони', 'Аннуляция брони', 'Внутренние правила', 'Правила заезда', 'Отчёты', 'Реестр кассы', 'Тарифы и цены']
-
 export default {
   name: 'DocFormsSettings',
 
   data:() => ({
-    checkedForms: ['Инвойс', 'Подтверждение брони', 'Внутренние правила'],
-    forms: docForms,
+    docForms: JSON.parse(window.sessionStorage.documentFormsSettings).documentFormat.general,
+    checkedForms: ['invoice',
+      'bookingConfirmation',
+      'residingRules',
+      'bookingCancellation'
+    ],
+    forms: [
+      {label: 'Инвойс', value: 'invoice'},
+      {label: 'Подтверждение брони', value: 'bookingConfirmation'},
+      {label: 'Аннуляция брони', value: 'bookingCancellation'},
+      {label: 'Внутренние правила', value: 'residingRules'},
+      {label: 'Правила заезда', value: 'checkInRules'},
+      {label: 'Отчёты', value: 'reports'},
+      {label: 'Реестр кассы', value: 'cashierBoxReestr'},
+      {label: 'Тарифы и цены', value: 'tariffs'}
+    ],
 
-    slogan: [
-      {uzb: ''},
-      {rus: ''},
-      {eng: ''},
-      ]
+    slogan: {
+      uzb: '',
+      rus: '',
+      eng: '',
+    },
+
+    myLogo: ''
   }),
 
+  computed: {
+    setInfo() {
+      this.checkedForms = JSON.parse(this.docForms).checkedForms,
+      this.slogan = JSON.parse(this.docForms).slogan,
+      this.myLogo = JSON.parse(this.docForms).myLogo
+    },
+
+    logoLink() {
+      const logo = JSON.parse(this.docForms).myLogo
+      return `http://hotelier.uz:3000/logos/${logo}`
+    }
+  },
+
   methods: {
-    checkedDocForms(value) {
-      let checkedCount = value.length;
-      this.checkAll === checkedCount === this.forms.length;
-      this.isIndeterminate === checkedCount > 0 && checkedCount < this.forms.length;
+    async docFormsGeneralSettings() {
+      const docFormsSettings = {
+        slogan: this.slogan,
+        checkedForms: this.checkedForms,
+        myLogo: this.myLogo
+      }
+
+      try {
+        await this.$store.dispatch('docFormsGeneralSettings', docFormsSettings)
+      } catch {}
+
+      try {
+        await this.$store.dispatch('getDocFormsInfo')
+      } catch {}
+
+      this.$router.push({ path: '/settings/document-forms' })
+      this.$message({
+        message: 'Изменения в общих настройках сохранены',
+        type: 'success'
+      })
+    },
+
+    handleFileUpload(event) {
+      this.myLogo = event.target.files[0]
     }
   }
 }

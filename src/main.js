@@ -22,7 +22,7 @@ Vue.use(VueApexCharts)
 Vue.use(VueTheMask)
 Vue.use(MaskedInput)
 Vue.use(createNumberMask)
-Vue.use(money, {precision: 4})
+Vue.use(money, {precision: 0})
 
 
 Vue.directive("uppercase", {

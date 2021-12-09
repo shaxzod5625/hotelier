@@ -60,41 +60,48 @@
         class="form-1"
         v-for="(ruleInputs, idx) in rules"
         :key="idx"
+        :set="v = $v.rules.$each[idx]"
       >
         <div
           class="w-100"
-          v-show="formLangs.includes('uzb')"
+          v-if="formLangs.includes('uzb')"
         >
           <label for="input">Правило на узбекском</label>
           <el-input
             v-model="ruleInputs.ruleUzb"
             type="textarea"
             placeholder="Введите правило проживания на узбекском"
+            :class="{invalid: (v.ruleUzb.$dirty && !v.ruleUzb.required)}"
           />
+          <span v-if="v.ruleUzb.$dirty && !v.ruleUzb.required" class="validation-error">Пожалуйста, введите правило проживания на узбекском</span>
         </div>
 
         <div
           class="w-100"
-          v-show="formLangs.includes('rus')"
+          v-if="formLangs.includes('rus')"
         >
           <label for="input">Правило на русском</label>
           <el-input
             v-model="ruleInputs.ruleRus"
             type="textarea"
             placeholder="Введите правило проживания на русском"
+            :class="{invalid: (v.ruleRus.$dirty && !v.ruleRus.required)}"
           />
+          <span v-if="v.ruleRus.$dirty && !v.ruleRus.required" class="validation-error">Пожалуйста, введите правило проживания на русском</span>
         </div>
 
         <div
           class="w-100"
-          v-show="formLangs.includes('eng')"
+          v-if="formLangs.includes('eng')"
         >
           <label for="input">Правило на английском</label>
           <el-input
             v-model="ruleInputs.ruleEng"
             type="textarea"
             placeholder="Введите правило проживания на английском"
+            :class="{invalid: (v.ruleEng.$dirty && !v.ruleEng.required)}"
           />
+          <span v-if="v.ruleEng.$dirty && !v.ruleEng.required" class="validation-error">Пожалуйста, введите правило проживания на английском</span>
         </div>
 
         <div class="input-grid-btns">
@@ -118,18 +125,25 @@
         </div>
       </div>
 
+<!-- //////////// Hidden computed //////////// -->
+      <h4 style="display: none">{{uzbRequired}}</h4>
+      <h4 style="display: none">{{rusRequired}}</h4>
+      <h4 style="display: none">{{engRequired}}</h4>
+<!-- ///////////////////////////////////////// -->
+
       <div class="input-grid-btns">
         <button
           class="sec-btn"
           @click="closeModal"
         >
-          Cancel
+          Отмена
         </button>
 
         <button
           class="prim-btn"
+          @click="internalRulesFormSettingsEdit"
         >
-          Save
+          Сохранить
         </button>
       </div>
     </div>
@@ -143,6 +157,7 @@
 
 <script>
 import RadioButton from '@/components/RadioButton.vue'
+import {required} from 'vuelidate/lib/validators'
 
 export default {
   name: 'InternalRulesForm',
@@ -167,6 +182,46 @@ export default {
     ],
   }),
 
+  validations() {
+    return {
+      formLangs: {required},
+      formLangs: {required},
+      rules: {
+        $each: {
+          ruleUzb: this.uzbRequired,
+          ruleRus: this.rusRequired,
+          ruleEng: this.engRequired
+        }
+      }
+    }
+  },
+
+  computed: {
+    uzbRequired() {
+      if(this.formLangs.includes('uzb')) {
+        return {required}
+      } else {
+        return ''
+      }
+    },
+
+    rusRequired() {
+      if(this.formLangs.includes('rus')) {
+        return {required}
+      } else {
+        return ''
+      }
+    },
+
+    engRequired() {
+      if(this.formLangs.includes('eng')) {
+        return {required}
+      } else {
+        return ''
+      }
+    },
+  },
+
   methods: {
     closeModal() {
       this.$emit('closeInternalRulesFormModal')
@@ -183,6 +238,33 @@ export default {
     removeRules (idx) {
       this.rules.splice(idx, 1)
     },
+
+    internalRulesFormSettingsEdit() {
+      if(this.$v.$invalid) {
+        this.$v.$touch()
+        return
+      }
+
+      const internalRulesFormSettings = {
+        formLangs: this.formLangs,
+        selectedOrientation: this.selectedOrientation,
+        rules: this.rules,
+        formLangs: this.formLangs,
+      }
+
+      console.log(internalRulesFormSettings);
+
+      // try {
+      //   await this.$store.dispatch('internalRulesFormSettingsEdit', internalRulesFormSettings)
+      // } catch {}
+
+      // this.$emit('refresh')
+      // this.$emit('closeInternalRulesFormModal')
+      this.$message({
+        message: 'Изменения в настройках формы внутренних правил сохранены',
+        type: 'success'
+      })
+    }
   }
 }
 </script>

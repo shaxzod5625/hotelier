@@ -6,8 +6,12 @@
       
       <div class="pad-24">
         <label for="select">Номер договора</label>
-        <el-input v-model="contractNumber" placeholder="Введите номер договора">
-        </el-input>
+        <el-input
+          v-model="contractNumber"
+          placeholder="Введите номер договора"
+          :class="{invalid: ($v.contractNumber.$dirty && !$v.contractNumber.required)}"
+        />
+        <span v-if="$v.contractNumber.$dirty && !$v.contractNumber.required" class="validation-error">Sometext</span>
       </div>
 
       <div class="pad-24">
@@ -18,8 +22,10 @@
           type="date"
           placeholder="Введите дату заключения договора"
           format="dd/MM/yyyy"
-        >
-        </el-date-picker>
+          v-mask="'##/##/####'"
+          :class="{invalid: ($v.contractStartDate.$dirty && !$v.contractStartDate.required)}"
+        />
+        <span v-if="$v.contractStartDate.$dirty && !$v.contractStartDate.required" class="validation-error">Sometext</span>
       </div>
 
       <div class="pad-24">
@@ -30,8 +36,10 @@
           type="date"
           placeholder="Введите дату окончания срока договора"
           format="dd/MM/yyyy"
-        >
-        </el-date-picker>
+          v-mask="'##/##/####'"
+          :class="{invalid: ($v.contractStopDate.$dirty && !$v.contractStopDate.required)}"
+        />
+        <span v-if="$v.contractStopDate.$dirty && !$v.contractStopDate.required" class="validation-error">Sometext</span>
       </div>
 
       <div class="modal-btns">
@@ -44,6 +52,7 @@
 
         <button
           class="prim-btn"
+          @click="newContract"
         >
           Добавить
         </button>
@@ -57,6 +66,8 @@
 </template>
 
 <script>
+import {required} from 'vuelidate/lib/validators'
+
 export default {
   name: 'ContractProlongation',
 
@@ -66,9 +77,53 @@ export default {
     contractStopDate: '',
   }),
 
+  props: {
+    type: String,
+    id: String
+  },
+
+  validations: {
+    contractNumber: {required},
+    contractStartDate: {required},
+    contractStopDate: {required}
+  },
+
   methods: {
     closeModal() {
       this.$emit('closeProlongationModal')
+    },
+
+    async newContract() {
+      if(this.$v.$invalid) {
+        this.$v.$touch()
+        return
+      }
+      
+      const start = new Date(this.contractStartDate)
+      const stop = new Date(this.contractStopDate)
+
+      const contract = {
+        type: this.type,
+        id: this.id,
+        contractNumber: this.contractNumber,
+        startedDate: start,
+        finishedDate: stop
+      }
+
+      try {
+        await this.$store.dispatch('newContract', contract)
+      } catch {}
+
+      try {
+        await this.$store.dispatch('getPartnersInfo')
+      } catch {}
+
+      this.$emit('refresh')
+      this.$emit('closeProlongationModal')
+      this.$message({
+        message: 'Новый контракт (договор) добавлен в информацию партнера',
+        type: 'success'
+      })
     }
   }
 }
