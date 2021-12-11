@@ -43,6 +43,10 @@
 
       </div>
 
+<!-- //////// Hidden computed ////////// -->
+<h4 style="display: none">{{setInfo}}</h4>
+<!-- /////////////////////////////////// -->
+
       <div class="input-grid-btns">
         <button
           class="sec-btn"
@@ -79,29 +83,35 @@ export default {
   },
 
   data:() => ({
+    tariffsForm: JSON.parse(window.sessionStorage.documentFormsSettings).documentFormat.tariffsAndPrices,
     selectedOrientation: 'bookOrientation',
     showTariffsTerm: true,
   }),
+
+  computed: {
+    setInfo() {
+      this.selectedOrientation = JSON.parse(this.tariffsForm).selectedOrientation,
+      this.showTariffsTerm = JSON.parse(this.tariffsForm).showTariffsTerm
+    }
+  },
 
   methods: {
     closeModal() {
       this.$emit('closeTariffsFormModal')
     },
 
-    tariffsFormSettingsEdit() {
+    async tariffsFormSettingsEdit() {
       const tariffsFormSettings = {
         selectedOrientation: this.selectedOrientation,
         showTariffsTerm: this.showTariffsTerm,
       }
 
-      console.log(tariffsFormSettings);
+      try {
+        await this.$store.dispatch('tariffsFormSettingsEdit', tariffsFormSettings)
+      } catch {}
 
-      // try {
-      //   await this.$store.dispatch('tariffsFormSettingsEdit', tariffsFormSettings)
-      // } catch {}
-
-      // this.$emit('refresh')
-      // this.$emit('closeTariffsFormModal')
+      this.$emit('refresh')
+      this.$emit('closeTariffsFormModal')
       this.$message({
         message: 'Изменения в настройках формы тарифов сохранены',
         type: 'success'

@@ -9,6 +9,7 @@
           <label for="input">Категория услуги</label>
           <el-select
             v-model="service.category"
+            disabled
             placeholder="Выберите категорию услуг"
           >
             <el-option>

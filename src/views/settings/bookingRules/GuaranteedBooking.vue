@@ -196,14 +196,16 @@ export default {
     }
   }),
 
-  validations: {
-    checkedGuaranteeTypes: {required},
-    rules: {
-      $each:{
-        freeCancellationPeriod: {required},
-        fixedSoum: {required},
-        penaltyProcent: {required},
-        penaltyType: {required}
+  validations() {
+    return {
+      checkedGuaranteeTypes: {required},
+      rules: {
+        $each:{
+          freeCancellationPeriod: {required},
+          fixedSoum: this.fixedSoumRequired,
+          penaltyProcent: this.procentRequired,
+          penaltyType: {required}
+        }
       }
     }
   },
@@ -212,6 +214,22 @@ export default {
     setBookingRulesInfo() {
       this.rules = JSON.parse(window.sessionStorage.rules).guarantedBooking.period
       this.checkedGuaranteeTypes = JSON.parse(window.sessionStorage.rules).guarantedBooking.typeOfGuarante
+    },
+
+    procentRequired() {
+      if(this.penaltyType === 'procent') {
+        return {required}
+      } else {
+        return ''
+      }
+    },
+
+    fixedSoumRequired() {
+      if(this.penaltyType === 'fixedAmount') {
+        return {required}
+      } else {
+        return ''
+      }
     },
   },
 
@@ -236,6 +254,7 @@ export default {
 
     async newBookingRules() {
       if(this.$v.$invalid) {
+        console.log('invalid');
         this.$v.$touch()
         return
       }

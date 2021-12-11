@@ -96,6 +96,7 @@
       </div>
 
 <!-- //////////// Hidden computed //////////// -->
+      <h4 style="display: none">{{setInfo}}</h4>
       <h4 style="display: none">{{uzbRequired}}</h4>
       <h4 style="display: none">{{rusRequired}}</h4>
       <h4 style="display: none">{{engRequired}}</h4>
@@ -132,6 +133,7 @@ export default {
   name: 'CheckInRulesForm',
 
   data:() => ({
+    checkInRulesForm: JSON.parse(window.sessionStorage.documentFormsSettings).documentFormat.checkInRules,
     formLangs: ['rus'],
 
     rules: [{
@@ -160,6 +162,11 @@ export default {
   },
 
   computed: {
+    setInfo() {
+      this.formLangs = JSON.parse(this.checkInRulesForm).formLangs,
+      this.rules = JSON.parse(this.checkInRulesForm).rules
+    },
+
     uzbRequired() {
       if(this.formLangs.includes('uzb')) {
         return {required}
@@ -213,14 +220,12 @@ export default {
         rules: this.rules
       }
 
-      console.log(checkInRulesFormSettings);
+      try {
+        await this.$store.dispatch('checkInRulesFormSettingsEdit', checkInRulesFormSettings)
+      } catch {}
 
-      // try {
-      //   await this.$store.dispatch('checkInRulesFormSettingsEdit', checkInRulesFormSettings)
-      // } catch {}
-
-      // this.$emit('refresh')
-      // this.$emit('closeCheckInRulesFormModal')
+      this.$emit('refresh')
+      this.$emit('closeCheckInRulesFormModal')
       this.$message({
         message: 'Изменения в настройках формы правил заезда сохранены',
         type: 'success'

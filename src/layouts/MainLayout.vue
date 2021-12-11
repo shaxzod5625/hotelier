@@ -250,7 +250,7 @@ export default {
       // sessionStorage.removeItem('employees')
 
       this.$router.push('/login')
-      await this.$store.dispatch('logout')
+      // await this.$store.dispatch('logout')
     },
 
     async getInfo(path) {

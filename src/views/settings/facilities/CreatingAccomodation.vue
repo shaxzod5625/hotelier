@@ -10,11 +10,16 @@
           <el-select
             v-model="category"
             placeholder="Выберите категорию удобства"
+            :class="{invalid: ($v.category.$dirty && !$v.category.required)}"
           >
-            <el-options>
-
-            </el-options>
+            <el-option
+              v-for="(type, idx) in categories"
+              :key="idx"
+              :label="(setCatLabel(type.category))"
+              :value="type.category"
+            />
           </el-select>
+          <span v-if="$v.category.$dirty && !$v.category.required" class="validation-error">Пожалуйста, выберите категорию удобства</span>
         </div>
 
         <div class="w-100">
@@ -22,7 +27,9 @@
           <el-input
             v-model="name"
             placeholder="Введите название удобства"
-          ></el-input>
+            :class="{invalid: ($v.name.$dirty && !$v.name.required)}"
+          />
+          <span v-if="$v.name.$dirty && !$v.name.required" class="validation-error">Пожалуйста, введите название удобства</span>
         </div>
 
         <div class="w-100">
@@ -30,11 +37,16 @@
           <el-select
             v-model="measurementUnit"
             placeholder="Выберите единицу измерения"
+            :class="{invalid: ($v.measurementUnit.$dirty && !$v.measurementUnit.required)}"
           >
-            <el-options>
-              
-            </el-options>
+            <el-option
+              v-for="(type, idx) in measurementUnitTypes"
+              :key="idx"
+              :label="type.label"
+              :value="type.value"
+            />
           </el-select>
+          <span v-if="$v.measurementUnit.$dirty && !$v.measurementUnit.required" class="validation-error">Пожалуйста, выберите единицу измерения</span>
         </div>
       </div>
 
@@ -45,20 +57,27 @@
             v-model="payFreeRoomCats"
             placeholder="Выберите категории номеров"
           >
-            <el-options>
-
-            </el-options>
+            <el-option
+              v-for="(category, idx) in allRooms"
+              :key="idx"
+              :value="category.category"
+              :label="categoryLabel(category.category)"
+            />
           </el-select>
         </div>
 
         <div class="w-100">
-          <label for="input">Стоимость</label>
-          <el-input
+          <label for="input">Стоимость (удобство будет считаться бесплатным при цене 0 UZS)</label>
+          <money
+            class="money-input"
             v-model="cost"
+            v-bind="money"
             placeholder="Введите стоимость услуги (SUM)"
-          ></el-input>
+          />
         </div>
       </div>
+
+      <h4>{{setPreLoaderState}}</h4>
 
       <div class="input-grid-btns">
         <button
@@ -70,6 +89,7 @@
 
         <button
           class="prim-btn"
+          @click="createAccomodation"
         >
           Добавить
         </button>
@@ -84,6 +104,8 @@
 </template>
 
 <script>
+import {required} from 'vuelidate/lib/validators'
+
 export default {
   name: 'CreatingAccomodation',
 
@@ -91,13 +113,136 @@ export default {
     category: '',
     name: '',
     measurementUnit: '',
-    payFreeRoomCats: '',
+    payFreeRoomCats: [],
     cost: '',
+    allRooms: JSON.parse(window.sessionStorage.allRoomCats).categories,
+
+    money: {
+      decimal: '',
+      thousands: ' ',
+      prefix: '',
+      suffix: ' UZS',
+      precision: 0,
+      masked: true
+    }
   }),
 
+  validations: {
+    category: {required},
+    name: {required},
+    measurementUnit: {required}
+  },
+
+  computed: {
+    setPreLoaderState() {
+      const preloader = this.$store.state.preloader
+      return preloader
+    },
+
+    setAccomodationsCategories() {
+      const accomodations = this.$store.state.accomodations
+      const length = accomodations.length
+      const sorted = []
+      
+      for (let i = 0; i < length; i ++) {
+        sorted.push({
+          category: accomodations[i].category
+        })
+      }
+
+      return sorted
+    },
+
+    categories() {
+      var result = this.setAccomodationsCategories.reduce((unique, o) => {
+        if(!unique.some(obj => obj.category === o.category)) {
+          unique.push(o);
+        }
+        return unique;
+      },[]);
+
+      return result.sort(function(a, b){
+        let x = a.category.toLowerCase();
+        let y = b.category.toLowerCase();
+        if (x < y) {return -1;}
+        if (x > y) {return 1;}
+        return 0;
+      })
+    },
+
+    measurementUnitTypes() {
+      const types = this.$store.state.measurementUnitTypes
+
+      return types.sort(function(a, b){
+        let x = a.label.toLowerCase();
+        let y = b.label.toLowerCase();
+        if (x < y) {return -1;}
+        if (x > y) {return 1;}
+        return 0;
+      })
+    }
+  },
+
   methods: {
+    setCatLabel(category) {
+      if(category === 'main'){return 'Основные'}
+      else if(category === 'additional'){return 'Дополнительные'}
+      else if(category === 'extra'){return 'Экстра'}
+    },
+
     closeModal() {
       this.$emit('closeCreatingAccomodationModal')
+    },
+
+    categoryLabel(catValue) {
+      if(catValue === 'apartment') {return 'Апартаменты'}
+      else if(catValue === 'bungalow') {return 'Бунгало'}
+      else if(catValue === 'deluxe') {return 'Делюкс'}
+      else if(catValue === 'honeymoonRoom') {return 'Для молодоженов'}
+      else if(catValue === 'duplex') {return 'Дюплекс'}
+      else if(catValue === 'suite') {return 'Люкс'}
+      else if(catValue === 'cabana') {return 'Коттедж'}
+      else if(catValue === 'juniorSuite') {return 'Полулюкс'}
+      else if(catValue === 'residence') {return 'Резиденция'}
+      else if(catValue === 'familyRoom') {return 'Семейная комната'}
+      else if(catValue === 'standart') {return 'Стандарт'}
+      else if(catValue === 'studio') {return 'Студия'}
+      else if(catValue === 'chalet') {return 'Шале'}
+      else if(catValue === 'economyClass') {return 'Эконом-класс'}
+    },
+
+    async createAccomodation() {
+      if(this.$v.$invalid) {
+        this.$v.$touch()
+        return
+      }
+
+      // this.$emit('closeCreatingAccomodationModal')
+      this.$emit('on')
+
+      const newAccomodation = {
+        category: this.category,
+        name: this.name,
+        measurementUnit: this.measurementUnit,
+        payFreeRoomCats: this.payFreeRoomCats,
+        cost: this.cost
+      }
+
+      console.log(newAccomodation);
+
+      try {
+        let response = await this.$store.dispatch('createAccomodation', newAccomodation)
+
+        console.log(response);
+      } catch(e) { console.log(e) }
+
+      if(this.$store.state.preloader === false) {
+      this.$emit('offPreLoader')
+      } else {return}
+      this.$message({
+        message: 'Новое удобство отправлен на обработку. В скорейшем времени удобство появится в списке добавления',
+        type: 'success'
+      })
     }
   }
 }
