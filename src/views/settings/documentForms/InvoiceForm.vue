@@ -86,6 +86,12 @@
         </div>
       </div>
 
+
+<!-- //////// Hidden computed //////////////// -->
+<h4 style="display: none">{{setInfo}}</h4>
+<!-- ///////////////////////////////////////// -->
+
+
       <div class="input-grid-btns">
         <button
           class="sec-btn"
@@ -128,7 +134,7 @@ export default {
     showRequisites: true,
     showDollarRate: false,
 
-    invoiceFormSettings: '',
+    invoiceFormSettings: JSON.parse(window.sessionStorage.documentFormsSettings).documentFormat.invoice,
 
     numerationTypes: [
       {label: 'С датой (8-значная)', value: 'date-8'},
@@ -152,11 +158,11 @@ export default {
 
   computed: {
     setInfo() {
-      this.numerationType = this.invoiceFormSettings.numerationType,
-      this.counterResetType = this.invoiceFormSettings.counterResetType,
-      this.selectedOrientation = this.invoiceFormSettings.selectedOrientation,
-      this.showRequisites = this.invoiceFormSettings.showRequisites,
-      this.showDollarRate = this.invoiceFormSettings.showDollarRate
+      this.numerationType = JSON.parse(this.invoiceFormSettings).numerationType,
+      this.counterResetType = JSON.parse(this.invoiceFormSettings).counterResetType,
+      this.selectedOrientation = JSON.parse(this.invoiceFormSettings).selectedOrientation,
+      this.showRequisites = JSON.parse(this.invoiceFormSettings).showRequisites,
+      this.showDollarRate = JSON.parse(this.invoiceFormSettings).showDollarRate
     }
   },
 
@@ -178,14 +184,13 @@ export default {
         showRequisites: this.showRequisites,
         showDollarRate: this.showDollarRate,
       }
-      console.log(invoiceFormSettings);
 
-      // try {
-      //   await this.$store.dispatch('invoiceFormSettingsEdit', invoiceFormSettings)
-      // } catch {}
+      try {
+        await this.$store.dispatch('invoiceFormSettingsEdit', invoiceFormSettings)
+      } catch {}
 
-      // this.$emit('refresh')
-      // this.$emit('closeInvoiceFormModal')
+      this.$emit('refresh')
+      this.$emit('closeInvoiceFormModal')
       this.$message({
         message: 'Изменения в настройках формы инвойса сохранены',
         type: 'success'

@@ -56,6 +56,10 @@
         </el-checkbox>
       </div>
 
+<!-- ///////// Hidden computed //////////// -->
+<h4 style="display: none">{{setInfo}}</h4>
+<!-- ////////////////////////////////////// -->
+
       <div class="modal-btns">
         <button
           class="sec-btn"
@@ -87,6 +91,7 @@ export default {
   name: 'BookingCancellationForm',
 
   data:() => ({
+    bookingCancellationForm: JSON.parse(window.sessionStorage.documentFormsSettings).documentFormat.cancellationBooking,
     numerationType: '',
     counterResetType: '',
     showRequisites: true,
@@ -112,6 +117,15 @@ export default {
     counterResetType: {required}
   },
 
+  computed: {
+    setInfo() {
+      this.numerationType = JSON.parse(this.bookingCancellationForm).numerationType,
+      this.counterResetType = JSON.parse(this.bookingCancellationForm).counterResetType,
+      this.showRequisites = JSON.parse(this.bookingCancellationForm).showRequisites,
+      this.showNFL = JSON.parse(this.bookingCancellationForm).showNFL
+    }
+  },
+
   methods: {
     closeModal() {
       this.$emit('closeBookingCancelFormModal')
@@ -130,14 +144,12 @@ export default {
         showNFL: this.showNFL
       }
 
-      console.log(bookingCancellationFormSettings);
+      try {
+        await this.$store.dispatch('bookingCancellationFormSettingsEdit', bookingCancellationFormSettings)
+      } catch {}
 
-      // try {
-      //   await this.$store.dispatch('bookingCancellationFormSettingsEdit')
-      // } catch {}
-
-      // this.$emit('refresh')
-      // this.$emit('closeBookingCancelFormModal')
+      this.$emit('refresh')
+      this.$emit('closeBookingCancelFormModal')
       this.$message({
         message: 'Изменения в настройках формы аннуляции брони сохранены',
         type: 'success'

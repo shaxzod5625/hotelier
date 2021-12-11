@@ -299,6 +299,8 @@ router.beforeResolve((to, from, next) => {
     next({path: '/login'})
   } else if (requireAuth && JSON.parse(window.sessionStorage.currentUser) === 'Invalid Credentials') {
     next({path: '/login'})
+  } else if (requireAuth && JSON.parse(window.sessionStorage.currentUser) === 'All input is required') {
+    next({path: '/login'})
   } else if (requireAuth && JSON.parse(window.sessionStorage.currentUser).error === 'invalid password') {
     next({path: '/login'})
   } else if (requireAuth && window.sessionStorage.myObject && JSON.parse(window.sessionStorage.myObject) === 'Invalid Token') {

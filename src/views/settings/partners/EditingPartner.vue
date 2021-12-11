@@ -141,7 +141,7 @@ export default {
     mainPhoneNumber: '',
     additionalPhoneNumber: '',
     fax: '',
-    email: ''
+    email: '',
   }),
 
   props: {
@@ -218,8 +218,9 @@ export default {
         message: 'Изменная информация партнера сохранена',
         type: 'success'
       })
-    }
-  }
+    },
+
+  },
 }
 </script>
 

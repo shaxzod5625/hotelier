@@ -126,6 +126,7 @@
       </div>
 
 <!-- //////////// Hidden computed //////////// -->
+      <h4 style="display: none">{{setInfo}}</h4>
       <h4 style="display: none">{{uzbRequired}}</h4>
       <h4 style="display: none">{{rusRequired}}</h4>
       <h4 style="display: none">{{engRequired}}</h4>
@@ -167,6 +168,7 @@ export default {
   },
 
   data:() => ({
+    internalRulesForm: JSON.parse(window.sessionStorage.documentFormsSettings).documentFormat.interalRules,
     formLangs: ['rus'],
     selectedOrientation: 'bookOrientation',
 
@@ -197,6 +199,12 @@ export default {
   },
 
   computed: {
+    setInfo() {
+      this.formLangs = JSON.parse(this.internalRulesForm).formLangs,
+      this.selectedOrientation = JSON.parse(this.internalRulesForm).selectedOrientation,
+      this.rules = JSON.parse(this.internalRulesForm).rules
+    },
+
     uzbRequired() {
       if(this.formLangs.includes('uzb')) {
         return {required}
@@ -239,7 +247,7 @@ export default {
       this.rules.splice(idx, 1)
     },
 
-    internalRulesFormSettingsEdit() {
+    async internalRulesFormSettingsEdit() {
       if(this.$v.$invalid) {
         this.$v.$touch()
         return
@@ -252,14 +260,12 @@ export default {
         formLangs: this.formLangs,
       }
 
-      console.log(internalRulesFormSettings);
+      try {
+        await this.$store.dispatch('internalRulesFormSettingsEdit', internalRulesFormSettings)
+      } catch {}
 
-      // try {
-      //   await this.$store.dispatch('internalRulesFormSettingsEdit', internalRulesFormSettings)
-      // } catch {}
-
-      // this.$emit('refresh')
-      // this.$emit('closeInternalRulesFormModal')
+      this.$emit('refresh')
+      this.$emit('closeInternalRulesFormModal')
       this.$message({
         message: 'Изменения в настройках формы внутренних правил сохранены',
         type: 'success'

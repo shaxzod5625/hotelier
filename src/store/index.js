@@ -208,6 +208,41 @@ export default new Vuex.Store({
       {value: 'zimbabwe', label: 'Зимбабве'}
     ],
 
+    services: [
+      {label: 'Услуга “Будильник”', value: 'wakeUpCall', category: 'main'},
+      {label: 'Доставка цветов', value: 'floverDelivery', category: 'main'},
+      {label: 'Wi-Fi', cost: 'free', value: 'wifi', category: 'main'},
+      {label: 'Аренда планшета', value: 'tabletRent', category: 'additional'},
+      {label: 'Бассейн', value: 'swimmingPool', category: 'main'},
+      {label: 'Глажка', value: 'ironing', cost: '15000', category: 'extra'},
+      {label: 'Хим-чистка', value: 'dryCleaning', category: 'main'},
+      {label: 'Услуги трансфера', value: 'transfer', category: 'main'},
+      {label: 'Услуга “NETFLIX”', value: 'netflix', category: 'main'},
+      {label: 'Аренда ноутбука', value: 'laptopRent', category: 'main'},
+    ],
+
+    accomodations: [
+      {label: 'Гладильная доска', value: 'ironingBoard', category: 'main'},
+      {label: 'LCD телевизор', value: 'lcdTv', category: 'main'},
+      {label: 'Диван', value: 'sofa', category: 'main'},
+      {label: 'Видео-проигрыватель', value: 'videoPlayer', category: 'main'},
+      {label: 'Компьютер', value: 'computer', category: 'main'},
+      {label: 'Вентиляция', value: 'ventilation', category: 'main'},
+      {label: 'Вид на озеро', value: 'lakeView', category: 'main'},
+      {label: 'Вид на лес', value: 'forestView', category: 'main'},
+      {label: 'Вид на город', value: 'cityView', category: 'main'},
+      {label: 'Туалетные принадлежности', value: 'toiletries', category: 'main'},
+    ],
+
+    measurementUnitTypes: [
+      {label: 'Разовая стоимость', value: 'oneTime'},
+      {label: 'За один день', value: 'perDay'},
+      {label: 'За каждую вещь', value: 'perUnit'},
+      {label: 'За все время проживания', value: 'perSettlement'},
+      {label: 'За штуку', value: 'perPiece'},
+      {label: 'За порцию', value: 'perPortion'},
+    ],
+
     activeTariffs: [
       {name: 'Основной', type: 'main', discount: {availability: false, discountType: undefined, discountAmount: undefined}, startTerm: '01/01/2021', stopTerm: '31/12/2021', activity: 'pending'},
       {name: 'Тариф “Весенний”', type: 'discount', discount: {availability: true, discountType: 'percent', discountAmount: '20'}, startTerm: '01/01/2021', stopTerm: '31/12/2021', activity: 'active'},
@@ -216,29 +251,29 @@ export default new Vuex.Store({
     ],
 
     servicesList: [
-      {name: 'Услуга “Будильник”', cost: '15000', payFreeRoomCats: ['Люкс', 'Апартаменты'], category: 'cat1', measurementUnit: 'Разовая стоимость', availability: true},
-      {name: 'Доставка цветов', cost: '22000', payFreeRoomCats: ['Люкс', 'Апартаменты'], category: 'cat1', measurementUnit: 'Разовая стоимость', availability: false},
-      {name: 'Wi-Fi', cost: 'free', payFreeRoomCats: [], category: 'cat2', measurementUnit: 'За один день', availability: true},
-      {name: 'Аренда планшета', cost: '50000', payFreeRoomCats: ['Люкс', 'Апартаменты'], category: 'cat1', measurementUnit: 'За один день', availability: false},
-      {name: 'Бассейн', cost: '35000', payFreeRoomCats: [], category: 'cat3', measurementUnit: 'За один день', availability: false},
-      {name: 'Глажка', cost: '15000', payFreeRoomCats: [], category: 'cat4', measurementUnit: 'За каждую вещь', availability: true},
-      {name: 'Хим-чистка', cost: '40000', payFreeRoomCats: [], category: 'cat4', measurementUnit: 'За каждую вещь', availability: true},
-      {name: 'Услуги трансфера', cost: '110000', payFreeRoomCats: [], category: 'cat1', measurementUnit: 'Разовая стоимость', availability: false},
-      {name: 'Услуга “NETFLIX”', cost: '10000', payFreeRoomCats: ['Люкс', 'Семейная комната', 'Апартаменты'], category: 'cat2', measurementUnit: 'За один день', availability: true},
-      {name: 'Аренда ноутбука', cost: '75000', payFreeRoomCats: [], category: 'cat2', measurementUnit: 'За один день', availability: false},
+      {label: 'Услуга “Будильник”', value: 'wakeUpCall', cost: '15000', payFreeRoomCats: ['Люкс', 'Апартаменты'], category: 'cat1', measurementUnit: 'Разовая стоимость', availability: true},
+      {label: 'Доставка цветов', value: 'floverDelivery', cost: '22000', payFreeRoomCats: ['Люкс', 'Апартаменты'], category: 'cat1', measurementUnit: 'Разовая стоимость', availability: false},
+      {label: 'Wi-Fi', cost: 'free', value: 'wifi', payFreeRoomCats: [], category: 'cat2', measurementUnit: 'За один день', availability: true},
+      {label: 'Аренда планшета', value: 'tabletRent', cost: '50000', payFreeRoomCats: ['Люкс', 'Апартаменты'], category: 'cat1', measurementUnit: 'За один день', availability: false},
+      {label: 'Бассейн', value: 'swimmingPool', cost: '35000', payFreeRoomCats: [], category: 'cat3', measurementUnit: 'За один день', availability: false},
+      {label: 'Глажка', value: 'ironing', cost: '15000', payFreeRoomCats: [], category: 'cat4', measurementUnit: 'За каждую вещь', availability: true},
+      {label: 'Хим-чистка', value: 'dryCleaning', cost: '40000', payFreeRoomCats: [], category: 'cat4', measurementUnit: 'За каждую вещь', availability: true},
+      {label: 'Услуги трансфера', value: 'transfer', cost: '110000', payFreeRoomCats: [], category: 'cat1', measurementUnit: 'Разовая стоимость', availability: false},
+      {label: 'Услуга “NETFLIX”', value: 'netflix', cost: '10000', payFreeRoomCats: ['Люкс', 'Семейная комната', 'Апартаменты'], category: 'cat2', measurementUnit: 'За один день', availability: true},
+      {label: 'Аренда ноутбука', value: 'laptopRent', cost: '75000', payFreeRoomCats: [], category: 'cat2', measurementUnit: 'За один день', availability: false},
     ],
 
     facilitiesList: [
-      {name: 'Гладильная доска', cost: '40000', payFreeRoomCats: ['Люкс', 'Апартаменты'], category: 'cat1', measurementUnit: 'Разовая стоимость', availability: true},
-      {name: 'LCD телевизор', cost: 'free', payFreeRoomCats: ['Люкс', 'Апартаменты'], category: 'cat1', measurementUnit: 'За все время проживания', availability: false},
-      {name: 'Диван', cost: 'free', payFreeRoomCats: [], category: 'cat2', measurementUnit: 'За все время проживания', availability: true},
-      {name: 'Видео-проигрыватель', cost: '25000', payFreeRoomCats: ['Люкс', 'Апартаменты'], category: 'cat1', measurementUnit: 'За один день', availability: false},
-      {name: 'Компьютер', cost: '70000', payFreeRoomCats: [], category: 'cat3', measurementUnit: 'За один день', availability: false},
-      {name: 'Вентиляция', cost: 'free', payFreeRoomCats: [], category: 'cat4', measurementUnit: 'За все время проживания', availability: true},
-      {name: 'Вид на озеро', cost: 'free', payFreeRoomCats: [], category: 'cat4', measurementUnit: 'За все время проживания', availability: true},
-      {name: 'Вид на лес', cost: 'free', payFreeRoomCats: [], category: 'cat1', measurementUnit: 'За все время проживания', availability: false},
-      {name: 'Вид на город', cost: 'free', payFreeRoomCats: ['Люкс', 'Семейная комната', 'Апартаменты'], category: 'cat2', measurementUnit: 'За все время проживания', availability: true},
-      {name: 'Туалетные принадлежности', cost: 'free', payFreeRoomCats: [], category: 'cat2', measurementUnit: 'За все время проживания', availability: false},
+      {label: 'Гладильная доска', value: 'ironingBoard', cost: '40000', payFreeRoomCats: ['Люкс', 'Апартаменты'], category: 'cat1', measurementUnit: 'Разовая стоимость', availability: true},
+      {label: 'LCD телевизор', value: 'lcdTv', cost: 'free', payFreeRoomCats: ['Люкс', 'Апартаменты'], category: 'cat1', measurementUnit: 'За все время проживания', availability: false},
+      {label: 'Диван', value: 'sofa', cost: 'free', payFreeRoomCats: [], category: 'cat2', measurementUnit: 'За все время проживания', availability: true},
+      {label: 'Видео-проигрыватель', value: 'videoPlayer', cost: '25000', payFreeRoomCats: ['Люкс', 'Апартаменты'], category: 'cat1', measurementUnit: 'За один день', availability: false},
+      {label: 'Компьютер', value: 'computer', cost: '70000', payFreeRoomCats: [], category: 'cat3', measurementUnit: 'За один день', availability: false},
+      {label: 'Вентиляция', value: 'ventilation', cost: 'free', payFreeRoomCats: [], category: 'cat4', measurementUnit: 'За все время проживания', availability: true},
+      {label: 'Вид на озеро', value: 'lakeView', cost: 'free', payFreeRoomCats: [], category: 'cat4', measurementUnit: 'За все время проживания', availability: true},
+      {label: 'Вид на лес', value: 'forestView', cost: 'free', payFreeRoomCats: [], category: 'cat1', measurementUnit: 'За все время проживания', availability: false},
+      {label: 'Вид на город', value: 'cityView', cost: 'free', payFreeRoomCats: ['Люкс', 'Семейная комната', 'Апартаменты'], category: 'cat2', measurementUnit: 'За все время проживания', availability: true},
+      {label: 'Туалетные принадлежности', value: 'toiletries', cost: 'free', payFreeRoomCats: [], category: 'cat2', measurementUnit: 'За все время проживания', availability: false},
     ],
 
     roomFund: [{
@@ -518,6 +553,11 @@ export default new Vuex.Store({
     ],
   },
   mutations: {
+    PRELOADER_OFF(state) {
+      state.preloader = false
+      window.sessionStorage.preloader = false
+    },
+
     SET_CURRENT_USER(state, user) {
       state.currentUser = user
       window.sessionStorage.currentUser = JSON.stringify(user)
@@ -684,19 +724,25 @@ export default new Vuex.Store({
 
 
   actions: {
-    async loginUser({commit}, loginInfo) {
+    async loginUser({commit}, logInfo) {
       try {
-        let response = await Api().post('/api/login', loginInfo)
+        let response = await Api().post('/api/login', logInfo)
         let user = response.data
+
         commit('SET_CURRENT_USER', user)
+      } catch(err) {
+        console.log(err)
         
-        if(JSON.parse(window.sessionStorage.currentUser) != undefined && JSON.parse(window.sessionStorage.currentUser) != null) {
+        commit('SET_RESPONSE_STATUS', err)
+      };
+
+      try {
+        if(JSON.parse(window.sessionStorage.currentUser).user != undefined && JSON.parse(window.sessionStorage.currentUser) != null) {
           let settingsResponse = await Api().get('/api/settings')
           let filling = settingsResponse.data
           commit('SET_SETTINGS_FILLING', filling)
         } else {}
-      } catch {
-      };
+      } catch(er) {console.log(er)}
     },
 
     async getSettingsFilling({commit}) {
@@ -1195,6 +1241,7 @@ export default new Vuex.Store({
         try {
           let response = await Api().post('/api/settings/rules/guaranted', rules)
           let responseStatus = response.data
+          console.log('POST')
 
           commit('SET_RESPONSE_STATUS', responseStatus)
         } catch {}
@@ -1202,6 +1249,7 @@ export default new Vuex.Store({
         try {
           let response = await Api().put('/api/settings/rules/guaranted', rules)
           let responseStatus = response.data
+          console.log('PUT')
 
           commit('SET_RESPONSE_STATUS', responseStatus)
         } catch {}
@@ -1252,63 +1300,96 @@ export default new Vuex.Store({
         let responseStatus = response.data
 
         commit('SET_RESPONSE_STATUS', responseStatus)
-      } catch {}
+      } catch(error) {console.log(error)}
     },
 
     async invoiceFormSettingsEdit({commit}, invoiceFormSettings) {
       try {
-        let response = await Api().put('/api/settings/documents/invoiceForm', invoiceFormSettings)
+        let response = await Api().put('/api/settings/documents/invoice', invoiceFormSettings)
         let responseStatus = response.data
 
         commit('SET_RESPONSE_STATUS', responseStatus)
-      } catch {}
+      } catch(e) {console.log(e)}
     },
 
     async boolingConfirmationFormSettingsEdit({commit}, boolingConfirmationFormSettings) {
       try {
-        let response = await Api().put('/api/settings/documents/bookingConfirmationForm', boolingConfirmationFormSettings)
+        let response = await Api().put('/api/settings/documents/confirmation', boolingConfirmationFormSettings)
         let responseStatus = response.data
 
         commit('SET_RESPONSE_STATUS', responseStatus)
-      } catch {}
+      } catch(e) {console.log(e)}
+    },
+
+    async bookingCancellationFormSettingsEdit({commit}, bookingCancellationFormSettings) {
+      try {
+        let response = await Api().put('/api/settings/documents/cancellation', bookingCancellationFormSettings)
+        let responseStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', responseStatus)
+      } catch(e) {console.log(e)}
     },
 
     async internalRulesFormSettingsEdit({commit}, internalRulesFormSettings) {
       try {
-        let response = await Api().put('/api/settings/documents/internalRulesForm', internalRulesFormSettings)
+        let response = await Api().put('/api/settings/documents/interal', internalRulesFormSettings)
         let responseStatus = response.data
 
         commit('SET_RESPONSE_STATUS', responseStatus)
-      } catch {}
+      } catch(e) {console.log(e)}
     },
 
     async checkInRulesFormSettingsEdit({commit}, checkInRulesFormSettings) {
       try {
-        let response = await Api().put('/api/settings/documents/checkInRulesForm', checkInRulesFormSettings)
+        let response = await Api().put('/api/settings/documents/checkin', checkInRulesFormSettings)
         let responseStatus = response.data
 
         commit('SET_RESPONSE_STATUS', responseStatus)
-      } catch {}
+      } catch(e) {console.log(e)}
     },
 
     async reportsFormSettingsEdit({commit}, reportsFormSettings) {
       try {
-        let response = await Api().put('/api/settings/documents/reportsForm', reportsFormSettings)
+        let response = await Api().put('/api/settings/documents/report', reportsFormSettings)
         let responseStatus = response.data
 
+        console.log(reportsFormSettings)
+
         commit('SET_RESPONSE_STATUS', responseStatus)
-      } catch {}
+      } catch(e) {console.log(e)}
     },
 
     async tariffsFormSettingsEdit({commit}, tariffsFormSettings) {
       try {
-        let response = await Api().put('/api/settings/documents/tariffsForm', tariffsFormSettings)
+        let response = await Api().put('/api/settings/documents/tariffs', tariffsFormSettings)
         let responseStatus = response.data
 
         commit('SET_RESPONSE_STATUS', responseStatus)
-      } catch {}
+      } catch(e) {console.log(e)}
+    },
+////////////////////////////////////////////////////////
+
+////////////////// Facilities //////////////////////////
+
+    async createFacility({commit}, newFacility) {
+      try {
+        let response = await Api().post('/api/settings/facilities/new', newFacility)
+        let responseStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', responseStatus)
+      } catch(e) {console.log(e)}
     },
 
+    async createAccomodation({commit}, newAccomodation) {
+      try {
+        let response = await Api().post('/api/settings/accomodations/new', newAccomodation)
+        let responseStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', responseStatus)
+      } catch(e) {console.log(e)}
+
+      commit('PRELOADER_OFF')
+    },
 
   },
 

@@ -313,7 +313,7 @@ export default {
     },
 
     refresh() {
-      this.$forceUpdate(this.getDocFormsInfo)
+      this.$forceUpdate(this.getDocFormsInfo())
     }
   }
 }

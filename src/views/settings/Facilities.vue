@@ -2,52 +2,86 @@
   <div class="con-page">
 
     <transition name="component-fade" mode="out-in">
+      <PreLoader
+        v-if="preLoader === true"
+      />
+
       <AddingFacilities
         v-if="addingFacility"
 
         @closeAddingFacilityModal="closeAddingFacilityModal"
+        @refresh="refresh"
+        @on="preloaderOn"
+        @off="preloaderOff"
       />
 
       <AddingAccomodations
         v-if="addingAccomodation"
 
         @closeAddingAccomodationModal="closeAddingAccomodationModal"
+        @refresh="refresh"
+        @on="preloaderOn"
+        @off="preloaderOff"
       />
 
       <CreatingFacility
         v-if="creatingFacility"
+
         @closeCreatingFacilityModal="closeCreatingFacilityModal"
+        @refresh="refresh"
+        @on="preloaderOn"
+        @off="preloaderOff"
       />
 
       <CreatingAccomodation
         v-if="creatingAccomodation"
+
         @closeCreatingAccomodationModal="closeCreatingAccomodationModal"
+        @refresh="refresh"
+        @on="preloaderOn"
+        @offPreLoader="preloaderOff"
       />
 
       <EditingFacility
         v-if="editingFacility"
+
         @closeEditingFacilityModal="closeEditingFacilityModal"
+        @refresh="refresh"
+        @on="preloaderOn"
+        @off="preloaderOff"
 
         :service="service"
       />
 
       <EditingAccomodation
         v-if="editingAccomodation"
+
         @closeEditingAccomodationModal="closeEditingAccomodationModal"
+        @refresh="refresh"
+        @on="preloaderOn"
+        @off="preloaderOff"
 
         :accomodation="accomodation"
       />
 
       <DeleteFacility
         v-if="deletingFacility"
+
         @closeDeleteFacilityModal="closeDeleteFacilityModal"
+        @refresh="refresh"
+        @on="preloaderOn"
+        @off="preloaderOff"
 
         :service="service"
       />
 
       <DeleteAccomodation
         v-if="deletingAccomodation"
+
         @closeDeleteAccomodationModal="closeDeleteAccomodationModal"
+        @refresh="refresh"
+        @on="preloaderOn"
+        @off="preloaderOff"
 
         :accomodation="accomodation"
       />
@@ -86,27 +120,26 @@
 
     </div>
 
-    <div
-      v-if="selected === 'Услуги'"
-      class="tab-conpage"
-    >
+
+    <transition name="slide-fade" mode="out-in">
+
       <Services
+        v-if="selected === 'Услуги'"
         @createFacility="creatingFacilityModal"
         @editFacility="editFacility"
         @deleteFacility="deleteFacility"
+        @preloaderOn="preloaderOn"
       />
-    </div>
 
-    <div
-      v-if="selected === 'Удобства'"
-      class="tab-conpage"
-    >
+    
       <Accomodations
+        v-if="selected === 'Удобства'"
         @createAccomodation="createAccomodation"
         @editAccomodation="editAccomodation"
         @deleteAccomodation="deleteAccomodation"
       />
-    </div>
+
+    </transition>
 
 
   </div>
@@ -125,6 +158,7 @@ import EditingFacility from './facilities/EditingFacility.vue'
 import EditingAccomodation from './facilities/EditingAccomodation.vue'
 import DeleteFacility from './facilities/DeleteFacility.vue'
 import DeleteAccomodation from './facilities/DeleteAccomodation.vue'
+import PreLoader from '@/components/PreLoader.vue'
 
 export default {
   name: 'Facilities',
@@ -132,10 +166,11 @@ export default {
   components: {
     TabBar, Tab, Services, Accomodations, AddingFacilities,
     AddingAccomodations, CreatingFacility, CreatingAccomodation,
-    EditingFacility, EditingAccomodation, DeleteFacility, DeleteAccomodation
+    EditingFacility, EditingAccomodation, DeleteFacility, DeleteAccomodation, PreLoader
   },
 
   data:() => ({
+    preLoader: false,
     selected: 'Услуги',
     addingFacility: false,
     addingAccomodation: false,
@@ -150,7 +185,19 @@ export default {
     service: {},
   }),
 
+  computed: {
+    
+  },
+
   methods: {
+    setPreLoaderOff() {
+      this.preLoader = false
+    },
+
+    getFacilities() {
+
+    },
+
     setSelected(tab) {
       this.selected = tab;
     },
@@ -213,6 +260,26 @@ export default {
 
     closeDeleteAccomodationModal() {
       this.deletingAccomodation = false
+    },
+
+    refresh() {
+      this.$forceUpdate(this.getFacilities())
+    },
+
+    preloaderOn() {
+      try {
+          this.creatingAccomodation = false
+        } catch {}
+        
+      this.preLoader = true
+    },
+
+    preloaderOff() {
+      if(window.sessionStorage.preLoader === false) {
+        this.$forceUpdate(this.setPreLoaderOff())
+
+        this.preLoader = false
+      }
     }
   }
 }

@@ -1597,14 +1597,43 @@ table {
 
 // transition of modal window
 
-.component-fade-enter-active, .component-fade-leave-active {
+.component-fade-enter-active {
   transition: all 500ms ease;
+  .modal-div {
+  transition: all 500ms ease;
+  transform: translateY(0px);
+  }
+  
 }
 
-.component-fade-enter, .component-fade-leave-to {
+.component-fade-leave-active {
+  transition: all 500ms ease;
+
+  .modal-div {
+    transition: all 500ms ease;
+    transform: translateY(0%);
+  }
+}
+
+.component-fade-enter {
+  transition: all 500ms ease;
   opacity: 0;
+
+  .modal-div {
+    transition: all 500ms ease;
+    transform: translateY(-100px);
+  }
 }
 
+.component-fade-leave-to {
+  transition: all 500ms ease;
+  opacity: 0;
+
+  .modal-div {
+    transition: all 500ms ease;
+    transform: translateY(-100px);
+  }
+}
 
 // transition of router view
 
@@ -1612,12 +1641,10 @@ table {
   transition: all .25s ease;
 }
 .slide-fade-leave-active {
-  height: 10px;
   transition: all .25s cubic-bezier(1.0, 0.5, 0.8, 1.0);
 }
 .slide-fade-enter, .slide-fade-leave-to {
-  height: 100px;
-  transform: translateX(0%);
+  transform: translateX(10px);
   opacity: 0;
 }
 
@@ -1648,6 +1675,72 @@ table {
     backdrop-filter: blur(3px);
   }
 }
+
+
+
+
+
+///////// PRELOADER STYLING /////////
+.preloader-back {
+    z-index: 100;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(6px);
+}
+
+.preloader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 101;
+  width: auto;
+  height: auto;
+
+  img {
+    width: 60px;
+    height: auto;
+    transform: translateY(0%);
+    animation: img 1200ms 0ms linear infinite;
+  }
+
+  h4 {
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 22px;
+    color: #83858A;
+  }
+}
+
+@keyframes img {
+  0% {
+    transform: translateX(0%) rotate(0deg);
+  }
+
+  25% {
+    transform: translateX(50%) rotate(-30deg);
+  }
+
+  50% {
+    transform: translateX(0) rotate(0deg);
+  }
+
+  75% {
+    transform: translateX(-50%) rotate(30deg);
+  }
+
+  100% {
+    transform: translateX(0%) rotate(0deg);
+  }
+}
+////////////////////////////////////////////////
+
+
 
 
 .checkbox-group-div {

@@ -50,6 +50,10 @@
         </div>
       </div>
 
+<!-- //////// Hidden computed ////////////// -->
+<h4 style="display: none">{{setInfo}}</h4>
+<!-- /////////////////////////////////////// -->
+
       <div class="input-grid-btns">
         <button
           class="sec-btn"
@@ -86,10 +90,19 @@ export default {
   },
 
   data:() => ({
+    reportsForm: JSON.parse(window.sessionStorage.documentFormsSettings).documentFormat.report,
     selectedOrientation: 'bookOrientation',
     showGraphics: true,
     showPrintDate: false,
   }),
+
+  computed: {
+    setInfo() {
+      this.selectedOrientation = JSON.parse(this.reportsForm).selectedOrientation,
+      this.showGraphics = JSON.parse(this.reportsForm).showGraphics,
+      this.showPrintDate = JSON.parse(this.reportsForm).showPrintDate
+    }
+  },
 
   methods: {
     closeModal() {
@@ -103,14 +116,12 @@ export default {
         showPrintDate: this.showPrintDate,
       }
 
-      console.log(reportsFormSettings);
+      try {
+        await this.$store.dispatch('reportsFormSettingsEdit', reportsFormSettings)
+      } catch {}
 
-      // try {
-      //   await this.$store.dispatch('reportsFormSettingsEdit', reportsFormSettings)
-      // } catch {}
-
-      // this.$emit('refresh')
-      // this.$emit('closeReportsFormModal')
+      this.$emit('refresh')
+      this.$emit('closeReportsFormModal')
       this.$message({
         message: 'Изменения в настройках формы отчетов сохранены',
         type: 'success'

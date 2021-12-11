@@ -13,6 +13,7 @@ import VueTheMask from 'vue-the-mask'
 import MaskedInput from 'vue-text-mask'
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 import money from 'v-money'
+import PreLoader from './components/PreLoader'
 
 
 
@@ -23,6 +24,9 @@ Vue.use(VueTheMask)
 Vue.use(MaskedInput)
 Vue.use(createNumberMask)
 Vue.use(money, {precision: 0})
+
+
+Vue.component('PreLoader', {PreLoader})
 
 
 Vue.directive("uppercase", {
