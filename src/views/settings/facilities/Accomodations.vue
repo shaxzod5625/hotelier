@@ -24,7 +24,7 @@
       </div>
 
       <div
-        v-if="searchAccomodation != ''"
+        v-if="this.accomodations.length"
         class="list-card"
       >
         <table class="list-table">
@@ -44,15 +44,15 @@
               <div class="list-content">
                   <td
                     class="category-name-2"
-                    @click="editAccomodation(accomodation)"
+                    @click="editAccomodation(JSON.parse(accomodation))"
                   >
-                    {{accomodation.label}}
+                    {{JSON.parse(accomodation).name}}
                   </td>
                 <td>
                   <span
-                    v-if="accomodation.cost != 'free'"
+                    v-if="JSON.parse(accomodation).cost !== '0 UZS'"
                   >
-                  {{(Number(accomodation.cost)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$& ')}} UZS
+                  {{JSON.parse(accomodation).cost}}
                   </span>
 
                   <span
@@ -61,18 +61,18 @@
                     Бесплатно
                   </span>
                 </td>
-                <td>{{accomodation.measurementUnit}}</td>
+                <td>{{setMeasurementLabel(JSON.parse(accomodation).measurementUnit)}}</td>
                 <td class="list-last-el">
-                  <el-switch v-model="accomodation.availability">
+                  <el-switch @change="switchAvailability(JSON.parse(accomodation).availability, JSON.parse(accomodation).id)" v-model="JSON.parse(accomodation).availability">
                   </el-switch>
                   <div class="list-icon-box">
                     <img
-                      @click="editAccomodation(accomodation)"
+                      @click="editAccomodation(JSON.parse(accomodation))"
                       class="icon-box"
                       src="@/assets/icons/Edit.svg" alt=""
                     >
                     <img
-                      @click="deleteAccomodation(accomodation)"
+                      @click="deleteAccomodation(JSON.parse(accomodation))"
                       class="icon-box"
                       src="@/assets/icons/Delete.svg" alt=""
                     >
@@ -84,12 +84,28 @@
         </table>
       </div>
 
+      
       <div
-        v-else
+        v-if="this.accomodations.length && !this.searchAccomodation.length"
         class="no-reults"
       >
         <h3>Результатов по поиску <span>"{{search}}"</span> среди удобств не найдено</h3>
+        <h3 class="advice">Вы можете <span class="new" @click="createAccomodation">создать</span> новое удобство, которое отсутствует в списке доступных удобств</h3>
       </div>
+
+      <div
+        v-if="!this.accomodations.length"
+        class="no-reults"
+      >
+        <h3>Удобства не найдены. Пожалуйста,
+          <span class="new" @click="addingAccomodation">добавьте</span> или
+          <span class="new" @click="createAccomodation">создайте</span>
+          удобства</h3>
+      </div>
+
+<!-- ////////// Hidden computed //////////// -->
+<!-- /////////////////////////////////////// -->
+
     </div>
   </div>
 </template>
@@ -102,16 +118,49 @@ export default {
     search: '',
   }),
 
+  props: {
+    accomodations: Array
+  },
+
   computed: {
     searchAccomodation(){
-      return this.$store.state.facilitiesList.filter(post => {
-        return post.label.toLowerCase().includes(this.search.toLowerCase())
-        || post.value.toLowerCase().includes(this.search.toLowerCase())
+      return this.accomodations.filter(post => {
+        return JSON.parse(post).name.toLowerCase().includes(this.search.toLowerCase())
       })
     },
   },
 
   methods: {
+    setMeasurementLabel(unit) {
+      if(unit === 'oneTime') {return 'Разовая стоимость'}
+      else if(unit === 'perDay') {return 'За один день'}
+      else if(unit === 'perUnit') {return 'За каждую вещь'}
+      else if(unit === 'perSettlement') {return 'За все время проживания'}
+      else if(unit === 'perPiece') {return 'За штуку'}
+      else if(unit === 'perPortion') {return 'За порцию'}
+    },
+
+    async switchAvailability(activity, id) {
+      const facility = {
+        id: id,
+        availability: !activity
+      }
+
+      try {
+        await this.$store.dispatch('switchAvailability', facility)
+      } catch {}
+
+      this.$emit('refresh')
+      this.$message({
+        message: 'Доступность удобства изменена',
+        type: 'success'
+      })
+    },
+
+    addingAccomodation() {
+      this.$emit('addingAccomodation')
+    },
+
     createAccomodation() {
       this.$emit('createAccomodation')
     },

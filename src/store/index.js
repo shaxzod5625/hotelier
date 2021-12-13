@@ -9,6 +9,7 @@ export default new Vuex.Store({
     currentUser: [],
     chartOptions: [],
     logoutInfo: [],
+    preloader: true,
 
     countries: [
       {value: 'afghanistan', label: 'Афганистан'},
@@ -232,6 +233,18 @@ export default new Vuex.Store({
       {label: 'Вид на лес', value: 'forestView', category: 'main'},
       {label: 'Вид на город', value: 'cityView', category: 'main'},
       {label: 'Туалетные принадлежности', value: 'toiletries', category: 'main'},
+    ],
+
+    servicesCategories: [
+      {label: 'Основные', value: 'main'},
+      {label: 'Дополнительные', value: 'additional'},
+    ],
+
+    accomodationsCategories: [
+      {label: 'Основные', value: 'main'},
+      {label: 'Дополнительные', value: 'additional'},
+      {label: 'Вид', value: 'view'},
+      {label: 'Комнатные принадлежности', value: 'roomAccessories'},
     ],
 
     measurementUnitTypes: [
@@ -553,9 +566,12 @@ export default new Vuex.Store({
     ],
   },
   mutations: {
+    PRELOADER_ON(state) {
+      state.preloader = true
+    },
+
     PRELOADER_OFF(state) {
       state.preloader = false
-      window.sessionStorage.preloader = false
     },
 
     SET_CURRENT_USER(state, user) {
@@ -697,6 +713,26 @@ export default new Vuex.Store({
       window.sessionStorage.documentFormsSettings = JSON.stringify(documentFormsSettings)
     },
 //////////////////////////////////////////////
+
+
+
+///////////// Facilities /////////////////////
+
+    SET_FACILITIES(state, facilities) {
+      state.facilities = facilities
+      window.sessionStorage.facilities = JSON.stringify(facilities)
+    },
+
+    SET_MY_FACILITIES_LIST(state, facilitiesList) {
+      state.facilitiesList = facilitiesList
+      window.sessionStorage.facilitiesList = JSON.stringify(facilitiesList)
+    },
+
+    SET_MY_SERVICES_LIST(state, servicesList) {
+      state.servicesList = servicesList
+      window.sessionStorage.servicesList = JSON.stringify(servicesList)
+    },
+/////////////////////////////////////////////
 
 
 
@@ -1241,7 +1277,6 @@ export default new Vuex.Store({
         try {
           let response = await Api().post('/api/settings/rules/guaranted', rules)
           let responseStatus = response.data
-          console.log('POST')
 
           commit('SET_RESPONSE_STATUS', responseStatus)
         } catch {}
@@ -1249,7 +1284,6 @@ export default new Vuex.Store({
         try {
           let response = await Api().put('/api/settings/rules/guaranted', rules)
           let responseStatus = response.data
-          console.log('PUT')
 
           commit('SET_RESPONSE_STATUS', responseStatus)
         } catch {}
@@ -1371,9 +1405,54 @@ export default new Vuex.Store({
 
 ////////////////// Facilities //////////////////////////
 
+    async getFacilitiesInfo({commit}) {
+      try {
+        let response = await Api().get('/api/settings/facilities')
+        let facilities = response.data
+
+        commit('SET_FACILITIES', facilities)
+      } catch(e) {console.log(e)}
+    },
+
+    async getFacilitiesList({commit}) {
+      try {
+        let response = await Api().get('/api/settings/accomodations/add')
+        let facilitiesList = response.data
+
+        commit('SET_MY_FACILITIES_LIST', facilitiesList)
+      } catch(e) {console.log(e)}
+    },
+
+    async getServicesList({commit}) {
+      try {
+        let response = await Api().get('/api/settings/services/add')
+        let servicesList = response.data
+
+        commit('SET_MY_SERVICES_LIST', servicesList)
+      } catch(e) {console.log(e)}
+    },
+
+    async addAccomodations({commit}, array) {
+      try {
+        let response = await Api().post('/api/settings/accomodations/add', array)
+        let resStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', resStatus)
+      } catch(e) {console.log(e)}
+    },
+    
+    async addServices({commit}, array) {
+      try {
+        let response = await Api().post('/api/settings/services/add', array)
+        let resStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', resStatus)
+      } catch(e) {console.log(e)}
+    },
+
     async createFacility({commit}, newFacility) {
       try {
-        let response = await Api().post('/api/settings/facilities/new', newFacility)
+        let response = await Api().post('/api/settings/services/new', newFacility)
         let responseStatus = response.data
 
         commit('SET_RESPONSE_STATUS', responseStatus)
@@ -1389,6 +1468,60 @@ export default new Vuex.Store({
       } catch(e) {console.log(e)}
 
       commit('PRELOADER_OFF')
+    },
+
+    async editAccomodation({commit}, accomodation) {
+      try {
+        let response = await Api().put('/api/settings/accomodations/edit', accomodation)
+        let resStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', resStatus)
+      } catch(e) {console.log(e)}
+    },
+
+    async editService({commit}, service) {
+      try {
+        let response = await Api().put('/api/settings/services/edit', service)
+        let resStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', resStatus)
+      } catch(e) {console.log(e)}
+    },
+
+    async switchAvailability({commit}, facility) {
+      try {
+        let response = await Api().post('/api/settings/accomodations/active', facility)
+        let resStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', resStatus)
+      } catch(e) {console.log(e)}
+    },
+
+    async switchServiceAvailability({commit}, facility) {
+      try {
+        let response = await Api().post('/api/settings/services/active', facility)
+        let resStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', resStatus)
+      } catch(e) {console.log(e)}
+    },
+
+    async deleteFacility({commit}, id) {
+      try {
+        let response = await Api().delete(`/api/settings/accomodations/delete/${id}`)
+        let resStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', resStatus)
+      } catch(e) {console.log(e)}
+    },
+
+    async deleteService({commit}, id) {
+      try {
+        let response = await Api().delete(`/api/settings/services/delete/${id}`)
+        let resStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', resStatus)
+      } catch(e) {console.log(e)}
     },
 
   },

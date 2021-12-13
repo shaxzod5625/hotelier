@@ -6,13 +6,19 @@
 
       <div class="form-1" style="justify-items: center">
         <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">Основные услуги</el-checkbox>
-      </div>
 
-      <div class="form-4">
-        <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
-          <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
+        <el-checkbox-group v-model="checkedAccomodations" @change="handleCheckedCitiesChange">
+          <el-checkbox v-for="accomodation in allAccomodations" :label="accomodation" :key="accomodation">{{accomodation}}</el-checkbox>
         </el-checkbox-group>
       </div>
+
+        
+
+<!-- ////////// Hidden computed ///////////// -->
+      <h4 style="display: none">{{accomodationsList}}</h4>
+      <h4 style="display: none">{{setAllAccomodations}}</h4>
+      <h4 style="display: none">{{allAccomodationsList}}</h4>
+<!-- //////////////////////////////////////// -->
 
       <div class="input-grid-btns">
         <button
@@ -24,6 +30,7 @@
 
         <button
           class="prim-btn"
+          @click="addAccomodations"
         >
           Добавить
         </button>
@@ -38,17 +45,55 @@
 </template>
 
 <script>
-const cityOptions = ['Shanghai', 'Beijing', 'Guangzhou', 'Shenzhen', 'Urumchi', 'Shanghaib', 'Beijingas', 'Guangzhouqw', 'Shenzhenad', 'Urumchwi',];
-
 export default {
   name: 'AddingAccomodations',
 
   data:() => ({
     checkAll: false,
-    checkedCities: ['Shanghai', 'Beijing'],
-    cities: cityOptions,
-    isIndeterminate: true
+    checkedAccomodations: [],
+    isIndeterminate: false,
+
+    allAccomodations: [],
+    constAllAccomodations: []
   }),
+
+  computed: {
+    accomodationsList() {
+      const accoms = JSON.parse(window.sessionStorage.facilitiesList).accomadations
+      const length = accoms.length
+      const sorted = []
+
+      for(let i=0; i<length; i++) {
+        sorted.push(accoms[i].name)
+      }
+
+      this.allAccomodations = sorted
+    },
+
+    allAccomodationsList() {
+      const accoms = JSON.parse(window.sessionStorage.facilitiesList).accomadations
+      const length = accoms.length
+      const sorted = []
+
+      for(let i=0; i<length; i++) {
+        sorted.push(accoms[i].name)
+      }
+
+      this.constAllAccomodations = sorted
+    },
+
+    setAllAccomodations() {
+      const accoms = JSON.parse(window.sessionStorage.facilitiesList).accomadations.filter(accom => accom.availability === true)
+      const length = accoms.length
+      const sorted = []
+
+      for (let i=0; i<length; i++) {
+        sorted.push(accoms[i].name)
+      }
+
+      this.checkedAccomodations = sorted
+    }
+  },
 
   methods: {
     closeModal() {
@@ -56,14 +101,36 @@ export default {
     },
 
     handleCheckAllChange(val) {
-        this.checkedCities = val ? cityOptions : [];
+        this.checkedAccomodations = val ? this.constAllAccomodations : []
         this.isIndeterminate = false;
       },
 
     handleCheckedCitiesChange(value) {
       let checkedCount = value.length;
-      this.checkAll = checkedCount === this.cities.length;
-      this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
+      this.checkAll = checkedCount === this.allAccomodations.length;
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.allAccomodations.length;
+    },
+
+    async addAccomodations() {
+      const array = []
+      const allAccoms = JSON.parse(window.sessionStorage.facilitiesList).accomadations
+      const checked = this.checkedAccomodations
+      const length = checked.length
+
+      for (let i=0; i<length; i++) {
+        array.push(allAccoms.find(accom => accom.name === checked[i]))
+      }
+
+      try {
+        await this.$store.dispatch('addAccomodations', array)
+      } catch {}
+
+      this.$emit('refresh')
+      this.$emit('closeAddingAccomodationModal')
+      this.$message({
+        message: 'Изменения в списке удобств сохранены',
+        type: 'success'
+      })
     }
   }
 }

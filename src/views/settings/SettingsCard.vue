@@ -183,6 +183,11 @@ export default {
         await this.$store.dispatch('getBookingRulesInfo')
       } else if(name === 'documents') {
         await this.$store.dispatch('getDocFormsInfo')
+      } else if(name === 'facilities') {
+        await this.$store.dispatch('getFacilitiesInfo')
+        await this.$store.dispatch('getRoomsCount')
+        await this.$store.dispatch('getFacilitiesList')
+        await this.$store.dispatch('getServicesList')
       }
     },
 

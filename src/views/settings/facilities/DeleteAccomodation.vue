@@ -13,7 +13,10 @@
           <span>Отмена</span>
         </button>
 
-        <button class="prim-btn">
+        <button
+          class="prim-btn"
+          @click="deleteFacility"
+        >
           <span>Удалить</span>
         </button>
       </div>
@@ -41,6 +44,21 @@ export default {
   methods: {
     closeModal() {
       this.$emit('closeDeleteAccomodationModal')
+    },
+
+    async deleteFacility() {
+      const id = this.accomodation.id
+
+      try {
+        await this.$store.dispatch('deleteFacility', id)
+      } catch {}
+
+      this.$emit('refresh')
+      this.$emit('closeDeleteAccomodationModal')
+      this.$message({
+        message: `Удобство "${this.accomodation.name}" удален`,
+        type: 'success'
+      })
     }
   }
 }

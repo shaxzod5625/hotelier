@@ -6,13 +6,19 @@
 
       <div class="form-1" style="justify-items: center">
         <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">Основные услуги</el-checkbox>
-      </div>
 
-      <div class="form-4">
-        <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
-          <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
+        <el-checkbox-group v-model="checkedServices" @change="handleCheckedCitiesChange">
+          <el-checkbox v-for="service in allServices" :label="service" :key="service">{{service}}</el-checkbox>
         </el-checkbox-group>
       </div>
+
+
+
+<!-- ////////// Hidden computed ///////////// -->
+      <h4 style="display: none">{{servicesList}}</h4>
+      <h4 style="display: none">{{setAllServices}}</h4>
+      <h4 style="display: none">{{allServicesList}}</h4>
+<!-- //////////////////////////////////////// -->
 
       <div class="input-grid-btns">
         <button
@@ -24,6 +30,7 @@
 
         <button
           class="prim-btn"
+          @click="addServices"
         >
           Добавить
         </button>
@@ -38,17 +45,55 @@
 </template>
 
 <script>
-const cityOptions = ['Shanghai', 'Beijing', 'Guangzhou', 'Shenzhen', 'Urumchi', 'Shanghaib', 'Beijingas', 'Guangzhouqw', 'Shenzhenad', 'Urumchwi',];
-
 export default {
   name: 'AddingFacilities',
 
   data:() => ({
     checkAll: false,
-    checkedCities: ['Shanghai', 'Beijing'],
-    cities: cityOptions,
-    isIndeterminate: true
+    checkedServices: [],
+    isIndeterminate: false,
+
+    allServices: [],
+    constAllServices: []
   }),
+
+  computed: {
+    servicesList() {
+      const servs = JSON.parse(window.sessionStorage.servicesList).services
+      const length = servs.length
+      const sorted = []
+
+      for(let i=0; i<length; i++) {
+        sorted.push(servs[i].name)
+      }
+
+      this.allServices = sorted
+    },
+
+    allServicesList() {
+      const servs = JSON.parse(window.sessionStorage.servicesList).services
+      const length = servs.length
+      const sorted = []
+
+      for(let i=0; i<length; i++) {
+        sorted.push(servs[i].name)
+      }
+
+      this.constAllServices = sorted
+    },
+
+    setAllServices() {
+      const servs = JSON.parse(window.sessionStorage.servicesList).services.filter(serv => serv.availability === true)
+      const length = servs.length
+      const sorted = []
+
+      for (let i=0; i<length; i++) {
+        sorted.push(servs[i].name)
+      }
+
+      this.checkedServices = sorted
+    }
+  },
 
   methods: {
     closeModal() {
@@ -56,14 +101,36 @@ export default {
     },
 
     handleCheckAllChange(val) {
-        this.checkedCities = val ? cityOptions : [];
+        this.checkedServices = val ? this.constAllServices : []
         this.isIndeterminate = false;
       },
 
     handleCheckedCitiesChange(value) {
       let checkedCount = value.length;
-      this.checkAll = checkedCount === this.cities.length;
-      this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
+      this.checkAll = checkedCount === this.allServices.length;
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.allServices.length;
+    },
+
+    async addServices() {
+      const array = []
+      const allServs = JSON.parse(window.sessionStorage.servicesList).services
+      const checked = this.checkedServices
+      const length = checked.length
+
+      for (let i=0; i<length; i++) {
+        array.push(allServs.find(serv => serv.name === checked[i]))
+      }
+
+      try {
+        await this.$store.dispatch('addServices', array)
+      } catch {}
+
+      this.$emit('refresh')
+      this.$emit('closeAddingFacilityModal')
+      this.$message({
+        message: 'Изменения в списке услуг сохранены',
+        type: 'success'
+      })
     }
   }
 }

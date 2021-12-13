@@ -13,10 +13,10 @@
             :class="{invalid: ($v.category.$dirty && !$v.category.required)}"
           >
             <el-option
-              v-for="(cat, idx) in categories"
+              v-for="(type, idx) in categories"
               :key="idx"
-              :label="(setCatLabel(cat.category))"
-              :value="cat.category"
+              :label="type.label"
+              :value="type.value"
             />
           </el-select>
           <span v-if="$v.category.$dirty && !$v.category.required" class="validation-error">Пожалуйста, выберите категорию услуг</span>
@@ -92,7 +92,7 @@
           class="prim-btn"
           @click="createFacility"
         >
-          Добавить
+          Создать
         </button>
       </div>
     </div>
@@ -135,31 +135,12 @@ export default {
   },
 
   computed: {
-    setServiceCategories() {
-      const services = this.$store.state.services
-      const length = services.length
-      const sorted = []
-      
-      for (let i = 0; i < length; i ++) {
-        sorted.push({
-          category: services[i].category
-        })
-      }
-
-      return sorted
-    },
-
     categories() {
-      var result = this.setServiceCategories.reduce((unique, o) => {
-        if(!unique.some(obj => obj.category === o.category)) {
-          unique.push(o);
-        }
-        return unique;
-      },[]);
+      const types = this.$store.state.servicesCategories
 
-      return result.sort(function(a, b){
-        let x = a.category.toLowerCase();
-        let y = b.category.toLowerCase();
+      return types.sort(function(a, b){
+        let x = a.label.toLowerCase();
+        let y = b.label.toLowerCase();
         if (x < y) {return -1;}
         if (x > y) {return 1;}
         return 0;
@@ -213,9 +194,6 @@ export default {
         return
       }
 
-      this.$emit('closeCreatingFacilityModal')
-      this.$emit('on')
-
       const newFacility = {
         category: this.category,
         name: this.name,
@@ -224,18 +202,16 @@ export default {
         cost: this.cost
       }
 
-      console.log(newFacility);
+      try {
+        await this.$store.dispatch('createFacility', newFacility)
+      } catch {}
 
-      // try {
-      //   await this.$store.dispatch('createFacility', newFacility)
-      // } catch {}
-
-      // this.$emit('refresh')
+      this.$emit('refresh')
+      this.$emit('closeCreatingFacilityModal')
       this.$message({
-        message: 'Новая услуга отправлена на обработку. В скорейшем времени услуга появится в списке добавления',
+        message: 'Новая услуга добавлена',
         type: 'success'
       })
-      this.$emit('off')
     }
   }
 }

@@ -13,7 +13,10 @@
           <span>Отмена</span>
         </button>
 
-        <button class="prim-btn">
+        <button
+          class="prim-btn"
+          @click="deleteService"
+        >
           <span>Удалить</span>
         </button>
       </div>
@@ -41,6 +44,21 @@ export default {
   methods: {
     closeModal() {
       this.$emit('closeDeleteFacilityModal')
+    },
+
+    async deleteService() {
+      const id = this.service.id
+
+      try {
+        await this.$store.dispatch('deleteService', id)
+      } catch {}
+
+      this.$emit('refresh')
+      this.$emit('closeDeleteFacilityModal')
+      this.$message({
+        message: `Услуга "${this.service.name}" удалена`,
+        type: 'success'
+      })
     }
   }
 }
