@@ -5,7 +5,7 @@
       <div class="divider"/>
       
       <div class="pad-24">
-        <label for="select">Уведомить перед заездом</label>
+        <label for="select">Уведомить перед заездом (в часах)</label>
         <el-input
           v-model="notificationPeriod"
           placeholder="Введите количество часов"

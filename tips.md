@@ -33,3 +33,44 @@ oops() {
   return sorted
 }
 /////////////////////////////////////////////////////
+
+
+// var result = this.setAccomodationsCategories.reduce((unique, o) => {
+  //   if(!unique.some(obj => obj.category === o.category)) {
+  //     unique.push(o);
+  //   }
+  //   return unique;
+  // },[]);
+
+  // return result.sort(function(a, b){
+  //   let x = a.category.toLowerCase();
+  //   let y = b.category.toLowerCase();
+  //   if (x < y) {return -1;}
+  //   if (x > y) {return 1;}
+  //   return 0;
+  // })
+
+
+
+
+  setAccomodationsCategories() {
+      const accomodations = this.$store.state.accomodations
+      const length = accomodations.length
+      const sorted = []
+      
+      for (let i = 0; i < length; i ++) {
+        sorted.push({
+          category: accomodations[i].category
+        })
+      }
+
+      return sorted
+    },
+
+
+
+
+
+    '70000'.replace(/\s+/g, '')
+
+

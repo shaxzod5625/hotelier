@@ -38,8 +38,6 @@
 
         @closeCreatingAccomodationModal="closeCreatingAccomodationModal"
         @refresh="refresh"
-        @on="preloaderOn"
-        @offPreLoader="preloaderOff"
       />
 
       <EditingFacility
@@ -89,7 +87,7 @@
 
     <div>
       <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: '/settings'}" class="breadcrump">Настройки</el-breadcrumb-item>
+        <el-breadcrumb-item @click.native="getSettingsFilling" :to="{ path: '/settings'}" class="breadcrump">Настройки</el-breadcrumb-item>
         <el-breadcrumb-item class="breadcrump">Услуги и удобства</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
@@ -125,18 +123,27 @@
 
       <Services
         v-if="selected === 'Услуги'"
+
+        :services.sync="services"
+
         @createFacility="creatingFacilityModal"
+        @addingFacility="addingFacility = true"
         @editFacility="editFacility"
         @deleteFacility="deleteFacility"
-        @preloaderOn="preloaderOn"
+        @refresh="refresh"
       />
 
     
       <Accomodations
         v-if="selected === 'Удобства'"
+        
+        :accomodations.sync="accomodations"
+
         @createAccomodation="createAccomodation"
+        @addingAccomodation="addingAccomodation = true"
         @editAccomodation="editAccomodation"
         @deleteAccomodation="deleteAccomodation"
+        @refresh="refresh"
       />
 
     </transition>
@@ -181,21 +188,39 @@ export default {
     creatingAccomodation: false,
     deletingAccomodation: false,
 
-
-    service: {},
+    allFacilities: JSON.parse(window.sessionStorage.facilities).accomodations,
+    allServices: JSON.parse(window.sessionStorage.facilities).services,
   }),
 
   computed: {
-    
+    accomodations() {
+      if(this.allFacilities !== null) {
+        return this.allFacilities.accomodation
+      } else return []
+    },
+
+    services() {
+      if(this.allServices !== null) {
+        return this.allServices.services
+      } else return []
+    }
   },
 
   methods: {
-    setPreLoaderOff() {
-      this.preLoader = false
+    getAllFacilities() {
+      if(JSON.parse(window.sessionStorage.facilities).accomodations !== null) {
+        this.allFacilities = JSON.parse(window.sessionStorage.facilities).accomodations
+      } else this.allFacilities = []
     },
 
-    getFacilities() {
+    getAllServices() {
+      if(JSON.parse(window.sessionStorage.facilities).services !== null) {
+        this.allServices = JSON.parse(window.sessionStorage.facilities).services
+      } else this.allServices = []
+    },
 
+    setPreLoaderOff() {
+      this.preLoader = false
     },
 
     setSelected(tab) {
@@ -262,8 +287,20 @@ export default {
       this.deletingAccomodation = false
     },
 
-    refresh() {
-      this.$forceUpdate(this.getFacilities())
+    async getSettingsFilling() {
+      await this.$store.dispatch('getSettingsFilling')
+    },
+
+    async refresh() {
+      try {
+        await this.$store.dispatch('getFacilitiesInfo')
+        await this.$store.dispatch('getRoomsCount')
+        await this.$store.dispatch('getFacilitiesList')
+        await this.$store.dispatch('getServicesList')
+      } catch {}
+
+      this.$forceUpdate(this.getAllFacilities())
+      this.$forceUpdate(this.getAllServices())
     },
 
     preloaderOn() {

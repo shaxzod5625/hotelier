@@ -254,7 +254,6 @@ export default {
 
     async newBookingRules() {
       if(this.$v.$invalid) {
-        console.log('invalid');
         this.$v.$touch()
         return
       }

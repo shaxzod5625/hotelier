@@ -1,5 +1,14 @@
 <template>
   <div class="main-layout">
+
+    <transition name="modal-fade" mode="out-in">
+      <ProfileModal
+        v-if="profileModal"
+
+        @closeProfileModal="closeProfileModal"
+        @logout="logout"
+      />
+    </transition>
     
     <div
       :class="side ? 'sidebar-open':'sidebar-closed'"
@@ -52,7 +61,7 @@
             23
           </div>
         </li>
-        <li class="sidebar-profile" @click="logout">
+        <li class="sidebar-profile" @click="openProfileModal">
           <div class="user-pic">
             <img v-if="currentUser.imageUrl !== '' && currentUser.imageUrl !== undefined && currentUser.imageUrl !== null" :src="(currentUser.imageUrl)" alt="">
             <img v-else-if="currentUser.gender === 'male'" src="@/assets/Male-employee.png" alt="">
@@ -76,10 +85,17 @@
 
 
 <script>
+import ProfileModal from '@/uniquePages/ProfileModal'
 
 export default {
   name: 'main-layout',
+
+  components: {
+    ProfileModal
+  },
+
   data: () => ({
+    profileModal: false,
     side: true,
     newmessage: false,
 
@@ -240,6 +256,10 @@ export default {
   },
 
   methods: {
+    openProfileModal() {
+      this.profileModal = true
+    },
+
     async logout() {
       sessionStorage.clear()
       
@@ -251,6 +271,10 @@ export default {
 
       this.$router.push('/login')
       // await this.$store.dispatch('logout')
+    },
+
+    closeProfileModal() {
+      this.profileModal = false
     },
 
     async getInfo(path) {

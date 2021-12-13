@@ -15,8 +15,8 @@
             <el-option
               v-for="(type, idx) in categories"
               :key="idx"
-              :label="(setCatLabel(type.category))"
-              :value="type.category"
+              :label="type.label"
+              :value="type.value"
             />
           </el-select>
           <span v-if="$v.category.$dirty && !$v.category.required" class="validation-error">Пожалуйста, выберите категорию удобства</span>
@@ -55,6 +55,8 @@
           <label for="input">Бесплатно для категорий номеров</label>
           <el-select
             v-model="payFreeRoomCats"
+            multiple
+            collapse-tags
             placeholder="Выберите категории номеров"
           >
             <el-option
@@ -77,7 +79,6 @@
         </div>
       </div>
 
-      <h4>{{setPreLoaderState}}</h4>
 
       <div class="input-grid-btns">
         <button
@@ -91,7 +92,7 @@
           class="prim-btn"
           @click="createAccomodation"
         >
-          Добавить
+          Создать
         </button>
       </div>
     </div>
@@ -134,36 +135,12 @@ export default {
   },
 
   computed: {
-    setPreLoaderState() {
-      const preloader = this.$store.state.preloader
-      return preloader
-    },
-
-    setAccomodationsCategories() {
-      const accomodations = this.$store.state.accomodations
-      const length = accomodations.length
-      const sorted = []
-      
-      for (let i = 0; i < length; i ++) {
-        sorted.push({
-          category: accomodations[i].category
-        })
-      }
-
-      return sorted
-    },
-
     categories() {
-      var result = this.setAccomodationsCategories.reduce((unique, o) => {
-        if(!unique.some(obj => obj.category === o.category)) {
-          unique.push(o);
-        }
-        return unique;
-      },[]);
+      const types = this.$store.state.accomodationsCategories
 
-      return result.sort(function(a, b){
-        let x = a.category.toLowerCase();
-        let y = b.category.toLowerCase();
+      return types.sort(function(a, b){
+        let x = a.label.toLowerCase();
+        let y = b.label.toLowerCase();
         if (x < y) {return -1;}
         if (x > y) {return 1;}
         return 0;
@@ -217,9 +194,6 @@ export default {
         return
       }
 
-      // this.$emit('closeCreatingAccomodationModal')
-      this.$emit('on')
-
       const newAccomodation = {
         category: this.category,
         name: this.name,
@@ -228,19 +202,14 @@ export default {
         cost: this.cost
       }
 
-      console.log(newAccomodation);
-
       try {
-        let response = await this.$store.dispatch('createAccomodation', newAccomodation)
-
-        console.log(response);
-      } catch(e) { console.log(e) }
-
-      if(this.$store.state.preloader === false) {
-      this.$emit('offPreLoader')
-      } else {return}
+        await this.$store.dispatch('createAccomodation', newAccomodation)
+      } catch {}
+      
+      this.$emit('refresh')
+      this.$emit('closeCreatingAccomodationModal')
       this.$message({
-        message: 'Новое удобство отправлен на обработку. В скорейшем времени удобство появится в списке добавления',
+        message: 'Новое удобство добавлен',
         type: 'success'
       })
     }

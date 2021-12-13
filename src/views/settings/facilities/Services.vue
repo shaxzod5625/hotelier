@@ -24,7 +24,7 @@
       </div>
 
       <div
-        v-if="searchService != ''"
+        v-if="this.services.length"
         class="list-card"
       >
         <table class="list-table">
@@ -44,15 +44,15 @@
               <div class="list-content">
                   <td
                     class="category-name-2"
-                    @click="editService(service)"
+                    @click="editService(JSON.parse(service))"
                   >
-                    {{service.label}}
+                    {{JSON.parse(service).name}}
                   </td>
                 <td>
                   <span
-                    v-if="service.cost != 'free'"
+                    v-if="JSON.parse(service).cost !== '0 UZS'"
                   >
-                  {{(Number(service.cost)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$& ')}} UZS
+                  {{JSON.parse(service).cost}}
                   </span>
 
                   <span
@@ -61,18 +61,18 @@
                     Бесплатно
                   </span>
                 </td>
-                <td>{{service.measurementUnit}}</td>
+                <td>{{setMeasurementLabel(JSON.parse(service).measurementUnit)}}</td>
                 <td class="list-last-el">
-                  <el-switch @change="switchActivity(service.label, service.availability)" v-model="service.availability">
+                  <el-switch @change="switchServiceAvailability(JSON.parse(service).availability, JSON.parse(service).id)" v-model="JSON.parse(service).availability">
                   </el-switch>
                   <div class="list-icon-box">
                     <img
-                      @click="editService(service)"
+                      @click="editService(JSON.parse(service))"
                       class="icon-box"
                       src="@/assets/icons/Edit.svg" alt=""
                     >
                     <img
-                      @click="deleteService(service)"
+                      @click="deleteService(JSON.parse(service))"
                       class="icon-box"
                       src="@/assets/icons/Delete.svg" alt=""
                     >
@@ -85,11 +85,26 @@
       </div>
 
       <div
-        v-else
+        v-if="this.services.length && !this.searchService.length"
         class="no-reults"
       >
         <h3>Результатов по поиску <span>"{{search}}"</span> среди услуг не найдено</h3>
+        <h3 class="advice">Вы можете <span class="new" @click="createFacility">создать</span> новую услуг, которая отсутствует в списке доступных услуг</h3>
       </div>
+
+      <div
+        v-if="!this.services.length"
+        class="no-reults"
+      >
+        <h3>Услуги не найдены. Пожалуйста,
+          <span class="new" @click="addingFacility">добавьте</span> или
+          <span class="new" @click="createFacility">создайте</span>
+          услуги</h3>
+      </div>
+
+<!-- //////////// Hidden computed //////////// -->
+<!-- ///////////////////////////////////////// -->
+
     </div>
   </div>
 </template>
@@ -100,34 +115,56 @@ export default {
 
   data:() => ({
     search: '',
+    allServices: [],
+
+
   }),
+
+  props: {
+    services: Array
+  },
 
   computed: {
     searchService(){
-      return this.$store.state.servicesList.filter(post => {
-        return post.label.toLowerCase().includes(this.search.toLowerCase())
-        || post.value.toLowerCase().includes(this.search.toLowerCase())
+      return this.services.filter(post => {
+        return JSON.parse(post).name.toLowerCase().includes(this.search.toLowerCase())
       })
     },
   },
 
   methods: {
-    createFacility() {
-      this.$emit('createFacility')
+    setMeasurementLabel(unit) {
+      if(unit === 'oneTime') {return 'Разовая стоимость'}
+      else if(unit === 'perDay') {return 'За один день'}
+      else if(unit === 'perUnit') {return 'За каждую вещь'}
+      else if(unit === 'perSettlement') {return 'За все время проживания'}
+      else if(unit === 'perPiece') {return 'За штуку'}
+      else if(unit === 'perPortion') {return 'За порцию'}
     },
 
-    switchActivity(name, activity) {
-      
-      const service = {
-        name: name,
-        activity: activity
+    async switchServiceAvailability(activity, id) {
+      const facility = {
+        id: id,
+        availability: !activity
       }
-      this.$emit('preloaderOn')
-      console.log(service);
 
-      // try {
-      //   this.$store.dispatch('switchServiceActivity', service)
-      // } catch {}
+      try {
+        await this.$store.dispatch('switchServiceAvailability', facility)
+      } catch {}
+
+      this.$emit('refresh')
+      this.$message({
+        message: 'Доступность услуги изменена',
+        type: 'success'
+      })
+    },
+
+    addingFacility() {
+      this.$emit('addingFacility')
+    },
+
+    createFacility() {
+      this.$emit('createFacility')
     },
 
     editService(service) {

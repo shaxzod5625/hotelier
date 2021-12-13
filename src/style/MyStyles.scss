@@ -1634,6 +1634,46 @@ table {
     transform: translateY(-100px);
   }
 }
+///////////////////////////////////////////
+
+///////// Side modal fade ////////////////@at-root
+.modal-fade-enter-active {
+  transition: all 500ms ease;
+  .left-modal-div {
+  transition: all 500ms ease;
+  transform: translateX(0px);
+  }
+  
+}
+
+.modal-fade-leave-active {
+  transition: all 500ms ease;
+
+  .left-modal-div {
+    transition: all 500ms ease;
+    transform: translateX(0%);
+  }
+}
+
+.modal-fade-enter {
+  transition: all 500ms ease;
+  opacity: 0;
+
+  .left-modal-div {
+    transition: all 500ms ease;
+    transform: translateX(100%);
+  }
+}
+
+.modal-fade-leave-to {
+  transition: all 500ms ease;
+  opacity: 0;
+
+  .left-modal-div {
+    transition: all 500ms ease;
+    transform: translateX(100%);
+  }
+}
 
 // transition of router view
 
@@ -1647,7 +1687,7 @@ table {
   transform: translateX(10px);
   opacity: 0;
 }
-
+/////////////////////////////////////
 
 
 // modal window
@@ -3518,21 +3558,32 @@ table {
 
 .no-reults {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 24px;
   margin-top: 24px;
 
   h3 {
     margin: 0;
     font-family: Roboto;
-    font-weight: 500;
+    font-weight: 400;
     font-size: 16px;
     line-height: 16px;
     color: #C91052;
 
     span {
+      font-weight: 500;
       color: #2161ED;
     }
+
+    .new {
+      cursor: pointer;
+    }
+  }
+
+  .advice {
+    color: #83858A;
   }
 }
 
@@ -3737,6 +3788,42 @@ label {
   z-index: 2000;
   background: #fff;
   border-radius: 12px;
+  filter: drop-shadow(0px 6px 16px rgba(50, 52, 56, 0.36));
+  overflow-y: auto;
+
+  h3 {
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 16px;
+    text-align: center;
+    color: #323438;
+    margin: 16px 0;
+  }
+
+  h4 {
+    font-family: Roboto;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    text-align: center;
+    color: #83858A;
+    margin-top: 12px;
+    margin-bottom: 0;
+  }
+}
+
+.left-modal-div {
+  position: fixed;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  width: 446px;
+  height: 100%;
+  align-items: center;
+  z-index: 2000;
+  background: #fff;
+  border-radius: 24px 0 0 24px;
   filter: drop-shadow(0px 6px 16px rgba(50, 52, 56, 0.36));
   overflow-y: auto;
 
