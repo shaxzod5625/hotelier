@@ -235,6 +235,18 @@ export default new Vuex.Store({
       {label: 'Туалетные принадлежности', value: 'toiletries', category: 'main'},
     ],
 
+    currencies: [
+      {label: 'Узбекский сум (UZS)', value: 'uzs'},
+      {label: 'Российский рубль (RUB)', value: 'rub'},
+      {label: 'Доллар США (USD)', value: 'usd'},
+      {label: 'Евро (EUR)', value: 'eur'},
+    ],
+
+    tariffMeasurementTypes: [
+      {label: 'За день (сутки)', value: 'perDay'},
+      {label: 'За час', value: 'perHour'},
+    ],
+
     servicesCategories: [
       {label: 'Основные', value: 'main'},
       {label: 'Дополнительные', value: 'additional'},
@@ -733,6 +745,22 @@ export default new Vuex.Store({
       window.sessionStorage.servicesList = JSON.stringify(servicesList)
     },
 /////////////////////////////////////////////
+
+
+
+
+///////////// Tariffs and Prices ////////////////
+
+    SET_MY_TARIFFS(state, tariffs) {
+      state.tariffs = tariffs
+      window.sessionStorage.tariffs = JSON.stringify(tariffs)
+    },
+
+    SET_TARIFF_CONFIGS(state, tariffConfigs) {
+      state.tariffConfigs = tariffConfigs
+      window.sessionStorage.tariffConfigs = JSON.stringify(tariffConfigs)
+    },
+/////////////////////////////////////////////////
 
 
 
@@ -1523,6 +1551,65 @@ export default new Vuex.Store({
         commit('SET_RESPONSE_STATUS', resStatus)
       } catch(e) {console.log(e)}
     },
+///////////////////////////////////////////////////////
+
+
+///////////////// Tariffs and prices //////////////////
+
+    async getAllTariffs({commit}) {
+      try {
+        let response = await Api().get('/api/settings/tariffs')
+        let tariffs = response.data
+
+        commit('SET_MY_TARIFFS', tariffs)
+      } catch(e) {console.log(e)}
+    },
+
+    async editCalculationRules({commit}, rules) {
+      try {
+        let response = await Api().put('/api/settings/tariffs/configurations/calculationRules', rules)
+        let resStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', resStatus)
+      } catch(e) {console.log(e)}
+    },
+
+    async newTariff({commit}, tariff) {
+      try {
+        let response = await Api().post('/api/settings/tariffs/new', tariff)
+        let resStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', resStatus)
+      } catch(e) {console.log(e)}
+    },
+
+    async getTariffsConfiguration({commit}) {
+      try {
+        let response = await Api().get('/api/settings/tariffs/configurations/get')
+        let tariffConfigs = response.data
+
+        commit('SET_TARIFF_CONFIGS', tariffConfigs)
+      } catch(e) {console.log(e)}
+    },
+
+    async editZeroHour({commit}, zeroHour) {
+      try {
+        let response = await Api().put('/api/settings/tariffs/configurations/zeroHour', zeroHour)
+        let resStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', resStatus)
+      } catch(e) {console.log(e)}
+    },
+
+    async editFreeOfChargePeriod({commit}, freeOfChargePeriod) {
+      try {
+        let response = await Api().put('/api/settings/tariffs/configurations/freeOfChargePeriod', freeOfChargePeriod)
+        let resStatus = response.data
+
+        commit('SET_RESPONSE_STATUS', resStatus)
+      } catch(e) {console.log(e)}
+    },
+///////////////////////////////////////////////////////////////////////
 
   },
 

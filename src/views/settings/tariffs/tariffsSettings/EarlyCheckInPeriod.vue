@@ -63,9 +63,11 @@
             v-if="rule.tarificationType === 'fixed'"
           >
             <label for="input">Сумма</label>
-            <currency-input
+            <money
+              class="money-input"
               v-model="rule.amount"
-              :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
+              v-bind="money"
+              placeholder="Введите сумму"
             />
           </div>
 
@@ -74,9 +76,11 @@
             class="w-100"
           >
             <label for="input">Процент</label>
-            <percent-input
+            <money
+              class="money-input"
               v-model="rule.amount"
-              :options="{ placeholder: 'Введите процент от проживания' }"
+              v-bind="percent"
+              placeholder="Введите процент от проживания"
             />
           </div>
         </div>
@@ -135,15 +139,9 @@
 </template>
 
 <script>
-import CurrencyInput from './../../../../components/CurrencyInput.vue'
-import PercentInput from './../../../../components/PercentInput.vue'
 
 export default {
   name: 'EarlyCheckInPeriod',
-
-  components: {
-    CurrencyInput, PercentInput
-  },
 
   data:() => ({
     checkInRules: [
@@ -158,7 +156,25 @@ export default {
     tarificationTypes: [
       {value: 'fixed', label: 'Фиксированная сумма'},
       {value: 'percent', label: 'Процент от проживания'}
-    ]
+    ],
+
+    money: {
+      decimal: '',
+      thousands: ' ',
+      prefix: '',
+      suffix: ' UZS',
+      precision: 0,
+      masked: true
+    },
+
+    percent: {
+      decimal: '',
+      thousands: ' ',
+      prefix: '',
+      suffix: ' %',
+      precision: 0,
+      masked: true
+    }
   }),
 
   methods: {

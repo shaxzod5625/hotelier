@@ -67,7 +67,7 @@
             <img v-else-if="currentUser.gender === 'male'" src="@/assets/Male-employee.png" alt="">
             <img v-else src="@/assets/Female-employee.png" alt="">
           </div>
-          <div>
+          <div style="margin-top: 6px">
             <h3>{{ currentUser.lastName }} {{ currentUser.name }}</h3>
             <span>{{ subPositionLbl }} {{ positionLbl }}</span>
           </div>

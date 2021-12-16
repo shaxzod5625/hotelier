@@ -111,9 +111,10 @@
           v-if="currentTariff.discount.discountType === 'UZS'"
         >
           <label for="input">Сумма скидки</label>
-          <currency-input
+          <money
+            class="money-input"
             v-model="currentTariff.discount.discountAmount"
-            :options="{ currency: 'UZS', placeholder: 'Введите сумму скидки'}"
+            v-bind="money"
           />
         </div>
 
@@ -122,9 +123,10 @@
           v-if="currentTariff.discount.discountType === 'percent'"
         >
           <label for="input">Процент скидки</label>
-          <percent-input
-            :value="currentTariff.discount.discountAmount"
-            :options="{ placeholder: 'Введите процент скидки' }"
+          <money
+            class="money-input"
+            v-model="currentTariff.discount.discountAmount"
+            v-bind="percent"
           />
         </div>
 
@@ -133,8 +135,10 @@
           v-if="currentTariff.discount.discountType === 'individual'"
         >
           <label for="input">Сумма скидки</label>
-          <currency-input
-            :options="{ currency: 'UZS', placeholder: 'Введите сумму скидки', disabled: 'disabled'}"
+          <el-input
+            v-model="disabled"
+            disabled
+            placeholder="Введите сумму скидки"
           />
         </div>
       </div>
@@ -169,13 +173,13 @@
         <div class="divider-collapse"/>
 
         <el-collapse
-          v-model="activeName"
           accordion
-          v-for="(ctgry, idx) in roomCategories"
+          v-for="(stock, idx) in stockForInputs"
           :key="idx"
+          v-model="activeName"
         >
           <el-collapse-item
-            :title="ctgry.catName"
+            :title="catName(stock.category)"
             :name="idx"
             >
 
@@ -188,381 +192,109 @@
 
               <div class="w-100">
                 <label for="input">Резидентам</label>
-                <currency-input
+                <money
+                  @blur="rackResidents"
+                  class="money-input"
                   v-model="cost.residentsMax"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
+                  v-bind="money"
                 />
               </div>
 
               <div class="w-100">
                 <label for="input">Иностранцам</label>
-                <currency-input
+                <money
+                  @change="rackForeigners"
+                  class="money-input"
                   v-model="cost.foreignersMax"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
+                  v-bind="money"
                 />
               </div>
 
               <div class="w-100">
                 <label for="input">Комбинированный случай</label>
-                <currency-input
+                <money
+                  @change="rackCombined"
+                  class="money-input"
                   v-model="cost.combinedMax"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
+                  v-bind="money"
                 />
               </div>
-            </div>
-
-
-            <div
-              v-if="Math.max(...maxBeds(ctgry.catID)) > 0"
-              class="form-4"
-              style="width: 100%"
-            >
-              <div class="w-100">
-                <h4 class="cat-name">Одноместный</h4>
-              </div>
-
-              <div class="w-100">
-                <currency-input
-                  v-model="cost.residents"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                />
-              </div>
-
-              <div class="w-100">
-                <currency-input
-                  v-model="cost.foreigners"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                />
-              </div>
-
-              <div class="w-100">
-                <currency-input
-                  v-model="cost.combined"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                />
-              </div>
-
             </div>
 
             <div
-              v-if="Math.max(...maxBeds(ctgry.catID)) > 1"
-              class="form-4"
-              style="width: 100%"
+              v-for="(row, idx) in stock.settlement"
+              :key="idx"
             >
-              <div class="w-100">
-                <h4 class="cat-name">Двухместный</h4>
-              </div>
 
-              <div class="w-100">
-                <currency-input
-                  v-model="cost.residents"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                />
-              </div>
+              <div
+                class="form-4"
+                style="width: 100%"
+              >
 
-              <div class="w-100">
-                <currency-input
-                  v-model="cost.foreigners"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                />
-              </div>
+                <div class="w-100">
+                  <h4 class="cat-name">{{settlementType(idx+1)}}</h4>
+                </div>
 
-              <div class="w-100">
-                <currency-input
-                  v-model="cost.combined"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                />
-              </div>
+                <div class="w-100">
+                  <money
+                    class="money-input"
+                    v-bind="money"
+                    v-model="row.residents"
+                  />
+                </div>
 
+                <div class="w-100">
+                  <money
+                    class="money-input"
+                    v-bind="money"
+                    v-model="row.foreigners"
+                  />
+                </div>
+
+                <div class="w-100">
+                  <money
+                    class="money-input"
+                    v-bind="money"
+                    v-model="row.foreigners"
+                  />
+                </div>
+              </div>
             </div>
-
+            
             <div
-              v-if="Math.max(...maxBeds(ctgry.catID)) > 2"
-              class="form-4"
-              style="width: 100%"
-            >
-              <div class="w-100">
-                <h4 class="cat-name">Трёхместный</h4>
+                class="form-4"
+                style="width: 100%"
+                v-if="stock.settlement[idx].additionalBed.amount > 0"
+              >
+
+                <div class="w-100">
+                  <h4 class="cat-name" style="color: #7710C9">Дополнительная койка</h4>
+                </div>
+
+                <div class="w-100">
+                  <money
+                    class="money-input"
+                    v-bind="money"
+                    v-model="stock.settlement[idx].additionalBed.residents"
+                  />
+                </div>
+
+                <div class="w-100">
+                  <money
+                    class="money-input"
+                    v-bind="money"
+                    v-model="stock.settlement[idx].additionalBed.foreigners"
+                  />
+                </div>
+
+                <div class="w-100">
+                  <money
+                    class="money-input"
+                    v-bind="money"
+                    v-model="stock.settlement[idx].additionalBed.combined"
+                  />
+                </div>
               </div>
-
-              <div class="w-100">
-                <currency-input
-                  v-model="cost.residents"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                />
-              </div>
-
-              <div class="w-100">
-                <currency-input
-                  v-model="cost.foreigners"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                />
-              </div>
-
-              <div class="w-100">
-                <currency-input
-                  v-model="cost.combined"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                />
-              </div>
-
-            </div>
-
-            <div
-              v-if="Math.max(...maxBeds(ctgry.catID)) > 3"
-              class="form-4"
-              style="width: 100%"
-            >
-              <div class="w-100">
-                <h4 class="cat-name">Четырёхместный</h4>
-              </div>
-
-              <div class="w-100">
-                <currency-input
-                  v-model="cost.residents"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                />
-              </div>
-
-              <div class="w-100">
-                <currency-input
-                  v-model="cost.foreigners"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                />
-              </div>
-
-              <div class="w-100">
-                <currency-input
-                  v-model="cost.combined"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                />
-              </div>
-
-            </div>
-
-            <div
-              v-if="Math.max(...maxBeds(ctgry.catID)) > 4"
-              class="form-4"
-              style="width: 100%"
-            >
-              <div class="w-100">
-                <h4 class="cat-name">Пятиместный</h4>
-              </div>
-
-              <div class="w-100">
-                <currency-input
-                  v-model="cost.residents"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                />
-              </div>
-
-              <div class="w-100">
-                <currency-input
-                  v-model="cost.foreigners"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                />
-              </div>
-
-              <div class="w-100">
-                <currency-input
-                  v-model="cost.combined"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                />
-              </div>
-
-            </div>
-
-            <div
-              v-if="Math.max(...maxBeds(ctgry.catID)) > 5"
-              class="form-4"
-              style="width: 100%"
-            >
-              <div class="w-100">
-                <h4 class="cat-name">Шестиместный</h4>
-              </div>
-
-              <div class="w-100">
-                <currency-input
-                  v-model="cost.residents"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                />
-              </div>
-
-              <div class="w-100">
-                <currency-input
-                  v-model="cost.foreigners"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                />
-              </div>
-
-              <div class="w-100">
-                <currency-input
-                  v-model="cost.combined"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                />
-              </div>
-
-            </div>
-
-            <div
-              v-if="Math.max(...maxBeds(ctgry.catID)) > 6"
-              class="form-4"
-              style="width: 100%"
-            >
-              <div class="w-100">
-                <h4 class="cat-name">Семиместный</h4>
-              </div>
-
-              <div class="w-100">
-                <currency-input
-                  v-model="cost.residents"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                />
-              </div>
-
-              <div class="w-100">
-                <currency-input
-                  v-model="cost.foreigners"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                />
-              </div>
-
-              <div class="w-100">
-                <currency-input
-                  v-model="cost.combined"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                />
-              </div>
-
-            </div>
-
-            <div
-              v-if="Math.max(...maxBeds(ctgry.catID)) > 7"
-              class="form-4"
-              style="width: 100%"
-            >
-              <div class="w-100">
-                <h4 class="cat-name">Восьмиместный</h4>
-              </div>
-
-              <div class="w-100">
-                <currency-input
-                  v-model="cost.residents"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                />
-              </div>
-
-              <div class="w-100">
-                <currency-input
-                  v-model="cost.foreigners"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                />
-              </div>
-
-              <div class="w-100">
-                <currency-input
-                  v-model="cost.combined"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                />
-              </div>
-
-            </div>
-
-            <div
-              v-if="Math.max(...maxBeds(ctgry.catID)) > 8"
-              class="form-4"
-              style="width: 100%"
-            >
-              <div class="w-100">
-                <h4 class="cat-name">Девятиместный</h4>
-              </div>
-
-              <div class="w-100">
-                <currency-input
-                  v-model="cost.residents"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                />
-              </div>
-
-              <div class="w-100">
-                <currency-input
-                  v-model="cost.foreigners"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                />
-              </div>
-
-              <div class="w-100">
-                <currency-input
-                  v-model="cost.combined"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                />
-              </div>
-
-            </div>
-
-            <div
-              v-if="Math.max(...maxBeds(ctgry.catID)) > 9"
-              class="form-4"
-              style="width: 100%"
-            >
-              <div class="w-100">
-                <h4 class="cat-name">Десятиместный</h4>
-              </div>
-
-              <div class="w-100">
-                <currency-input
-                  v-model="cost.residents"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                />
-              </div>
-
-              <div class="w-100">
-                <currency-input
-                  v-model="cost.foreigners"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                />
-              </div>
-
-              <div class="w-100">
-                <currency-input
-                  v-model="cost.combined"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                />
-              </div>
-
-            </div>
-
-            <div
-              v-if="Math.max(...maxAdditionalBeds(ctgry.catID)) > 0"
-              class="form-4"
-              style="width: 100%"
-            >
-              <div class="w-100">
-                <h4 class="cat-name">Дополнительная койка</h4>
-              </div>
-
-              <div class="w-100">
-                <currency-input
-                  v-model="cost.residents"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                />
-              </div>
-
-              <div class="w-100">
-                <currency-input
-                  v-model="cost.foreigners"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                />
-              </div>
-
-              <div class="w-100">
-                <currency-input
-                  v-model="cost.combined"
-                  :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                />
-              </div>
-
-            </div>
 
           </el-collapse-item>
           <div class="divider-collapse"/>
@@ -581,14 +313,21 @@
 
         <button
           class="prim-btn"
+          @click="consoleStock(submit)"
         >
           Save
         </button>
       </div>
     </div>
+<!-- //////////////////////////////////////////////////////////// -->
 
+
+
+
+
+<!-- /////////////////// Tour companies ///////////////////////// -->
     <div
-      v-if="selected === 'Туристические фирмы'"
+      v-if="selected === 'asd фирмы'"
       class="input-grid"
     >
       <div
@@ -639,9 +378,10 @@
             v-if="tourCompanyTariff.discountType === 'UZS'"
           >
             <label for="input">Сумма скидки</label>
-            <currency-input
+            <money
+              class="money-input"
               v-model="tourCompanyTariff.discountAmount"
-              :options="{ currency: 'UZS', placeholder: 'Введите сумму скидки'}"
+              v-bind="money"
             />
           </div>
 
@@ -650,9 +390,10 @@
             v-if="tourCompanyTariff.discountType === 'percent'"
           >
             <label for="input">Процент скидки</label>
-            <percent-input
-              :value="tourCompanyTariff.discountAmount"
-              :options="{ placeholder: 'Введите процент скидки' }"
+            <money
+              class="money-input"
+              v-model="tourCompanyTariff.discountAmount"
+              v-bind="percent"
             />
           </div>
 
@@ -661,8 +402,10 @@
             v-if="tourCompanyTariff.discountType === 'individual'"
           >
             <label for="input">Сумма скидки</label>
-            <currency-input
-              :options="{ currency: 'UZS', placeholder: 'Введите сумму скидки', disabled: 'disabled'}"
+            <el-input
+              v-model="disabled"
+              disabled
+              placeholder="Введите сумму скидки"
             />
           </div>
         </div>
@@ -703,13 +446,13 @@
           <div class="divider-collapse"/>
 
           <el-collapse
-            v-model="activeName"
             accordion
-            v-for="(ctgry, idx) in roomCategories"
+            v-for="(stock, idx) in stockForInputs"
             :key="idx"
+            v-model="activeName"
           >
             <el-collapse-item
-              :title="ctgry.catName"
+              :title="catName(stock.category)"
               :name="idx"
               >
 
@@ -722,381 +465,109 @@
 
                 <div class="w-100">
                   <label for="input">Резидентам</label>
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.residentsMax"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
+                  <money
+                    @input="rackResidents"
+                    class="money-input"
+                    v-model="cost.residentsMax"
+                    v-bind="money"
                   />
                 </div>
 
                 <div class="w-100">
                   <label for="input">Иностранцам</label>
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.foreignersMax"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
+                  <money
+                    @input="rackForeigners"
+                    class="money-input"
+                    v-model="cost.foreignersMax"
+                    v-bind="money"
                   />
                 </div>
 
                 <div class="w-100">
                   <label for="input">Комбинированный случай</label>
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.combinedMax"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
+                  <money
+                    @input="rackCombined"
+                    class="money-input"
+                    v-model="cost.combinedMax"
+                    v-bind="money"
                   />
                 </div>
-              </div>
-
-
-              <div
-                v-if="Math.max(...maxBeds(ctgry.catID)) > 0"
-                class="form-4"
-                style="width: 100%"
-              >
-                <div class="w-100">
-                  <h4 class="cat-name">Одноместный</h4>
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.residents1"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.foreigners1"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.combined1"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
               </div>
 
               <div
-                v-if="Math.max(...maxBeds(ctgry.catID)) > 1"
-                class="form-4"
-                style="width: 100%"
+                v-for="(row, idx) in stock.settlement"
+                :key="idx"
               >
-                <div class="w-100">
-                  <h4 class="cat-name">Двухместный</h4>
-                </div>
 
-                <div class="w-100">
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.residents2"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
+                <div
+                  class="form-4"
+                  style="width: 100%"
+                >
 
-                <div class="w-100">
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.foreigners2"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
+                  <div class="w-100">
+                    <h4 class="cat-name">{{settlementType(idx+1)}}</h4>
+                  </div>
 
-                <div class="w-100">
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.combined2"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
+                  <div class="w-100">
+                    <money
+                      class="money-input"
+                      v-bind="money"
+                      v-model="row.residents"
+                    />
+                  </div>
 
+                  <div class="w-100">
+                    <money
+                      class="money-input"
+                      v-bind="money"
+                      v-model="row.foreigners"
+                    />
+                  </div>
+
+                  <div class="w-100">
+                    <money
+                      class="money-input"
+                      v-bind="money"
+                      v-model="row.foreigners"
+                    />
+                  </div>
+                </div>
               </div>
-
+              
               <div
-                v-if="Math.max(...maxBeds(ctgry.catID)) > 2"
-                class="form-4"
-                style="width: 100%"
-              >
-                <div class="w-100">
-                  <h4 class="cat-name">Трёхместный</h4>
+                  class="form-4"
+                  style="width: 100%"
+                  v-if="stock.settlement[idx].additionalBed.amount > 0"
+                >
+
+                  <div class="w-100">
+                    <h4 class="cat-name" style="color: #7710C9">Дополнительная койка</h4>
+                  </div>
+
+                  <div class="w-100">
+                    <money
+                      class="money-input"
+                      v-bind="money"
+                      v-model="stock.settlement[idx].additionalBed.residents"
+                    />
+                  </div>
+
+                  <div class="w-100">
+                    <money
+                      class="money-input"
+                      v-bind="money"
+                      v-model="stock.settlement[idx].additionalBed.foreigners"
+                    />
+                  </div>
+
+                  <div class="w-100">
+                    <money
+                      class="money-input"
+                      v-bind="money"
+                      v-model="stock.settlement[idx].additionalBed.combined"
+                    />
+                  </div>
                 </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.residents3"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.foreigners3"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.combined3"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-              </div>
-
-              <div
-                v-if="Math.max(...maxBeds(ctgry.catID)) > 3"
-                class="form-4"
-                style="width: 100%"
-              >
-                <div class="w-100">
-                  <h4 class="cat-name">Четырёхместный</h4>
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.residents4"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.foreigners4"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.combined4"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-              </div>
-
-              <div
-                v-if="Math.max(...maxBeds(ctgry.catID)) > 4"
-                class="form-4"
-                style="width: 100%"
-              >
-                <div class="w-100">
-                  <h4 class="cat-name">Пятиместный</h4>
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.residents5"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.foreigners5"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.combined5"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-              </div>
-
-              <div
-                v-if="Math.max(...maxBeds(ctgry.catID)) > 5"
-                class="form-4"
-                style="width: 100%"
-              >
-                <div class="w-100">
-                  <h4 class="cat-name">Шестиместный</h4>
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.residents6"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.foreigners6"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.combined6"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-              </div>
-
-              <div
-                v-if="Math.max(...maxBeds(ctgry.catID)) > 6"
-                class="form-4"
-                style="width: 100%"
-              >
-                <div class="w-100">
-                  <h4 class="cat-name">Семиместный</h4>
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.residents7"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.foreigners7"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.combined7"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-              </div>
-
-              <div
-                v-if="Math.max(...maxBeds(ctgry.catID)) > 7"
-                class="form-4"
-                style="width: 100%"
-              >
-                <div class="w-100">
-                  <h4 class="cat-name">Восьмиместный</h4>
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.residents8"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.foreigners8"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.combined8"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-              </div>
-
-              <div
-                v-if="Math.max(...maxBeds(ctgry.catID)) > 8"
-                class="form-4"
-                style="width: 100%"
-              >
-                <div class="w-100">
-                  <h4 class="cat-name">Девятиместный</h4>
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.residents9"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.foreigners9"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.combined9"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-              </div>
-
-              <div
-                v-if="Math.max(...maxBeds(ctgry.catID)) > 9"
-                class="form-4"
-                style="width: 100%"
-              >
-                <div class="w-100">
-                  <h4 class="cat-name">Десятиместный</h4>
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.residents10"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.foreigners10"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.combined10"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-              </div>
-
-              <div
-                v-if="Math.max(...maxAdditionalBeds(ctgry.catID)) > 0"
-                class="form-4"
-                style="width: 100%"
-              >
-                <div class="w-100">
-                  <h4 class="cat-name">Дополнительная койка</h4>
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.residentsAdditional"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.foreignersAdditional"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="tourCompanyTariff.cost.combinedAdditional"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-              </div>
 
             </el-collapse-item>
             <div class="divider-collapse"/>
@@ -1143,6 +614,16 @@
       </div>
     </div>
 
+    <TourCompanies
+      v-if="selected === 'Туристические фирмы'"
+
+      :tourCompanyTariffs="tourCompanyTariffs"
+    />
+<!-- /////////////////////////////////////////////////////// -->
+
+
+
+<!-- //////////////// Company partners ///////////////////// -->
     <div
       v-if="selected === 'Компании-партнеры'"
       class="input-grid"
@@ -1195,9 +676,10 @@
             v-if="partnerCompaniesTariff.discountType === 'UZS'"
           >
             <label for="input">Сумма скидки</label>
-            <currency-input
+            <money
+              class="money-input"
               v-model="partnerCompaniesTariff.discountAmount"
-              :options="{ currency: 'UZS', placeholder: 'Введите сумму скидки'}"
+              v-bind="money"
             />
           </div>
 
@@ -1206,9 +688,10 @@
             v-if="partnerCompaniesTariff.discountType === 'percent'"
           >
             <label for="input">Процент скидки</label>
-            <percent-input
-              :value="partnerCompaniesTariff.discountAmount"
-              :options="{ placeholder: 'Введите процент скидки' }"
+            <money
+              class="money-input"
+              v-model="partnerCompaniesTariff.discountAmount"
+              v-bind="percent"
             />
           </div>
 
@@ -1217,8 +700,10 @@
             v-if="partnerCompaniesTariff.discountType === 'individual'"
           >
             <label for="input">Сумма скидки</label>
-            <currency-input
-              :options="{ currency: 'UZS', placeholder: 'Введите сумму скидки', disabled: 'disabled'}"
+            <el-input
+              v-model="disabled"
+              disabled
+              placeholder="Введите сумму скидки"
             />
           </div>
         </div>
@@ -1259,13 +744,13 @@
           <div class="divider-collapse"/>
 
           <el-collapse
-            v-model="activeName"
             accordion
-            v-for="(ctgry, idx) in roomCategories"
+            v-for="(stock, idx) in stockForInputs"
             :key="idx"
+            v-model="activeName"
           >
             <el-collapse-item
-              :title="ctgry.catName"
+              :title="catName(stock.category)"
               :name="idx"
               >
 
@@ -1278,381 +763,109 @@
 
                 <div class="w-100">
                   <label for="input">Резидентам</label>
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.residentsMax"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
+                  <money
+                    @input="rackResidents"
+                    class="money-input"
+                    v-model="cost.residentsMax"
+                    v-bind="money"
                   />
                 </div>
 
                 <div class="w-100">
                   <label for="input">Иностранцам</label>
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.foreignersMax"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
+                  <money
+                    @input="rackForeigners"
+                    class="money-input"
+                    v-model="cost.foreignersMax"
+                    v-bind="money"
                   />
                 </div>
 
                 <div class="w-100">
                   <label for="input">Комбинированный случай</label>
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.combinedMax"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
+                  <money
+                    @input="rackCombined"
+                    class="money-input"
+                    v-model="cost.combinedMax"
+                    v-bind="money"
                   />
                 </div>
-              </div>
-
-
-              <div
-                v-if="Math.max(...maxBeds(ctgry.catID)) > 0"
-                class="form-4"
-                style="width: 100%"
-              >
-                <div class="w-100">
-                  <h4 class="cat-name">Одноместный</h4>
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.residents1"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.foreigners1"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.combined1"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
               </div>
 
               <div
-                v-if="Math.max(...maxBeds(ctgry.catID)) > 1"
-                class="form-4"
-                style="width: 100%"
+                v-for="(row, idx) in stock.settlement"
+                :key="idx"
               >
-                <div class="w-100">
-                  <h4 class="cat-name">Двухместный</h4>
-                </div>
 
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.residents2"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
+                <div
+                  class="form-4"
+                  style="width: 100%"
+                >
 
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.foreigners2"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
+                  <div class="w-100">
+                    <h4 class="cat-name">{{settlementType(idx+1)}}</h4>
+                  </div>
 
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.combined2"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
+                  <div class="w-100">
+                    <money
+                      class="money-input"
+                      v-bind="money"
+                      v-model="row.residents"
+                    />
+                  </div>
 
+                  <div class="w-100">
+                    <money
+                      class="money-input"
+                      v-bind="money"
+                      v-model="row.foreigners"
+                    />
+                  </div>
+
+                  <div class="w-100">
+                    <money
+                      class="money-input"
+                      v-bind="money"
+                      v-model="row.foreigners"
+                    />
+                  </div>
+                </div>
               </div>
-
+              
               <div
-                v-if="Math.max(...maxBeds(ctgry.catID)) > 2"
-                class="form-4"
-                style="width: 100%"
-              >
-                <div class="w-100">
-                  <h4 class="cat-name">Трёхместный</h4>
+                  class="form-4"
+                  style="width: 100%"
+                  v-if="stock.settlement[idx].additionalBed.amount > 0"
+                >
+
+                  <div class="w-100">
+                    <h4 class="cat-name" style="color: #7710C9">Дополнительная койка</h4>
+                  </div>
+
+                  <div class="w-100">
+                    <money
+                      class="money-input"
+                      v-bind="money"
+                      v-model="stock.settlement[idx].additionalBed.residents"
+                    />
+                  </div>
+
+                  <div class="w-100">
+                    <money
+                      class="money-input"
+                      v-bind="money"
+                      v-model="stock.settlement[idx].additionalBed.foreigners"
+                    />
+                  </div>
+
+                  <div class="w-100">
+                    <money
+                      class="money-input"
+                      v-bind="money"
+                      v-model="stock.settlement[idx].additionalBed.combined"
+                    />
+                  </div>
                 </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.residents3"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.foreigners3"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.combined3"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-              </div>
-
-              <div
-                v-if="Math.max(...maxBeds(ctgry.catID)) > 3"
-                class="form-4"
-                style="width: 100%"
-              >
-                <div class="w-100">
-                  <h4 class="cat-name">Четырёхместный</h4>
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.residents4"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.foreigners4"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.combined4"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-              </div>
-
-              <div
-                v-if="Math.max(...maxBeds(ctgry.catID)) > 4"
-                class="form-4"
-                style="width: 100%"
-              >
-                <div class="w-100">
-                  <h4 class="cat-name">Пятиместный</h4>
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.residents5"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.foreigners5"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.combined5"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-              </div>
-
-              <div
-                v-if="Math.max(...maxBeds(ctgry.catID)) > 5"
-                class="form-4"
-                style="width: 100%"
-              >
-                <div class="w-100">
-                  <h4 class="cat-name">Шестиместный</h4>
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.residents6"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.foreigners6"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.combined6"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-              </div>
-
-              <div
-                v-if="Math.max(...maxBeds(ctgry.catID)) > 6"
-                class="form-4"
-                style="width: 100%"
-              >
-                <div class="w-100">
-                  <h4 class="cat-name">Семиместный</h4>
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.residents7"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.foreigners7"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.combined7"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-              </div>
-
-              <div
-                v-if="Math.max(...maxBeds(ctgry.catID)) > 7"
-                class="form-4"
-                style="width: 100%"
-              >
-                <div class="w-100">
-                  <h4 class="cat-name">Восьмиместный</h4>
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.residents8"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.foreigners8"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.combined8"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-              </div>
-
-              <div
-                v-if="Math.max(...maxBeds(ctgry.catID)) > 8"
-                class="form-4"
-                style="width: 100%"
-              >
-                <div class="w-100">
-                  <h4 class="cat-name">Девятиместный</h4>
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.residents9"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.foreigners9"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.combined9"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-              </div>
-
-              <div
-                v-if="Math.max(...maxBeds(ctgry.catID)) > 9"
-                class="form-4"
-                style="width: 100%"
-              >
-                <div class="w-100">
-                  <h4 class="cat-name">Десятиместный</h4>
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.residents10"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.foreigners10"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.combined10"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-              </div>
-
-              <div
-                v-if="Math.max(...maxAdditionalBeds(ctgry.catID)) > 0"
-                class="form-4"
-                style="width: 100%"
-              >
-                <div class="w-100">
-                  <h4 class="cat-name">Дополнительная койка</h4>
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.residentsAdditional"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.foreignersAdditional"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerCompaniesTariff.cost.combinedAdditional"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-              </div>
 
             </el-collapse-item>
             <div class="divider-collapse"/>
@@ -1698,7 +911,10 @@
         </button>
       </div>
     </div>
+<!-- ///////////////////////////////////////////////////// -->
 
+
+<!-- ////////////////////// Agents /////////////////////// -->
     <div
       v-if="selected === 'Агенты'"
       class="input-grid"
@@ -1751,9 +967,10 @@
             v-if="partnerAgentsTariff.discountType === 'UZS'"
           >
             <label for="input">Сумма скидки</label>
-            <currency-input
+            <money
+              class="money-input"
               v-model="partnerAgentsTariff.discountAmount"
-              :options="{ currency: 'UZS', placeholder: 'Введите сумму скидки'}"
+              v-bind="money"
             />
           </div>
 
@@ -1762,9 +979,9 @@
             v-if="partnerAgentsTariff.discountType === 'percent'"
           >
             <label for="input">Процент скидки</label>
-            <percent-input
-              :value="partnerAgentsTariff.discountAmount"
-              :options="{ placeholder: 'Введите процент скидки' }"
+            <money
+              class="money-input"
+              v-model="partnerAgentsTariff.discountAmount"
             />
           </div>
 
@@ -1773,8 +990,10 @@
             v-if="partnerAgentsTariff.discountType === 'individual'"
           >
             <label for="input">Сумма скидки</label>
-            <currency-input
-              :options="{ currency: 'UZS', placeholder: 'Введите сумму скидки', disabled: 'disabled'}"
+            <el-input
+              v-model="disabled"
+              disabled
+              placeholder="Введите сумму скидки"
             />
           </div>
         </div>
@@ -1815,13 +1034,13 @@
           <div class="divider-collapse"/>
 
           <el-collapse
-            v-model="activeName"
             accordion
-            v-for="(ctgry, idx) in roomCategories"
+            v-for="(stock, idx) in stockForInputs"
             :key="idx"
+            v-model="activeName"
           >
             <el-collapse-item
-              :title="ctgry.catName"
+              :title="catName(stock.category)"
               :name="idx"
               >
 
@@ -1834,381 +1053,109 @@
 
                 <div class="w-100">
                   <label for="input">Резидентам</label>
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.residentsMax"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
+                  <money
+                    @input="rackResidents"
+                    class="money-input"
+                    v-model="cost.residentsMax"
+                    v-bind="money"
                   />
                 </div>
 
                 <div class="w-100">
                   <label for="input">Иностранцам</label>
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.foreignersMax"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
+                  <money
+                    @input="rackForeigners"
+                    class="money-input"
+                    v-model="cost.foreignersMax"
+                    v-bind="money"
                   />
                 </div>
 
                 <div class="w-100">
                   <label for="input">Комбинированный случай</label>
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.combinedMax"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
+                  <money
+                    @input="rackCombined"
+                    class="money-input"
+                    v-model="cost.combinedMax"
+                    v-bind="money"
                   />
                 </div>
-              </div>
-
-
-              <div
-                v-if="Math.max(...maxBeds(ctgry.catID)) > 0"
-                class="form-4"
-                style="width: 100%"
-              >
-                <div class="w-100">
-                  <h4 class="cat-name">Одноместный</h4>
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.residents1"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.foreigners1"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.combined1"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
               </div>
 
               <div
-                v-if="Math.max(...maxBeds(ctgry.catID)) > 1"
-                class="form-4"
-                style="width: 100%"
+                v-for="(row, idx) in stock.settlement"
+                :key="idx"
               >
-                <div class="w-100">
-                  <h4 class="cat-name">Двухместный</h4>
-                </div>
 
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.residents2"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
+                <div
+                  class="form-4"
+                  style="width: 100%"
+                >
 
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.foreigners2"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
+                  <div class="w-100">
+                    <h4 class="cat-name">{{settlementType(idx+1)}}</h4>
+                  </div>
 
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.combined2"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
+                  <div class="w-100">
+                    <money
+                      class="money-input"
+                      v-bind="money"
+                      v-model="row.residents"
+                    />
+                  </div>
 
+                  <div class="w-100">
+                    <money
+                      class="money-input"
+                      v-bind="money"
+                      v-model="row.foreigners"
+                    />
+                  </div>
+
+                  <div class="w-100">
+                    <money
+                      class="money-input"
+                      v-bind="money"
+                      v-model="row.foreigners"
+                    />
+                  </div>
+                </div>
               </div>
-
+              
               <div
-                v-if="Math.max(...maxBeds(ctgry.catID)) > 2"
-                class="form-4"
-                style="width: 100%"
-              >
-                <div class="w-100">
-                  <h4 class="cat-name">Трёхместный</h4>
+                  class="form-4"
+                  style="width: 100%"
+                  v-if="stock.settlement[idx].additionalBed.amount > 0"
+                >
+
+                  <div class="w-100">
+                    <h4 class="cat-name" style="color: #7710C9">Дополнительная койка</h4>
+                  </div>
+
+                  <div class="w-100">
+                    <money
+                      class="money-input"
+                      v-bind="money"
+                      v-model="stock.settlement[idx].additionalBed.residents"
+                    />
+                  </div>
+
+                  <div class="w-100">
+                    <money
+                      class="money-input"
+                      v-bind="money"
+                      v-model="stock.settlement[idx].additionalBed.foreigners"
+                    />
+                  </div>
+
+                  <div class="w-100">
+                    <money
+                      class="money-input"
+                      v-bind="money"
+                      v-model="stock.settlement[idx].additionalBed.combined"
+                    />
+                  </div>
                 </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.residents3"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.foreigners3"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.combined3"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-              </div>
-
-              <div
-                v-if="Math.max(...maxBeds(ctgry.catID)) > 3"
-                class="form-4"
-                style="width: 100%"
-              >
-                <div class="w-100">
-                  <h4 class="cat-name">Четырёхместный</h4>
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.residents4"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.foreigners4"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.combined4"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-              </div>
-
-              <div
-                v-if="Math.max(...maxBeds(ctgry.catID)) > 4"
-                class="form-4"
-                style="width: 100%"
-              >
-                <div class="w-100">
-                  <h4 class="cat-name">Пятиместный</h4>
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.residents5"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.foreigners5"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.combined5"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-              </div>
-
-              <div
-                v-if="Math.max(...maxBeds(ctgry.catID)) > 5"
-                class="form-4"
-                style="width: 100%"
-              >
-                <div class="w-100">
-                  <h4 class="cat-name">Шестиместный</h4>
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.residents6"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.foreigners6"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.combined6"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-              </div>
-
-              <div
-                v-if="Math.max(...maxBeds(ctgry.catID)) > 6"
-                class="form-4"
-                style="width: 100%"
-              >
-                <div class="w-100">
-                  <h4 class="cat-name">Семиместный</h4>
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.residents7"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.foreigners7"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.combined7"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-              </div>
-
-              <div
-                v-if="Math.max(...maxBeds(ctgry.catID)) > 7"
-                class="form-4"
-                style="width: 100%"
-              >
-                <div class="w-100">
-                  <h4 class="cat-name">Восьмиместный</h4>
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.residents8"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.foreigners8"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.combined8"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-              </div>
-
-              <div
-                v-if="Math.max(...maxBeds(ctgry.catID)) > 8"
-                class="form-4"
-                style="width: 100%"
-              >
-                <div class="w-100">
-                  <h4 class="cat-name">Девятиместный</h4>
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.residents9"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.foreigners9"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.combined9"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-              </div>
-
-              <div
-                v-if="Math.max(...maxBeds(ctgry.catID)) > 9"
-                class="form-4"
-                style="width: 100%"
-              >
-                <div class="w-100">
-                  <h4 class="cat-name">Десятиместный</h4>
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.residents10"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.foreigners10"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.combined10"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-              </div>
-
-              <div
-                v-if="Math.max(...maxAdditionalBeds(ctgry.catID)) > 0"
-                class="form-4"
-                style="width: 100%"
-              >
-                <div class="w-100">
-                  <h4 class="cat-name">Дополнительная койка</h4>
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.residentsAdditional"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.foreignersAdditional"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-                <div class="w-100">
-                  <currency-input
-                    v-model="partnerAgentsTariff.cost.combinedAdditional"
-                    :options="{ currency: 'UZS', placeholder: 'Введите сумму' }"
-                  />
-                </div>
-
-              </div>
 
             </el-collapse-item>
             <div class="divider-collapse"/>
@@ -2254,29 +1201,50 @@
         </button>
       </div>
     </div>
+
+    <h4>{{stockForInputs}}</h4>
+
   </div>
 </template>
 
 <script>
 import TabBar from '@/components/TabBar.vue'
 import Tab from '@/components/Tab.vue'
-import CurrencyInput from '../../../components/CurrencyInput.vue'
-import PercentInput from '../../../components/PercentInput.vue'
+import TourCompanies from './tariffSections/TourComapnies.vue'
 
 export default {
   name: 'EditingTariff',
 
   components: {
-    TabBar, Tab, CurrencyInput, PercentInput
+    TabBar, Tab, TourCompanies
   },
 
   data:() => ({
+    disabled: '',
     type: 'main',
     activeName: 0,
     selected: 'Со стойки',
     nowDate: '',
     nowTime: '',
     chosenPartners: [],
+
+    money: {
+      decimal: '',
+      thousands: ' ',
+      prefix: '',
+      suffix: ' UZS',
+      precision: 0,
+      masked: true
+    },
+
+    percent: {
+      decimal: '',
+      thousands: ' ',
+      prefix: '',
+      suffix: ' %',
+      precision: 0,
+      masked: true
+    },
 
     tourCompanyTariffs: [
       {
@@ -2372,9 +1340,88 @@ export default {
     roomCategories() {
       return this.$store.state.roomFund
     },
+
+    stockForInputs() {
+      const rooms = JSON.parse(window.sessionStorage.allRoomCats).categories
+      const roomsLength = rooms.length
+      const rawLooped = []
+
+      for (let i=0; i<roomsLength; i++) {
+        rawLooped.push({
+          category: rooms[i].category,
+          main: Math.max(...rooms[i].rooms.map(room => JSON.parse(room).mainBeds)),
+          additional: Math.max(...rooms[i].rooms.map(room => JSON.parse(room).additionalBeds))
+        })
+      }
+
+      const newLength = rawLooped.length
+      const looped = []
+
+      for (let idx=0; idx<newLength; idx++) {
+        looped.push({
+          category: rawLooped[idx].category,
+          settlement: new Array(rawLooped[idx].main).fill({
+            type: '',
+            residents: '',
+            foreigners: '',
+            combined: '',
+            additionalBed: {
+              amount: rawLooped[idx].additional,
+              residents: '',
+              foreigners: '',
+              combined: ''
+            }
+          }) 
+        })
+      }
+
+      return looped
+    }
   },
 
   methods: {
+    settlementType(indexNum) {
+      if(indexNum === 1) {return 'Одноместный'}
+      else if(indexNum === 2) {return 'Двухместный'}
+      else if(indexNum === 3) {return 'Трёхместный'}
+      else if(indexNum === 4) {return 'Четырёхместный'}
+      else if(indexNum === 5) {return 'Пятиместный'}
+      else if(indexNum === 6) {return 'Шестиместный'}
+      else if(indexNum === 7) {return 'Семиместный'}
+      else if(indexNum === 8) {return 'Восьмиместный'}
+      else if(indexNum === 9) {return 'Девятиместный'}
+      else if(indexNum === 10) {return 'Десятиместный'}
+    },
+
+    catName(catValue) {
+      if(catValue === 'apartment') {return 'Апартаменты'}
+      else if(catValue === 'bungalow') {return 'Бунгало'}
+      else if(catValue === 'deluxe') {return 'Делюкс'}
+      else if(catValue === 'honeymoonRoom') {return 'Для молодоженов'}
+      else if(catValue === 'suite') {return 'Люкс'}
+      else if(catValue === 'duplex') {return 'Дюплекс'}
+      else if(catValue === 'cabana') {return 'Коттедж'}
+      else if(catValue === 'juniorSuite') {return 'Полулюкс'}
+      else if(catValue === 'residence') {return 'Резиденция'}
+      else if(catValue === 'familyRoom') {return 'Семейная комната'}
+      else if(catValue === 'standart') {return 'Стандарт'}
+      else if(catValue === 'studio') {return 'Студия'}
+      else if(catValue === 'chalet') {return 'Шале'}
+      else if(catValue === 'economyClass') {return 'Эконом-класс'}
+    },
+
+    rackResidents(event) {
+      console.log(event);
+    },
+
+    rackForeigners(event) {
+      console.log(event);
+    },
+
+    rackCombined(event) {
+      console.log(event);
+    },
+
     setSelected(tab) {
       this.selected = tab;
     },
@@ -2466,6 +1513,10 @@ export default {
     removeAgents (idx) {
       this.partnerAgentsTariffs.splice(idx, 1)
     },
+
+    consoleStock(value) {
+      console.log(value);
+    }
   }
 }
 </script>

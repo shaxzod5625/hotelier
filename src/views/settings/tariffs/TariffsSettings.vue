@@ -6,24 +6,28 @@
         v-if="freeOfChargePeriod"
         
         @closeFreeOfChargePeriod="closeFreeOfChargePeriod"
+        @refresh="refresh"
       />
 
       <EarlyCheckInPeriod
         v-if="earlyCheckIn"
 
         @closeEarlyCheckInPeriod="closeEarlyCheckInPeriod"
+        @refresh="refresh"
       />
 
       <LatelyCheckOutPeriod
         v-if="lateCheckOut"
 
         @closeLateCheckOutPeriod="closeLateCheckOutPeriod"
+        @refresh="refresh"
       />
 
       <ZeroHour
         v-if="zeroHour"
 
         @closeZeroHour="closeZeroHour"
+        @refresh="refresh"
       />
     </transition>
 
@@ -40,6 +44,11 @@
         class="tariff-setting-card"
         @click="zeroHour = true"
       >
+        <div class="fillingDiv">
+          <svg style="margin: 0" width="36" height="12" viewBox="0 0 36 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 0H24C30.6274 0 36 5.37258 36 12V12H12C5.37258 12 0 6.62742 0 0V0Z" :fill="filling(zeroHour)"/>
+          </svg>
+        </div>
         <svg  width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" v-html="setCards[0].svg" ></svg>
         <h3>{{setCards[0].title}}</h3>
       </div>
@@ -48,6 +57,11 @@
         class="tariff-setting-card"
         @click="freeOfChargePeriod = true"
       >
+        <div class="fillingDiv">
+          <svg style="margin: 0" width="36" height="12" viewBox="0 0 36 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 0H24C30.6274 0 36 5.37258 36 12V12H12C5.37258 12 0 6.62742 0 0V0Z" :fill="filling(zeroHour)"/>
+          </svg>
+        </div>
         <svg  width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" v-html="setCards[1].svg" ></svg>
         <h3>{{setCards[1].title}}</h3>
       </div>
@@ -56,6 +70,11 @@
         class="tariff-setting-card"
         @click="earlyCheckIn = true"
       >
+        <div class="fillingDiv">
+          <svg style="margin: 0" width="36" height="12" viewBox="0 0 36 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 0H24C30.6274 0 36 5.37258 36 12V12H12C5.37258 12 0 6.62742 0 0V0Z" :fill="filling(zeroHour)"/>
+          </svg>
+        </div>
         <svg  width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" v-html="setCards[2].svg" ></svg>
         <h3>{{setCards[2].title}}</h3>
       </div>
@@ -64,6 +83,11 @@
         class="tariff-setting-card"
         @click="lateCheckOut = true"
       >
+        <div class="fillingDiv">
+          <svg style="margin: 0" width="36" height="12" viewBox="0 0 36 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 0H24C30.6274 0 36 5.37258 36 12V12H12C5.37258 12 0 6.62742 0 0V0Z" :fill="filling(zeroHour)"/>
+          </svg>
+        </div>
         <svg  width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" v-html="setCards[3].svg" ></svg>
         <h3>{{setCards[3].title}}</h3>
       </div>
@@ -73,6 +97,11 @@
         class="tariff-setting-card"
         :to="{ name: setCards[4].pathName}"
       >
+        <div class="fillingDiv">
+          <svg style="margin: 0" width="36" height="12" viewBox="0 0 36 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 0H24C30.6274 0 36 5.37258 36 12V12H12C5.37258 12 0 6.62742 0 0V0Z" :fill="filling(zeroHour)"/>
+          </svg>
+        </div>
         <svg  width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" v-html="setCards[4].svg" ></svg>
         <h3>{{setCards[4].title}}</h3>
       </router-link>
@@ -122,15 +151,19 @@ export default {
       },
       {
         title: 'Правила расчёта',
-        svg: `<path fill-rule="evenodd" clip-rule="evenodd" d="M18 4C18.5523 4 19 4.44772 19 5V17H31C31.5523 17 32 17.4477 32 18C32 18.5523 31.5523 19 31 19H19V31C19 31.5523 18.5523 32 18 32C17.4477 32 17 31.5523 17 31V19H5C4.44772 19 4 18.5523 4 18C4 17.4477 4.44772 17 5 17H17V5C17 4.44772 17.4477 4 18 4ZM10 6C10.5523 6 11 6.44772 11 7V9.5H13.5C14.0523 9.5 14.5 9.94772 14.5 10.5C14.5 11.0523 14.0523 11.5 13.5 11.5H11V14C11 14.5523 10.5523 15 10 15C9.44772 15 9 14.5523 9 14V11.5H6.5C5.94772 11.5 5.5 11.0523 5.5 10.5C5.5 9.94772 5.94772 9.5 6.5 9.5H9V7C9 6.44772 9.44772 6 10 6ZM21.5 10.5C21.5 9.94772 21.9477 9.5 22.5 9.5H29.5C30.0523 9.5 30.5 9.94772 30.5 10.5C30.5 11.0523 30.0523 11.5 29.5 11.5H22.5C21.9477 11.5 21.5 11.0523 21.5 10.5ZM14.2071 21.2929C14.5976 21.6834 14.5976 22.3166 14.2071 22.7071L7.20711 29.7071C6.81658 30.0976 6.18342 30.0976 5.79289 29.7071C5.40237 29.3166 5.40237 28.6834 5.79289 28.2929L12.7929 21.2929C13.1834 20.9024 13.8166 20.9024 14.2071 21.2929ZM21.7929 22.7071C21.4024 22.3166 21.4024 21.6834 21.7929 21.2929C22.1834 20.9024 22.8166 20.9024 23.2071 21.2929L26 24.0858L28.7929 21.2929C29.1834 20.9024 29.8166 20.9024 30.2071 21.2929C30.5976 21.6834 30.5976 22.3166 30.2071 22.7071L27.4142 25.5L30.2071 28.2929C30.5976 28.6834 30.5976 29.3166 30.2071 29.7071C29.8166 30.0976 29.1834 30.0976 28.7929 29.7071L26 26.9142L23.2071 29.7071C22.8166 30.0976 22.1834 30.0976 21.7929 29.7071C21.4024 29.3166 21.4024 28.6834 21.7929 28.2929L24.5858 25.5L21.7929 22.7071Z" fill="currentColor"/>
-        <path d="M14.5 28.5C14.5 29.3284 13.8284 30 13 30C12.1716 30 11.5 29.3284 11.5 28.5C11.5 27.6716 12.1716 27 13 27C13.8284 27 14.5 27.6716 14.5 28.5Z" fill="currentColor"/>
-        <path d="M8.5 22.5C8.5 23.3284 7.82843 24 7 24C6.17157 24 5.5 23.3284 5.5 22.5C5.5 21.6716 6.17157 21 7 21C7.82843 21 8.5 21.6716 8.5 22.5Z" fill="currentColor"/>`,
+        svg: `<path fill-rule="evenodd" clip-rule="evenodd" d="M10 4C10.5523 4 11 4.44772 11 5V9H15C15.5523 9 16 9.44772 16 10C16 10.5523 15.5523 11 15 11H11V15C11 15.5523 10.5523 16 10 16C9.44772 16 9 15.5523 9 15V11H5C4.44772 11 4 10.5523 4 10C4 9.44772 4.44772 9 5 9H9V5C9 4.44772 9.44772 4 10 4ZM20 10C20 9.44772 20.4477 9 21 9H31C31.5523 9 32 9.44772 32 10C32 10.5523 31.5523 11 31 11H21C20.4477 11 20 10.5523 20 10ZM15.7071 20.2929C16.0976 20.6834 16.0976 21.3166 15.7071 21.7071L5.70711 31.7071C5.31658 32.0976 4.68342 32.0976 4.29289 31.7071C3.90237 31.3166 3.90237 30.6834 4.29289 30.2929L14.2929 20.2929C14.6834 19.9024 15.3166 19.9024 15.7071 20.2929ZM20.2929 21.7071C19.9024 21.3166 19.9024 20.6834 20.2929 20.2929C20.6834 19.9024 21.3166 19.9024 21.7071 20.2929L26 24.5858L30.2929 20.2929C30.6834 19.9024 31.3166 19.9024 31.7071 20.2929C32.0976 20.6834 32.0976 21.3166 31.7071 21.7071L27.4142 26L31.7071 30.2929C32.0976 30.6834 32.0976 31.3166 31.7071 31.7071C31.3166 32.0976 30.6834 32.0976 30.2929 31.7071L26 27.4142L21.7071 31.7071C21.3166 32.0976 20.6834 32.0976 20.2929 31.7071C19.9024 31.3166 19.9024 30.6834 20.2929 30.2929L24.5858 26L20.2929 21.7071Z" fill="currentColor"/>
+          <path d="M16 30C16 31.1046 15.1046 32 14 32C12.8954 32 12 31.1046 12 30C12 28.8954 12.8954 28 14 28C15.1046 28 16 28.8954 16 30Z" fill="currentColor"/>
+          <path d="M8 22C8 23.1046 7.10457 24 6 24C4.89543 24 4 23.1046 4 22C4 20.8954 4.89543 20 6 20C7.10457 20 8 20.8954 8 22Z" fill="currentColor"/>`,
         pathName: 'Calculation Rules'
       },
     ]
   }),
 
   methods: {
+    filling(fillingValue) {
+      return '#2161ED'
+    },
+
     closeFreeOfChargePeriod() {
       this.freeOfChargePeriod = false
     },
@@ -145,6 +178,13 @@ export default {
 
     closeZeroHour() {
       this.zeroHour = false
+    },
+
+    async refresh() {
+      try {
+        await this.$store.dispatch('getTariffsConfiguration')
+      } catch {}
+
     }
   }
 }

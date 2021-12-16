@@ -89,6 +89,7 @@
           tag="button"
           class="prim-btn"
           :to="{ name: 'Tariffs Settings'}"
+          @click.native="getTariffsConfiguration"
         >
           <img src="@/assets/icons/Settings-sm-white.svg" alt="">
           Настройки
@@ -96,22 +97,24 @@
       </div>
     </div>
 
-    <ActiveTariffs
-      v-if="selected === 'Тарифы'"
+    <transition name="slide-fade" mode="out-in">
+      <ActiveTariffs
+        v-if="selected === 'Тарифы'"
 
-      @archiveTariff="archiveTariff"
-      @printOutTariff="printOutTariff"
-      @extendingTariffTerm="extendingTariffTerm"
-    />
+        @archiveTariff="archiveTariff"
+        @printOutTariff="printOutTariff"
+        @extendingTariffTerm="extendingTariffTerm"
+      />
 
-    <ArchivedTariffs
-      v-if="selected === 'Архив тарифов'"
+      <ArchivedTariffs
+        v-if="selected === 'Архив тарифов'"
 
-      @duplicatingTariff="duplicatingTariff"
-      @printOutTariff="printOutTariff"
-      @deletingTariffs="deletingTariffs"
-      @unarchivingTariff="unarchivingTariff"
-    />
+        @duplicatingTariff="duplicatingTariff"
+        @printOutTariff="printOutTariff"
+        @deletingTariffs="deletingTariffs"
+        @unarchivingTariff="unarchivingTariff"
+      />
+    </transition>
 
   </div>
 </template>
@@ -154,6 +157,12 @@ export default {
   }),
 
   methods: {
+    async getTariffsConfiguration() {
+      try {
+        await this.$store.dispatch('getTariffsConfiguration')
+      } catch {}
+    },
+
     setSelected(tab) {
       this.selected = tab;
     },

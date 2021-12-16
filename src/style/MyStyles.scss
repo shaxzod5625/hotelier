@@ -1599,17 +1599,37 @@ table {
 
 .component-fade-enter-active {
   transition: all 500ms ease;
+
   .modal-div {
-  transition: all 500ms ease;
-  transform: translateY(0px);
+    transition: all 500ms ease;
+    transform: translateY(0px);
   }
-  
+
+  .modal-div-2 {
+    transition: all 500ms ease;
+    transform: translateY(0px);
+  }
+
+  .form-filter {
+    transition: all 500ms ease;
+    transform: translateY(0px);
+  }
 }
 
 .component-fade-leave-active {
   transition: all 500ms ease;
 
   .modal-div {
+    transition: all 500ms ease;
+    transform: translateY(0%);
+  }
+
+  .modal-div-2 {
+    transition: all 500ms ease;
+    transform: translateY(0%);
+  }
+
+  .form-filter {
     transition: all 500ms ease;
     transform: translateY(0%);
   }
@@ -1623,6 +1643,16 @@ table {
     transition: all 500ms ease;
     transform: translateY(-100px);
   }
+
+  .modal-div-2 {
+    transition: all 500ms ease;
+    transform: translateY(-100px);
+  }
+
+  .form-filter {
+    transition: all 500ms ease;
+    transform: translateY(-100px);
+  }
 }
 
 .component-fade-leave-to {
@@ -1630,6 +1660,16 @@ table {
   opacity: 0;
 
   .modal-div {
+    transition: all 500ms ease;
+    transform: translateY(-100px);
+  }
+
+  .modal-div-2 {
+    transition: all 500ms ease;
+    transform: translateY(-100px);
+  }
+
+  .form-filter {
     transition: all 500ms ease;
     transform: translateY(-100px);
   }
@@ -2289,6 +2329,7 @@ table {
 // setting cards styles
 
 .tariff-setting-card {
+  position: relative;
   display: flex;
   align-items: center;
   height: 120px;
@@ -2300,6 +2341,14 @@ table {
   transition: 200ms;
   user-select: none;
   text-decoration-line: none;
+
+  .fillingDiv {
+    position: absolute;
+    height: auto;
+    width: auto;
+    right: 0;
+    top: -2px;
+  }
 
   h3 {
     font-family: Roboto;
@@ -3825,16 +3874,64 @@ label {
   background: #fff;
   border-radius: 24px 0 0 24px;
   filter: drop-shadow(0px 6px 16px rgba(50, 52, 56, 0.36));
-  overflow-y: auto;
+
+  .content-wrapper {
+    margin-top: 84px;
+    width: calc(100% - 48px);
+
+    .profile-inicials {
+      font-family: Roboto;
+      font-weight: 500;
+      font-size: 24px;
+      line-height: 28px;
+      color: #323438;
+    }
+  }
+
+  .profile-pic {
+    position: fixed;
+    width: 119px;
+    height: 119px;
+    left: 24px;
+    top: 60px;
+    background: #6B96F3;
+    border: 1px solid #83858A;
+    box-sizing: border-box;
+    border-radius: 60px;
+  }
+
+  .edit-profile-pic {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    left: 108px;
+    top: 144px;
+    background: #FFFFFF;
+    border: 1px solid #83858A;
+    box-sizing: border-box;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  .gradient-back {
+    width: 446px;
+    height: 120px;
+    left: 0px;
+    top: 0px;
+    background: linear-gradient(90deg, #2161ED 0%, #7710C9 70%);
+    border-radius: 24px 0px 0px 0px;
+  }
 
   h3 {
     font-family: Roboto;
     font-weight: 500;
     font-size: 16px;
     line-height: 16px;
-    text-align: center;
     color: #323438;
-    margin: 16px 0;
+    margin: 0;
   }
 
   h4 {
@@ -3842,10 +3939,13 @@ label {
     font-weight: 400;
     font-size: 14px;
     line-height: 16px;
-    text-align: center;
     color: #83858A;
-    margin-top: 12px;
-    margin-bottom: 0;
+    margin: 0;
+  }
+
+  .content-text {
+    font-weight: 500;
+    color: #323438;
   }
 }
 
