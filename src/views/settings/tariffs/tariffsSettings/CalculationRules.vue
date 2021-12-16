@@ -12,12 +12,13 @@
     <div class="input-grid">
       <h4>Основные</h4>
 
-      <div class="form-3">
+      <div class="form-3" style="width: 100%">
         <div class="w-100">
           <label for="input">Основная валюта</label>
           <el-select
             v-model="mainCurrency"
             placeholder="Выберите валюту"
+            :class="{invalid: ($v.mainCurrency.$dirty && !$v.mainCurrency.required)}"
           >
             <el-option
               v-for="(currency, idx) in currencies"
@@ -26,6 +27,7 @@
               :label="currency.label"
             />
           </el-select>
+          <span v-if="$v.mainCurrency.$dirty && !$v.mainCurrency.required" class="validation-error">Пожалуйста, выберите валюту</span>
         </div>
 
         <div class="w-100">
@@ -33,6 +35,7 @@
           <el-select
             v-model="additionalCurrency"
             placeholder="Выберите валюту"
+            :class="{invalid: ($v.additionalCurrency.$dirty && !$v.additionalCurrency.required)}"
           >
             <el-option
               v-for="(currency, idx) in currencies"
@@ -41,6 +44,7 @@
               :label="currency.label"
             />
           </el-select>
+          <span v-if="$v.additionalCurrency.$dirty && !$v.additionalCurrency.required" class="validation-error">Пожалуйста, выберите валюту</span>
         </div>
 
         <div class="w-100">
@@ -48,27 +52,34 @@
           <el-select
             v-model="measurementUnit"
             placeholder="Выберите единицу измерения"
+            :class="{invalid: ($v.measurementUnit.$dirty && !$v.measurementUnit.required)}"
           >
             <el-option
-              v-for="(unit, idx) in measurementUnitTypes"
+              v-for="(type, idx) in tariffMeasurementTypes"
               :key="idx"
-              :value="unit.value"
-              :label="unit.label"
+              :value="type.value"
+              :label="type.label"
             />
           </el-select>
+          <span v-if="$v.measurementUnit.$dirty && !$v.measurementUnit.required" class="validation-error">Пожалуйста, выберите единицу измерения</span>
         </div>
 
         <div class="w-100">
           <label for="input">Туристический сбор для иностранцев</label>
-          <percent-input
-            :value="foreignersTourTax"
-            :options="{ placeholder: 'Введите % от БВР для тур.сбора' }"
+          <money
+            class="money-input"
+            v-model="foreignersTourTax"
+            placeholder="Введите % от БВР для тур.сбора"
+            v-bind="percent"
+            :class="{invalid: ($v.foreignersTourTax.$dirty && !$v.foreignersTourTax.required)}"
           />
+          <span v-if="$v.foreignersTourTax.$dirty && !$v.foreignersTourTax.required" class="validation-error">Пожалуйста, введите % от БВР для тур.сбора"</span>
         </div>
 
         <div class="w-100">
           <label for="input">Тип налога</label>
           <el-select
+            disabled
             v-model="foreignersTaxType"
             placeholder="Выберите тип налога"
           >
@@ -83,18 +94,23 @@
 
         <div class="w-100">
           <label for="input">Налог</label>
-          <percent-input
-            :value="foreignersTax"
-            :options="{ placeholder: 'Введите % налога' }"
+          <el-input
+            disabled
+            v-model="foreignersTax"
+            placeholder="Введите % налога"
           />
         </div>
 
         <div class="w-100">
           <label for="input">Туристический сбор для резидентов</label>
-          <percent-input
-            :value="residentsTourTax"
-            :options="{ placeholder: 'Введите % от БВР для тур.сбора' }"
+          <money
+            class="money-input"
+            v-model="residentsTourTax"
+            placeholder="Введите % от БВР для тур.сбора"
+            v-bind="percent"
+            :class="{invalid: ($v.residentsTourTax.$dirty && !$v.residentsTourTax.required)}"
           />
+          <span v-if="$v.residentsTourTax.$dirty && !$v.residentsTourTax.required" class="validation-error">Пожалуйста, введите % от БВР для тур.сбора"</span>
         </div>
 
         <div class="w-100">
@@ -102,6 +118,7 @@
           <el-select
             v-model="residentsTaxType"
             placeholder="Выберите тип налога"
+            disabled
           >
             <el-option
               v-for="(type, idx) in taxTypes"
@@ -114,9 +131,10 @@
 
         <div class="w-100">
           <label for="input">Налог</label>
-          <percent-input
-            :value="residentsTax"
-            :options="{ placeholder: 'Введите % налога' }"
+          <el-input
+            v-model="residentsTax"
+            disabled
+            placeholder="Введите % налога"
           />
         </div>
 
@@ -127,8 +145,10 @@
 
       <div
         class="form-3"
+        style="width: 100%"
         v-for="(child, idx) in children"
         :key="idx"
+        :set="v = $v.children.$each[idx]"
       >
         <div class="w-100">
           <label for="input">Возраст С</label>
@@ -136,7 +156,9 @@
             v-model="child.childAgeStart"
             placeholder="Введите возраст детей"
             v-mask="'##'"
+            :class="{invalid: (v.childAgeStart.$dirty && !v.childAgeStart.required)}"
           />
+          <span v-if="v.childAgeStart.$dirty && !v.childAgeStart.required" class="validation-error">Пожалуйста, введите возраст детей"</span>
         </div>
 
         <div class="w-100">
@@ -145,15 +167,21 @@
             v-model="child.childAgeStop"
             placeholder="Введите возраст детей"
             v-mask="'##'"
+            :class="{invalid: (v.childAgeStop.$dirty && !v.childAgeStop.required)}"
           />
+          <span v-if="v.childAgeStop.$dirty && !v.childAgeStop.required" class="validation-error">Пожалуйста, введите возраст детей"</span>
         </div>
 
         <div class="w-100">
-          <label for="input">Сумма к оплате</label>
-          <percent-input
-            :value="child.costPercent"
-            :options="{ placeholder: 'Введите % от стоимости номера' }"
+          <label for="input">Сумма к оплате (% от стоимости номера)</label>
+          <money
+            class="money-input"
+            v-model="child.costPercent"
+            placeholder="Введите % от стоимости номера"
+            v-bind="percent"
+            :class="{invalid: (v.costPercent.$dirty && !v.costPercent.required)}"
           />
+          <span v-if="v.costPercent.$dirty && !v.costPercent.required" class="validation-error">Пожалуйста, введите % от стоимости номера"</span>
         </div>
 
         <div></div>
@@ -429,6 +457,10 @@
         <img src="@/assets/icons/Question-mark.svg" alt="">
       </div>
 
+<!-- //////////// Hidden computed /////////////// -->
+<h4>{{setInfo}}</h4>
+<!-- //////////////////////////////////////////// -->
+
       <div class="input-grid-btns">
         <router-link
           tag="button"
@@ -440,6 +472,7 @@
 
         <button
           class="prim-btn"
+          @click="editCalculationRules"
         >
           Сохранить
         </button>
@@ -449,14 +482,14 @@
 </template>
 
 <script>
-import PercentInput from '@/components/PercentInput.vue'
 import RadioButton from '@/components/RadioButton.vue'
+import {required} from 'vuelidate/lib/validators'
 
 export default {
   name: 'CalculationRules',
 
   components: {
-    PercentInput, RadioButton
+    RadioButton
   },
 
   data:() => ({
@@ -465,6 +498,7 @@ export default {
     measurementUnit: '',
     foreignersTourTax: '',
     foreignersTaxType: '',
+    foreignersTax: '',
     residentsTourTax: '',
     residentsTaxType: '',
     residentsTax: '',
@@ -478,29 +512,57 @@ export default {
       costPercent: ''
     }],
 
+    percent: {
+      decimal: '',
+      thousands: ' ',
+      prefix: '',
+      suffix: ' %',
+      precision: 0,
+      masked: true
+    },
 
-
-    currencies: [
-      {label: '', value: ''},
-      {label: '', value: ''},
-      {label: '', value: ''},
-      {label: '', value: ''},
-    ],
-
-    measurementUnitTypes: [
-      {label: '', value: ''},
-      {label: '', value: ''},
-      {label: '', value: ''},
-      {label: '', value: ''},
-    ],
-
-    taxTypes: [
-      {label: '', value: ''},
-      {label: '', value: ''},
-      {label: '', value: ''},
-      {label: '', value: ''},
-    ],
+    taxTypes: [],
   }),
+
+  validations: {
+    mainCurrency: {required},
+    additionalCurrency: {required},
+    measurementUnit: {required},
+    foreignersTourTax: {required},
+    residentsTourTax: {required},
+    children: {
+      $each: {
+        childAgeStart: {required},
+        childAgeStop: {required},
+        costPercent: {required},
+      }
+    },
+  },
+
+  computed: {
+    setInfo() {
+      const calcRules = JSON.parse(JSON.parse(window.sessionStorage.tariffConfigs).configuration.calculationRules)
+
+      this.mainCurrency = calcRules.mainCurrency
+      this.additionalCurrency = calcRules.additionalCurrency
+      this.measurementUnit = calcRules.measurementUnit
+      this.foreignersTourTax = calcRules.foreignersTourTax
+      this.residentsTourTax = calcRules.residentsTourTax
+      this.calculationType = calcRules.calculationType
+      this.combinedCase = calcRules.combinedCase
+      this.combinedCaseEarlyCheckIn = calcRules.combinedCaseEarlyCheckIn
+      this.combinedCaseLatelyCheckOut = calcRules.combinedCaseLatelyCheckOut
+      this.children = calcRules.children
+    },
+
+    currencies() {
+      return this.$store.state.currencies
+    },
+
+    tariffMeasurementTypes() {
+      return this.$store.state.tariffMeasurementTypes
+    }
+  },
 
   methods: {
     addChildRule() {
@@ -514,6 +576,39 @@ export default {
     removeChildRule(idx) {
       this.children.splice(idx, 1)
     },
+
+    async editCalculationRules() {
+      if(this.$v.$invalid) {
+        this.$v.$touch()
+        this.$message.error('Пожалуйста, заполните все необходимые поля');
+        return
+      }
+
+      const rules = {
+        mainCurrency: this.mainCurrency,
+        additionalCurrency: this.additionalCurrency,
+        measurementUnit: this.measurementUnit,
+        foreignersTourTax: this.foreignersTourTax,
+        residentsTourTax: this.residentsTourTax,
+        calculationType: this.calculationType,
+        combinedCase: this.combinedCase,
+        combinedCaseEarlyCheckIn: this.combinedCaseEarlyCheckIn,
+        combinedCaseLatelyCheckOut: this.combinedCaseLatelyCheckOut,
+        children: this.children
+      }
+
+      console.log(rules);
+
+      // try {
+      //   await this.$store.dispatch('editCalculationRules', rules)
+      // } catch {}
+
+      // this.router.push( {path: '/settings/tariffs'} )
+      this.$message({
+        message: 'Изменения в правилах расчета сохранены',
+        type: 'success'
+      })
+    }
   }
 }
 </script>

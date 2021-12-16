@@ -52,8 +52,8 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
-    height: 24px;
-    width: 24px;
+    height: 22px;
+    width: 22px;
     border-radius: 50%;
     background-color: #fff;
     border: 2px solid #6B96F3;
@@ -81,8 +81,8 @@ export default {
   .wrapper .checkmark:after {
     top: 3px;
     left: 3px;
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
     background: #2161ED;
   }

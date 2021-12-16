@@ -81,7 +81,7 @@
                 <span
                   v-else-if="tariff.discount.discountType === 'UZS'"
                 >
-                  - {{(Number(tariff.discount.discountAmount)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$& ')}} UZS
+                  - {{(Number(tariff.discount.discountAmount)).toFixed(1).replace(/\d(?=(\d{3})+\.)/g, '$& ')}} UZS
                 </span>
 
                 <span

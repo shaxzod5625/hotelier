@@ -17,9 +17,15 @@
             step: '00:01',
             end: '23:59'
           }"
+          :class="{invalid: ($v.zeroHour.$dirty && !$v.zeroHour.required)}"
           v-mask="'##:##'"
         />
+        <span v-if="$v.zeroHour.$dirty && !$v.zeroHour.required" class="validation-error">Пожалуйста, введите время</span>
       </div>
+
+<!-- //////// Hidden computed //////////// -->
+<h4 style="display: none">{{setZeroHour}}</h4>
+<!-- ///////////////////////////////////// -->
 
       <div class="modal-btns">
         <button
@@ -31,6 +37,7 @@
 
         <button
           class="prim-btn"
+          @click="editZeroHour"
         >
           Сохранить
         </button>
@@ -45,6 +52,8 @@
 </template>
 
 <script>
+import {required} from 'vuelidate/lib/validators'
+
 export default {
   name: 'ZeroHour',
 
@@ -52,9 +61,41 @@ export default {
     zeroHour: ''
   }),
 
+  validations: {
+    zeroHour: {required}
+  },
+
+  computed: {
+    setZeroHour() {
+      this.zeroHour = JSON.parse(window.sessionStorage.tariffConfigs).configuration.zeroHour
+    }
+  },
+
   methods: {
     closeModal() {
       this.$emit('closeZeroHour')
+    },
+
+    async editZeroHour() {
+      if(this.$v.$invalid) {
+        this.$v.$touch()
+        return
+      }
+
+      const zeroHour = this.zeroHour
+
+      console.log(zeroHour);
+
+      // try {
+      //   await this.$store.dispatch('editZeroHour')
+      // } catch {}
+
+      // this.$emit('refresh')
+      // this.$emit('closeZeroHour')
+      this.$message({
+        message: 'Расчетный час изменен',
+        type: 'success'
+      })
     }
   }
 }

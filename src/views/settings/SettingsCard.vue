@@ -188,6 +188,8 @@ export default {
         await this.$store.dispatch('getRoomsCount')
         await this.$store.dispatch('getFacilitiesList')
         await this.$store.dispatch('getServicesList')
+      } else if(name === 'tariffs') {
+        // await this.$store.dispatch('getAllTariffs')
       }
     },
 
